@@ -35,7 +35,7 @@ internal class Program
             for (int i = 0; i < numberOfEnemies; i++)
             {
                 Vector2 center = new Vector2((numberOfEnemies / 2) - i, 2);
-                Enemy enemy = new Enemy(center, 0.1f, 0.1f);
+                Enemy enemy = new Enemy(center, 0.1f, 0.2f);
                 listOfEnemies.Add(enemy);
             }
             return listOfEnemies;
@@ -47,9 +47,32 @@ internal class Program
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             //draw a quad
-            DrawPlayer();
+            //DrawPlayer();
             DrawEnemies(listOfEnemies);
         }
+
+        void DrawPlayer()
+        {
+
+        }
+
+        void DrawEnemies(List<Enemy> listOfEnemies)
+        {
+            foreach (Enemy enemy in listOfEnemies)
+            {
+                GL.Color4(Color4.Red);
+                GL.Begin(PrimitiveType.TriangleFan);
+                GL.Vertex2(enemy.Center);
+                var circle = CreateCirclePoints();
+                foreach (var point in circle)
+                {
+                    GL.Vertex2(enemy.Center + enemy.Radius * point);
+                }
+                GL.Vertex2(enemy.Center + enemy.Radius * circle[0]);
+                GL.End();
+            }
+        }
+
 
         List<Vector2> CreateCirclePoints()
         {
