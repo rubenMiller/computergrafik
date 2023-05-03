@@ -5,6 +5,7 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Zenseless.Patterns;
 using static Zenseless.OpenTK.Transformation2d;
 
@@ -154,6 +155,28 @@ internal class Program
             var elapsedTime = (float)args.Time;
             MoveEnemies(listOfEnemies, elapsedTime);
             MoveBullets(elapsedTime);
+            Collissions();
+        }
+
+        void Collissions()
+        {
+            foreach (Enemy enemy in listOfEnemies.ToList())
+            {
+                foreach (Bullet bullet in listOfBullets.ToList())
+                {
+                    var deltaX = bullet.Center.X - enemy.Center.X;
+                    var deltaY = bullet.Center.Y - enemy.Center.Y;
+
+                    var distanceSq = deltaX * deltaX + deltaY * deltaY;
+                    var distance = MathF.Sqrt(distanceSq);
+                    if (distance < bullet.Radius + enemy.Radius)
+                    {
+                        listOfEnemies.Remove(enemy);
+                        listOfBullets.Remove(bullet);
+                        break;
+                    }
+                }
+            }
         }
     }
 }
