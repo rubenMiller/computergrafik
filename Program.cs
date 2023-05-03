@@ -143,14 +143,13 @@ internal class Program
             listOfBullets.Add(bullet);
         }
 
-        Matrix4 InvViewPortMatrix = new Matrix4();
 
         void Resize(ResizeEventArgs args)
         {
             GL.Viewport(0, 0, args.Width, args.Height);
-            Matrix4 matrix = Translate(-1f, 1f);
-            Matrix4 matrix2 = Scale(2f / (args.Width - 1), -2f / (args.Height - 1f));
-            InvViewPortMatrix = matrix * matrix2;
+            var _invAspectRatio = args.Height / (float)args.Width;
+            var scaleWindow = Scale(_invAspectRatio, 1);
+            GL.LoadMatrix(ref scaleWindow);
         }
 
         void Update(FrameEventArgs args)
