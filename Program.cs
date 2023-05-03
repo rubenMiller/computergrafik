@@ -22,7 +22,7 @@ internal class Program
         window.KeyDown += args => { if (Keys.Escape == args.Key) window.Close(); };
         window.RenderFrame += Draw; // called once each frame; callback should contain drawing code
         window.RenderFrame += _ => window.SwapBuffers(); // buffer swap needed for double buffering
-        //window.MouseDown += _ => shootBullet();
+        window.MouseDown += _ => shootBullet();
 
         // setup code executed once
         GL.ClearColor(Color4.LightGray);
@@ -49,6 +49,7 @@ internal class Program
             //draw a quad
             //DrawPlayer();
             DrawEnemies(listOfEnemies);
+            DrawBullets();
         }
 
         void DrawPlayer()
@@ -56,20 +57,35 @@ internal class Program
 
         }
 
+        void DrawCircle(Vector2 center, float radius)
+        {
+
+            GL.Begin(PrimitiveType.TriangleFan);
+            GL.Vertex2(center);
+            var circle = CreateCirclePoints();
+            foreach (var point in circle)
+            {
+                GL.Vertex2(center + radius * point);
+            }
+            GL.Vertex2(center + radius * circle[0]);
+            GL.End();
+        }
+
         void DrawEnemies(List<Enemy> listOfEnemies)
         {
             foreach (Enemy enemy in listOfEnemies)
             {
                 GL.Color4(Color4.Red);
-                GL.Begin(PrimitiveType.TriangleFan);
-                GL.Vertex2(enemy.Center);
-                var circle = CreateCirclePoints();
-                foreach (var point in circle)
-                {
-                    GL.Vertex2(enemy.Center + enemy.Radius * point);
-                }
-                GL.Vertex2(enemy.Center + enemy.Radius * circle[0]);
-                GL.End();
+                DrawCircle(enemy.Center, enemy.Radius);
+            }
+        }
+
+        void DrawBullets()
+        {
+            foreach (Bullet bullet in listOfBullets)
+            {
+                GL.Color4(Color4.BlueViolet);
+                DrawCircle(bullet.Center, bullet.Radius);
             }
         }
 
@@ -103,11 +119,24 @@ internal class Program
             }
         }
 
+        void MoveBullets(float elapsedTime)
+        {
+            foreach (Bullet bullet in listOfBullets)
+            {
+                bullet.Center = bullet.Center + bullet.Direction * bullet.Speed * elapsedTime;
+            }
+        }
+
         void shootBullet()
         {
             var mousePosition = window.MousePosition;
-            var posX = (2f / window.Size.X) - 1; var posY = (-2f / window.Size.Y) + 1;
+            var posX = (mousePosition.X * 2f / window.Size.X) - 1;
+            var posY = (mousePosition.Y * -2f / window.Size.Y) + 1;
             Console.WriteLine($"mouseX: {posX}, mouseY: {posY}");
+            Vector2 direction = new Vector2(posX, posY);
+            direction.Normalize();
+            Bullet bullet = new Bullet(new Vector2(0, 0), direction);
+            listOfBullets.Add(bullet);
         }
 
         Matrix4 InvViewPortMatrix = new Matrix4();
@@ -124,6 +153,7 @@ internal class Program
         {
             var elapsedTime = (float)args.Time;
             MoveEnemies(listOfEnemies, elapsedTime);
+            MoveBullets(elapsedTime);
         }
     }
 }
@@ -145,7 +175,7 @@ internal class Bullet
 {
     public Vector2 Center;
     public Vector2 Direction;
-    public float Radius = 0.1f;
+    public float Radius = 0.02f;
     public float Speed = 0.4f;
 
     public Bullet(Vector2 center, Vector2 direction)
