@@ -1,0 +1,68 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/ruben/Dokumente/AAAStudium/Semester-6/computergrafik/mein-Projekt-2/4.2 Transformation - Camera.csproj": {}
+  },
+  "projects": {
+    "/home/ruben/Dokumente/AAAStudium/Semester-6/computergrafik/mein-Projekt-2/4.2 Transformation - Camera.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/ruben/Dokumente/AAAStudium/Semester-6/computergrafik/mein-Projekt-2/4.2 Transformation - Camera.csproj",
+        "projectName": "4.2 Transformation - Camera",
+        "projectPath": "/home/ruben/Dokumente/AAAStudium/Semester-6/computergrafik/mein-Projekt-2/4.2 Transformation - Camera.csproj",
+        "packagesPath": "/home/ruben/.nuget/packages/",
+        "outputPath": "/home/ruben/Dokumente/AAAStudium/Semester-6/computergrafik/mein-Projekt-2/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/ruben/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6"
+        ],
+        "sources": {
+          "http://teamcity.monogame.net/guestAuth/app/nuget/feed/_Root/default/v3/index.json": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6",
+          "dependencies": {
+            "Zenseless.OpenTK": {
+              "target": "Package",
+              "version": "[0.1.67, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.408/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
