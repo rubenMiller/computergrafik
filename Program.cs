@@ -18,6 +18,7 @@ internal class Program
         float x = 0f;
         List<Enemy> listOfEnemies = MakeEnemies(6);
         List<Bullet> listOfBullets = new List<Bullet>();
+        Player player = new Player(0.1f);
         window.UpdateFrame += Update;
         window.Resize += Resize;
         window.KeyDown += args => { if (Keys.Escape == args.Key) window.Close(); };
@@ -48,14 +49,16 @@ internal class Program
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             //draw a quad
-            //DrawPlayer();
+            DrawPlayer();
             DrawEnemies(listOfEnemies);
             DrawBullets();
         }
 
+
         void DrawPlayer()
         {
-
+            GL.Color4(Color4.BlanchedAlmond);
+            DrawCircle(new Vector2(0, 0), player.Radius);
         }
 
         void DrawCircle(Vector2 center, float radius)
@@ -176,6 +179,12 @@ internal class Program
                         break;
                     }
                 }
+
+                var distanceToPlayer = MathF.Sqrt(enemy.Center.X * enemy.Center.X + enemy.Center.Y * enemy.Center.Y);
+                if (distanceToPlayer < enemy.Radius + player.Radius)
+                {
+                    window.Close();
+                }
             }
         }
     }
@@ -205,5 +214,15 @@ internal class Bullet
     {
         Center = center;
         Direction = direction;
+    }
+}
+
+internal class Player
+{
+    public float Radius;
+
+    public Player(float radius)
+    {
+        Radius = radius;
     }
 }
