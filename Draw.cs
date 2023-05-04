@@ -60,15 +60,16 @@ internal class Draw
     private static void DrawPlayer(Player player)
     {
         GL.Color4(Color4.BlanchedAlmond);
-        DrawCircle(new Vector2(0, 0), player.Radius);
+        DrawCircle(player.Center, player.Radius);
     }
 
-    public Draw(FrameEventArgs args, List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player)
+    public Draw(FrameEventArgs args, List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player, Camera camera)
     {
         //clear screen - what happens without?
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
         //draw a quad
+        camera.SetMatrix();
         DrawPlayer(player);
         DrawEnemies(listOfEnemies);
         DrawBullets(listOfBullets);

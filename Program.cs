@@ -16,12 +16,16 @@ internal class Program
         List<Bullet> listOfBullets = new List<Bullet>();
         Player player = new Player(0.1f);
         Camera camera = new Camera();
-        window.UpdateFrame += args2 => new Update(args2, window, listOfEnemies, listOfBullets, player, camera);
+        window.UpdateFrame += args =>
+        {
+            new Update(args, window, listOfEnemies, listOfBullets, player, camera);
+            camera.moveCamera(window.KeyboardState);
+        };
         window.Resize += args1 => camera.Resize(args1);
         window.KeyDown += args => { if (Keys.Escape == args.Key) window.Close(); };
-        window.RenderFrame += args1 => new Draw(args1, listOfEnemies, listOfBullets, player); // called once each frame; callback should contain drawing code
+        window.RenderFrame += args1 => new Draw(args1, listOfEnemies, listOfBullets, player, camera); // called once each frame; callback should contain drawing code
         window.RenderFrame += _ => window.SwapBuffers(); // buffer swap needed for double buffering
-        window.MouseDown += _ => player.shootBullet(window, listOfBullets);
+        window.MouseDown += _ => player.shootBullet(window, listOfBullets, player);
 
         // setup code executed once
         GL.ClearColor(Color4.LightGray);
