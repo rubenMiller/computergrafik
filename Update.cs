@@ -13,6 +13,7 @@ internal class Update
         {
             foreach (Bullet bullet in listOfBullets.ToList())
             {
+                //checks whether it collides with an enemy
                 var deltaX = bullet.Center.X - enemy.Center.X;
                 var deltaY = bullet.Center.Y - enemy.Center.Y;
 
@@ -32,6 +33,17 @@ internal class Update
             if (distanceToPlayer < enemy.Radius + player.Radius)
             {
                 window.Close();
+            }
+        }
+        foreach (Bullet bullet in listOfBullets.ToList())
+        {
+            //checks whether it is far away from player
+            var deltaX = bullet.Center.X - player.Center.X;
+            var deltaY = bullet.Center.Y - player.Center.Y;
+            if (deltaX > 4 || deltaY > 4 || deltaX < -4 || deltaY < -4)
+            {
+                listOfBullets.Remove(bullet);
+                Console.WriteLine($"Removed bullet, remaining bullets: {listOfBullets.Count}");
             }
         }
     }
@@ -56,16 +68,17 @@ internal class Update
 
     private static void MovePlayer(Player player, Camera camera, float elapsedTime)
     {
-        Console.Write($"player: {player.Center}, camera: {camera.Center}");
+        //Console.Write($"player: {player.Center}, camera: {camera.Center}");
         if (player.Center != camera.Center)
         {
             Vector2 direction = camera.Center - player.Center;
-            direction.Normalize();
             player.Direction = direction;
-            player.Center = player.Center + player.Direction * player.Speed * elapsedTime;
+            player.Direction.Normalize();
+            if (direction.Length > 0.05f)
+            {
+                player.Center = player.Center + player.Direction * (1 + direction.Length) * player.Speed * elapsedTime;
+            }
         }
-        //player.Direction = camera.Movement;
-        //player.Center = player.Center + player.Direction;
     }
 
     public Update(FrameEventArgs args, GameWindow window, List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player, Camera camera)

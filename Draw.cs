@@ -63,6 +63,19 @@ internal class Draw
         DrawCircle(player.Center, player.Radius);
     }
 
+    private static void DrawGrid()
+    {
+        GL.Begin(PrimitiveType.Lines);
+        for (int i = -10; i <= 10; i++)
+        {
+            GL.Vertex2(i, -10);
+            GL.Vertex2(i, 10);
+            GL.Vertex2(-10, i);
+            GL.Vertex2(10, i);
+        }
+        GL.End();
+    }
+
     public Draw(FrameEventArgs args, List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player, Camera camera)
     {
         //clear screen - what happens without?
@@ -73,5 +86,7 @@ internal class Draw
         DrawPlayer(player);
         DrawEnemies(listOfEnemies);
         DrawBullets(listOfBullets);
+        DrawGrid();
+
     }
 }

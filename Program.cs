@@ -25,7 +25,7 @@ internal class Program
         window.KeyDown += args => { if (Keys.Escape == args.Key) window.Close(); };
         window.RenderFrame += args1 => new Draw(args1, listOfEnemies, listOfBullets, player, camera); // called once each frame; callback should contain drawing code
         window.RenderFrame += _ => window.SwapBuffers(); // buffer swap needed for double buffering
-        window.MouseDown += _ => player.shootBullet(window, listOfBullets, player);
+        window.MouseDown += _ => player.shootBullet(window, listOfBullets, player, camera);
 
         // setup code executed once
         GL.ClearColor(Color4.LightGray);

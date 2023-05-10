@@ -50,7 +50,7 @@ internal class Camera
         {
             return;
         }
-        Console.Write("Hello");
+        //Console.Write("Hello");
         movement.Normalize();
         Movement = movement * 0.02f;
         UpdateMatrix();
@@ -61,6 +61,7 @@ internal class Camera
     {
         get => _position;
     }
+    public Matrix4 CameraMatrix { get => _cameraMatrix; }
 
     public void SetMatrix() => GL.LoadMatrix(ref _cameraMatrix);
     private Matrix4 _cameraMatrix = Matrix4.Identity;
@@ -70,13 +71,12 @@ internal class Camera
 
     private void UpdateMatrix()
     {
-        Console.Write("THis hould be prtinted");
         _position = _position + Movement;
         var translate = Translate(-_position);
         var scale = Scale(1f / 1f);
         var aspect = Scale(_invAspectRatio, 1);
         _cameraMatrix = Combine(translate, scale, aspect);
-        Console.Write($"camera: {_position}");
+        //Console.Write($"camera: {_position}");
     }
 
     public Camera()
