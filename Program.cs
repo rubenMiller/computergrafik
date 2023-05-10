@@ -12,13 +12,14 @@ internal class Program
     {
         GameWindow window = new(GameWindowSettings.Default, new NativeWindowSettings { Profile = ContextProfile.Compatability }); // window with immediate mode rendering enabled
 
-        List<Enemy> listOfEnemies = MakeEnemies(6);
+        List<Enemy> listOfEnemies = new List<Enemy>();
         List<Bullet> listOfBullets = new List<Bullet>();
         Player player = new Player(0.1f);
         Camera camera = new Camera();
+        Update update = new Update(window, listOfEnemies, listOfBullets, player, camera);
         window.UpdateFrame += args =>
         {
-            new Update(args, window, listOfEnemies, listOfBullets, player, camera);
+            update.update(args);
             camera.moveCamera(window.KeyboardState);
         };
         window.Resize += args1 => camera.Resize(args1);
@@ -31,19 +32,5 @@ internal class Program
         GL.ClearColor(Color4.LightGray);
 
         window.Run();
-    }
-
-
-
-    private static List<Enemy> MakeEnemies(int numberOfEnemies)
-    {
-        List<Enemy> listOfEnemies = new List<Enemy>();
-        for (int i = 0; i < numberOfEnemies; i++)
-        {
-            Vector2 center = new Vector2((numberOfEnemies / 2) - i, 2);
-            Enemy enemy = new Enemy(center, 0.1f, 0.2f);
-            listOfEnemies.Add(enemy);
-        }
-        return listOfEnemies;
     }
 }

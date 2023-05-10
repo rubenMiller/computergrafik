@@ -7,7 +7,7 @@ using OpenTK.Windowing.Desktop;
 
 internal class Update
 {
-    private static void Collissions(GameWindow window, List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player)
+    private void Collissions(GameWindow window, List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player)
     {
         foreach (Enemy enemy in listOfEnemies.ToList())
         {
@@ -22,6 +22,8 @@ internal class Update
                 if (distance < bullet.Radius + enemy.Radius)
                 {
                     listOfEnemies.Remove(enemy);
+                    numberOfKilledEnemies++;
+                    window.Title = $"Killed Enemies: {numberOfKilledEnemies}";
                     listOfBullets.Remove(bullet);
                     break;
                 }
@@ -43,7 +45,7 @@ internal class Update
             if (deltaX > 4 || deltaY > 4 || deltaX < -4 || deltaY < -4)
             {
                 listOfBullets.Remove(bullet);
-                Console.WriteLine($"Removed bullet, remaining bullets: {listOfBullets.Count}");
+                //Console.WriteLine($"Removed bullet, remaining bullets: {listOfBullets.Count}");
             }
         }
     }
@@ -81,12 +83,55 @@ internal class Update
         }
     }
 
-    public Update(FrameEventArgs args, GameWindow window, List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player, Camera camera)
+    Random random = new Random();
+    private List<Enemy> SpawnEnemies(int numberOfEnemies, Player player)
+    {
+        List<Enemy> listOfEnemies = new List<Enemy>();
+        for (int i = 0; i < numberOfEnemies; i++)
+        {
+            int randomNumber = random.Next(0, 2) == 0 ? -1 : 1;
+            Vector2 center = new Vector2((numberOfEnemies / 2) - i + player.Center.X, 2 * randomNumber + player.Center.Y);
+            Enemy enemy = new Enemy(center, 0.1f, 0.2f);
+            listOfEnemies.Add(enemy);
+        }
+        return listOfEnemies;
+    }
+
+    private float timeSinceLastSpawn = 0;
+    private void MakeEnemies(Player player, List<Enemy> listOfEnemies, float elapsedTime)
+    {
+        timeSinceLastSpawn = timeSinceLastSpawn + elapsedTime;
+        if (timeSinceLastSpawn > 2)
+        {
+            timeSinceLastSpawn = 0;
+            List<Enemy> newEnemies = SpawnEnemies(8, player);
+            listOfEnemies.AddRange(newEnemies);
+        }
+    }
+
+    public void update(FrameEventArgs args)
     {
         var elapsedTime = (float)args.Time;
+        MakeEnemies(player, listOfEnemies, elapsedTime);
         MoveEnemies(listOfEnemies, elapsedTime, player);
         MoveBullets(elapsedTime, listOfBullets);
         MovePlayer(player, camera, elapsedTime);
-        Collissions(window, listOfEnemies, listOfBullets, player);
+        Collissions(gameWindow, listOfEnemies, listOfBullets, player);
+    }
+
+
+    GameWindow gameWindow;
+    List<Enemy> listOfEnemies;
+    int numberOfKilledEnemies;
+    List<Bullet> listOfBullets;
+    Player player;
+    Camera camera;
+    public Update(GameWindow window, List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player, Camera camera)
+    {
+        gameWindow = window;
+        this.listOfEnemies = listOfEnemies;
+        this.listOfBullets = listOfBullets;
+        this.player = player;
+        this.camera = camera;
     }
 }

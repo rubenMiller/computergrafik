@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
@@ -18,7 +17,7 @@ internal class Player
         direction.Normalize();
         Bullet bullet = new Bullet(player.Center, direction);
         listOfBullets.Add(bullet);
-        Console.WriteLine($"Number of Bullets: {listOfBullets.Count}");
+        //Console.WriteLine($"Number of Bullets: {listOfBullets.Count}");
     }
 
 
