@@ -1,12 +1,30 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using OpenTK.Mathematics;
+using System.Linq;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 
 internal class Update
 {
+
+
+    GameWindow gameWindow;
+    List<Enemy> listOfEnemies;
+    int numberOfKilledEnemies;
+    List<Bullet> listOfBullets;
+    Player player;
+    Camera camera;
+    public Update(GameWindow window, List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player, Camera camera)
+    {
+        gameWindow = window;
+        this.listOfEnemies = listOfEnemies;
+        this.listOfBullets = listOfBullets;
+        this.player = player;
+        this.camera = camera;
+
+    }
     private void Collissions(GameWindow window, List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player)
     {
         foreach (Enemy enemy in listOfEnemies.ToList())
@@ -34,7 +52,12 @@ internal class Update
             var distanceToPlayer = MathF.Sqrt(dX * dX + dY * dY);
             if (distanceToPlayer < enemy.Radius + player.Radius)
             {
-                window.Close();
+                listOfEnemies.Remove(enemy);
+                player.Health--;
+                if (player.Health < 1)
+                {
+                    window.Close();
+                }
             }
         }
         foreach (Bullet bullet in listOfBullets.ToList())
@@ -117,21 +140,5 @@ internal class Update
         MoveBullets(elapsedTime, listOfBullets);
         MovePlayer(player, camera, elapsedTime);
         Collissions(gameWindow, listOfEnemies, listOfBullets, player);
-    }
-
-
-    GameWindow gameWindow;
-    List<Enemy> listOfEnemies;
-    int numberOfKilledEnemies;
-    List<Bullet> listOfBullets;
-    Player player;
-    Camera camera;
-    public Update(GameWindow window, List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player, Camera camera)
-    {
-        gameWindow = window;
-        this.listOfEnemies = listOfEnemies;
-        this.listOfBullets = listOfBullets;
-        this.player = player;
-        this.camera = camera;
     }
 }

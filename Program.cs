@@ -14,9 +14,10 @@ internal class Program
 
         List<Enemy> listOfEnemies = new List<Enemy>();
         List<Bullet> listOfBullets = new List<Bullet>();
-        Player player = new Player(0.1f);
+        Player player = new Player(0.1f, 4);
         Camera camera = new Camera();
         Update update = new Update(window, listOfEnemies, listOfBullets, player, camera);
+        Draw draw = new Draw();
         window.UpdateFrame += args =>
         {
             update.update(args);
@@ -24,7 +25,7 @@ internal class Program
         };
         window.Resize += args1 => camera.Resize(args1);
         window.KeyDown += args => { if (Keys.Escape == args.Key) window.Close(); };
-        window.RenderFrame += args1 => new Draw(args1, listOfEnemies, listOfBullets, player, camera); // called once each frame; callback should contain drawing code
+        window.RenderFrame += args1 => draw.draw(listOfEnemies, listOfBullets, player, camera); // called once each frame; callback should contain drawing code
         window.RenderFrame += _ => window.SwapBuffers(); // buffer swap needed for double buffering
         window.MouseDown += _ => player.shootBullet(window, listOfBullets, player, camera);
 

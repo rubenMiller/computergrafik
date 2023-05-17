@@ -15,21 +15,23 @@ internal class Player
         var transformedPosition = mousePosition.Transform(camera.CameraMatrix.Inverted());
         var direction = transformedPosition - player.Center;
         direction.Normalize();
+
+        Orientation = direction;
         Bullet bullet = new Bullet(player.Center, direction);
         listOfBullets.Add(bullet);
-        //Console.WriteLine($"Number of Bullets: {listOfBullets.Count}");
     }
 
 
-    internal float shootingTimer;
-    internal float shootingInterval = 0.25f;
     public Vector2 Center = new Vector2(0, 0);
     public Vector2 Direction = new Vector2(0, 0);
     public float Speed = 1f;
     public float Radius;
+    public int Health;
+    public Vector2 Orientation = new Vector2(0, 0);
 
-    public Player(float radius)
+    public Player(float radius, int health)
     {
         Radius = radius;
+        Health = health;
     }
 }

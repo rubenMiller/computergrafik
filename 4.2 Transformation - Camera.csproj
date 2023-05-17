@@ -9,4 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Zenseless.OpenTK" Version="0.1.67" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="content\**\*.*" />
+  </ItemGroup>
 </Project>
