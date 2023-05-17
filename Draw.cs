@@ -10,6 +10,7 @@ internal class Draw
 
     private readonly Texture2D texBackground;
     private readonly Texture2D texPlayer;
+    private readonly Texture2D texZombie;
     public Draw()
     {
         texBackground = EmbeddedResource.LoadTexture("Cartoon_green_texture_grass.jpg");
@@ -19,6 +20,7 @@ internal class Draw
         GL.BindTexture(TextureTarget.Texture2D, 0);
 
         texPlayer = EmbeddedResource.LoadTexture("survivor-idle_rifle_0.png");
+        texZombie = EmbeddedResource.LoadTexture("zombie.png");
 
         GL.Enable(EnableCap.Texture2D);
         GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -34,7 +36,7 @@ internal class Draw
         camera.SetMatrix();
         DrawBackground();
         DrawPlayer(player, camera);
-        DrawEnemies(listOfEnemies);
+        DrawEnemies(listOfEnemies, camera);
         DrawBullets(listOfBullets);
         //DrawGrid();
     }
@@ -66,12 +68,26 @@ internal class Draw
         }
     }
 
-    private static void DrawEnemies(List<Enemy> listOfEnemies)
+    private void DrawEnemies(List<Enemy> listOfEnemies, Camera camera)
     {
         foreach (Enemy enemy in listOfEnemies)
         {
-            GL.Color4(Color4.Black);
-            DrawCircle(enemy.Center, enemy.Radius, 1);
+            GL.Color4(0f, 0f, 0f, 0.25f);
+            DrawCircle(enemy.Center, enemy.Radius, 1f);
+
+            var cam = camera.CameraMatrix;
+
+            cam = Transformation2d.Combine(Transformation2d.Rotation(enemy.Orientation.PolarAngle()), Transformation2d.Translate(enemy.Center), cam);
+            GL.LoadMatrix(ref cam);
+
+
+            GL.Color4(1f, 1f, 1f, 1f);
+            GL.BindTexture(TextureTarget.Texture2D, texZombie.Handle);
+            var enemyBox = new Box2(-enemy.Radius, -enemy.Radius, enemy.Radius, enemy.Radius);
+            DrawRect(enemyBox, new Box2(0f, 0f, 1f, 1f));
+
+            cam = camera.CameraMatrix;
+            GL.LoadMatrix(ref cam);
         }
     }
 
@@ -95,6 +111,17 @@ internal class Draw
         GL.End();
     }
 
+    private static void DrawRectangle(Vector2 center, float width, float height)
+    {
+        GL.Begin(PrimitiveType.Quads);
+        GL.Vertex2(center.X, center.Y);
+        GL.Vertex2(center.X + width, center.Y);
+        GL.Vertex2(center.X + width, center.Y + height);
+        GL.Vertex2(center.X, center.Y + height);
+        GL.End();
+    }
+
+
     private void DrawPlayer(Player player, Camera camera)
     {
         GL.Color4(0f, 0f, 0f, 0.25f);
@@ -115,8 +142,8 @@ internal class Draw
         GL.LoadMatrix(ref cam);
 
         GL.Color4(Color4.Red);
-        Vector2 offsetCenter = new Vector2(player.Center.X, player.Center.Y + 0.1f);
-        DrawCircle(offsetCenter, player.Radius / 2, player.Health / 4f);
+        Vector2 offsetCenter = new Vector2(player.Center.X - 0.1f, player.Center.Y + 0.1f);
+        DrawRectangle(offsetCenter, 0.05f * player.Health, 0.03f);
 
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
@@ -17,8 +18,17 @@ internal class Player
         direction.Normalize();
 
         Orientation = direction;
-        Bullet bullet = new Bullet(player.Center, direction);
+        var rotation = Rotate(new Vector2(0.07f, -0.05f), direction.PolarAngle());
+        Vector2 bulletStart = new Vector2(player.Center.X + rotation.X, player.Center.Y + rotation.Y);
+        Bullet bullet = new Bullet(bulletStart, direction);
         listOfBullets.Add(bullet);
+    }
+
+    public static Vector2 Rotate(Vector2 vector, float angle)
+    {
+        float cos = (float)Math.Cos(angle);
+        float sin = (float)Math.Sin(angle);
+        return new Vector2(vector.X * cos - vector.Y * sin, vector.X * sin + vector.Y * cos);
     }
 
 

@@ -87,6 +87,7 @@ internal class Update
         {
             Vector2 enemyDirection = player.Center - enemy.Center;
             enemyDirection.Normalize();
+            enemy.Orientation = enemyDirection;
             enemy.Center = enemy.Center + enemyDirection * enemy.Speed * elapsedTime;
         }
     }
