@@ -13,18 +13,23 @@ internal class Update
     List<Enemy> listOfEnemies;
     int numberOfKilledEnemies;
     List<Bullet> listOfBullets;
+    public float timePlayed;
     Player player;
     Camera camera;
-    public Update(GameWindow window, List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player, Camera camera)
+    EnemySpawner enemySpawner;
+    public bool readyForNewWave = true;
+    public int Wave;
+    public Update(GameWindow window, List<Bullet> listOfBullets, Player player, Camera camera, EnemySpawner enemySpawner)
     {
         gameWindow = window;
-        this.listOfEnemies = listOfEnemies;
         this.listOfBullets = listOfBullets;
         this.player = player;
         this.camera = camera;
+        this.enemySpawner = enemySpawner;
+        timePlayed = 0;
 
     }
-    private void Collissions(GameWindow window, List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player)
+    private int Collissions(GameWindow window, List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player, int gameState)
     {
         foreach (Enemy enemy in listOfEnemies.ToList())
         {
@@ -60,7 +65,8 @@ internal class Update
                 player.Health--;
                 if (player.Health < 1)
                 {
-                    window.Close();
+                    gameState = 2;
+                    return 2;
                 }
             }
         }
@@ -75,6 +81,7 @@ internal class Update
                 //Console.WriteLine($"Removed bullet, remaining bullets: {listOfBullets.Count}");
             }
         }
+        return 1;
     }
 
     private static void MoveBullets(float elapsedTime, List<Bullet> listOfBullets)
@@ -133,14 +140,26 @@ internal class Update
     }
 
 
-    public void update(FrameEventArgs args, int gameState)
+    public int update(FrameEventArgs args, int gameState, List<Enemy> listOfEnemies)
     {
-        var elapsedTime = (float)args.Time;
-        camera.UpdateMatrix(elapsedTime);
-        MoveEnemies(listOfEnemies, elapsedTime, player);
-        MoveBullets(elapsedTime, listOfBullets);
-        MovePlayer(player, elapsedTime);
-        MoveCamera(player, camera);
-        Collissions(gameWindow, listOfEnemies, listOfBullets, player);
+        if (gameState == 1)
+        {
+            var elapsedTime = (float)args.Time;
+            timePlayed = timePlayed + elapsedTime;
+            camera.UpdateMatrix(elapsedTime);
+            MoveEnemies(listOfEnemies, elapsedTime, player);
+            MoveBullets(elapsedTime, listOfBullets);
+            MovePlayer(player, elapsedTime);
+            MoveCamera(player, camera);
+            gameState = Collissions(gameWindow, listOfEnemies, listOfBullets, player, gameState);
+
+            if (listOfEnemies.Count == 0 && readyForNewWave == false)
+            {
+                readyForNewWave = true;
+                timePlayed = 0f;
+            }
+        }
+
+        return gameState;
     }
 }

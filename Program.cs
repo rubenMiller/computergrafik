@@ -17,18 +17,24 @@ internal class Program
         List<Bullet> listOfBullets = new List<Bullet>();
         Player player = new Player(0.1f, 4);
         EnemySpawner enemySpawner = new EnemySpawner();
-        listOfEnemies = enemySpawner.MakeEnemies(player);
         Camera camera = new Camera();
-        Update update = new Update(window, listOfEnemies, listOfBullets, player, camera);
+        Update update = new Update(window, listOfBullets, player, camera, enemySpawner);
         Draw draw = new Draw();
         window.UpdateFrame += args =>
         {
-            update.update(args, gameState);
+            if (update.timePlayed >= 2f && update.readyForNewWave)
+            {
+                update.readyForNewWave = false;
+                listOfEnemies = enemySpawner.MakeEnemies(player);
+                update.Wave++;
+            }
+            gameState = update.update(args, gameState, listOfEnemies);
             player.movePlayer(window.KeyboardState);
         };
         window.Resize += args1 => camera.Resize(args1);
         window.KeyDown += args => { if (Keys.Escape == args.Key) window.Close(); };
-        window.RenderFrame += args1 => draw.draw(listOfEnemies, listOfBullets, player, camera); // called once each frame; callback should contain drawing code
+        window.RenderFrame += args1 => draw.draw(listOfEnemies, listOfBullets, player, camera, gameState, update); // called once each frame; callback should contain drawing code
+        window.KeyDown += args => { if (gameState != 1) gameState = 1; };
         window.RenderFrame += _ => window.SwapBuffers(); // buffer swap needed for double buffering
         window.MouseDown += _ => player.shootBullet(window, listOfBullets, player, camera);
 

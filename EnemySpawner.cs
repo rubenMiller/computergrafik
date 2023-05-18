@@ -32,8 +32,10 @@ internal class EnemySpawner
     }
 
     private Random random = new Random();
+
+
     public EnemySpawner()
     {
-
+        
     }
 }

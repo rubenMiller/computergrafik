@@ -39,19 +39,31 @@ internal class Draw
 
     }
 
-    public void draw(List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player, Camera camera)
+    public void draw(List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player, Camera camera, int gameState, Update update)
     {
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
-        //draw a quad
-        camera.SetMatrix();
-        DrawBackground();
-        DrawPlayer(player, camera);
-        DrawEnemies(listOfEnemies, camera);
-        DrawBullets(listOfBullets, camera);
-        DrawText($"abcdefghjiklA019!z", -.99f, 0.9f, 0.05f, camera);
-        //DrawGrid();
+        if (gameState == 0)
+        {
+            DrawText($"To start the game, press any Key.", -0.9f, 0, 0.05f, camera);
+        }
+        if (gameState == 1)
+        {
+            camera.SetMatrix();
+            DrawBackground();
+            DrawPlayer(player, camera);
+            DrawEnemies(listOfEnemies, camera);
+            DrawBullets(listOfBullets, camera);
+            DrawText($"Wave: {update.Wave}, time in Wave: {(int)update.timePlayed} seconds.", -.99f, 0.9f, 0.05f, camera);
+        }
+        if (gameState == 2)
+        {
+            DrawText($"You died!", -0.5f, 0, 0.1f, camera);
+            DrawText($"To start the game, press any Key.", -0.9f, -0.2f, 0.05f, camera);
+        }
+
     }
+
 
     private void DrawText(string text, float x, float y, float size, Camera camera)
     {
