@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 using Zenseless.OpenTK;
 
 internal class Player
@@ -31,6 +32,45 @@ internal class Player
         return new Vector2(vector.X * cos - vector.Y * sin, vector.X * sin + vector.Y * cos);
     }
 
+    public void movePlayer(KeyboardState keyBoardState)
+    {
+        int movX = 0;
+        int movY = 0;
+        if (keyBoardState.IsKeyDown(Keys.W))
+        {
+            movX = 1;
+        }
+        else if (keyBoardState.IsKeyDown(Keys.S))
+        {
+            movX = -1;
+        }
+        else
+        {
+            movX = 0;
+        }
+        if (keyBoardState.IsKeyDown(Keys.D))
+        {
+            movY = 1;
+        }
+        else if (keyBoardState.IsKeyDown(Keys.A))
+        {
+            movY = -1;
+        }
+        else
+        {
+            movY = 0;
+        }
+
+        Vector2 direction = new Vector2(movY, movX);
+        if (direction.Length == 0)
+        {
+            Direction = new Vector2(0, 0);
+            return;
+        }
+        //Console.Write("Hello");
+        direction.Normalize();
+        Direction = direction;
+    }
 
     public Vector2 Center = new Vector2(0, 0);
     public Vector2 Direction = new Vector2(0, 0);

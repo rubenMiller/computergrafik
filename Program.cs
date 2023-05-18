@@ -21,7 +21,7 @@ internal class Program
         window.UpdateFrame += args =>
         {
             update.update(args);
-            camera.moveCamera(window.KeyboardState);
+            player.movePlayer(window.KeyboardState);
         };
         window.Resize += args1 => camera.Resize(args1);
         window.KeyDown += args => { if (Keys.Escape == args.Key) window.Close(); };

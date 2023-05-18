@@ -11,6 +11,7 @@ internal class Draw
     private readonly Texture2D texBackground;
     private readonly Texture2D texPlayer;
     private readonly Texture2D texZombie;
+    private readonly Texture2D texBullet;
     public Draw()
     {
         texBackground = EmbeddedResource.LoadTexture("Cartoon_green_texture_grass.jpg");
@@ -21,6 +22,7 @@ internal class Draw
 
         texPlayer = EmbeddedResource.LoadTexture("survivor-idle_rifle_0.png");
         texZombie = EmbeddedResource.LoadTexture("zombie.png");
+        texBullet = EmbeddedResource.LoadTexture("bullet.png");
 
         GL.Enable(EnableCap.Texture2D);
         GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -37,7 +39,7 @@ internal class Draw
         DrawBackground();
         DrawPlayer(player, camera);
         DrawEnemies(listOfEnemies, camera);
-        DrawBullets(listOfBullets);
+        DrawBullets(listOfBullets, camera);
         //DrawGrid();
     }
     private static List<Vector2> CreateCirclePoints()
@@ -59,12 +61,24 @@ internal class Draw
         return pointList;
     }
 
-    private static void DrawBullets(List<Bullet> listOfBullets)
+    private void DrawBullets(List<Bullet> listOfBullets, Camera camera)
     {
         foreach (Bullet bullet in listOfBullets)
         {
-            GL.Color4(Color4.BlueViolet);
-            DrawCircle(bullet.Center, bullet.Radius, 1);
+
+            var cam = camera.CameraMatrix;
+
+            cam = Transformation2d.Combine(Transformation2d.Rotation(bullet.Direction.PolarAngle()), Transformation2d.Translate(bullet.Center), cam);
+            GL.LoadMatrix(ref cam);
+
+
+            GL.Color4(1f, 1f, 1f, 1f);
+            GL.BindTexture(TextureTarget.Texture2D, texBullet.Handle);
+            var bulletBox = new Box2(-bullet.Radius, -bullet.Radius, bullet.Radius, bullet.Radius);
+            DrawRect(bulletBox, new Box2(0f, 0f, 1f, 1f));
+
+            cam = camera.CameraMatrix;
+            GL.LoadMatrix(ref cam);
         }
     }
 
@@ -163,7 +177,6 @@ internal class Draw
 
     private static void DrawRect(Box2 rectangle, Box2 texCoords)
     {
-        //TODO: 02. draw a rectangle with texture coordinates
         GL.Begin(PrimitiveType.Quads);
         GL.TexCoord2(texCoords.Min);
         GL.Vertex2(rectangle.Min);

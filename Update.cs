@@ -92,18 +92,39 @@ internal class Update
         }
     }
 
-    private static void MovePlayer(Player player, Camera camera, float elapsedTime)
+    private static void MovePlayer(Player player, float elapsedTime)
     {
-        //Console.Write($"player: {player.Center}, camera: {camera.Center}");
-        if (player.Center != camera.Center)
+        Vector2 newCenter = new Vector2();
+
+        newCenter = player.Center + player.Direction * player.Speed * elapsedTime;
+        /*Vector2 direction = camera.Center - player.Center;
+        player.Direction = direction;
+        player.Direction.Normalize();
+        if (direction.Length > 0.05f)
         {
-            Vector2 direction = camera.Center - player.Center;
-            player.Direction = direction;
-            player.Direction.Normalize();
-            if (direction.Length > 0.05f)
-            {
-                player.Center = player.Center + player.Direction * (1 + direction.Length) * player.Speed * elapsedTime;
-            }
+            //player.Center = player.Center + player.Direction * (1 + direction.Length) * player.Speed * elapsedTime;
+            newCenter = player.Center + player.Direction * player.Speed * elapsedTime;
+        }*/
+
+        if (newCenter.X > 10 || newCenter.X < -10 || newCenter.Y > 10 || newCenter.Y < -10)
+        {
+            return;
+        }
+        player.Center = newCenter;
+
+    }
+
+    private static void MoveCamera(Player player, Camera camera)
+    {
+        Vector2 newCenter = new Vector2();
+        newCenter = player.Center;
+        if (newCenter.X < 9 && newCenter.X > -9)
+        {
+            camera.Center.X = newCenter.X;
+        }
+        if (newCenter.Y < 9 && newCenter.Y > -9)
+        {
+            camera.Center.Y = newCenter.Y;
         }
     }
 
@@ -136,10 +157,12 @@ internal class Update
     public void update(FrameEventArgs args)
     {
         var elapsedTime = (float)args.Time;
-        MakeEnemies(player, listOfEnemies, elapsedTime);
+        camera.UpdateMatrix(elapsedTime);
+        //MakeEnemies(player, listOfEnemies, elapsedTime);
         MoveEnemies(listOfEnemies, elapsedTime, player);
         MoveBullets(elapsedTime, listOfBullets);
-        MovePlayer(player, camera, elapsedTime);
+        MovePlayer(player, elapsedTime);
+        MoveCamera(player, camera);
         Collissions(gameWindow, listOfEnemies, listOfBullets, player);
     }
 }

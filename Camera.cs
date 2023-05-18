@@ -12,66 +12,24 @@ internal class Camera
         _invAspectRatio = args.Height / (float)args.Width;
         //var scaleWindow = Scale(_invAspectRatio, 1);
         //GL.LoadMatrix(ref scaleWindow);
-        UpdateMatrix();
-    }
-
-    public void moveCamera(KeyboardState keyBoardState)
-    {
-        int movX = 0;
-        int movY = 0;
-        if (keyBoardState.IsKeyDown(Keys.W))
-        {
-            movX = 1;
-        }
-        else if (keyBoardState.IsKeyDown(Keys.S))
-        {
-            movX = -1;
-        }
-        else
-        {
-            movX = 0;
-        }
-        if (keyBoardState.IsKeyDown(Keys.D))
-        {
-            movY = 1;
-        }
-        else if (keyBoardState.IsKeyDown(Keys.A))
-        {
-            movY = -1;
-        }
-        else
-        {
-            movY = 0;
-        }
-
-        Vector2 movement = new Vector2(movY, movX);
-        if (movement.Length == 0)
-        {
-            return;
-        }
-        //Console.Write("Hello");
-        movement.Normalize();
-        Movement = movement * 0.02f;
-        UpdateMatrix();
+        UpdateMatrix(0f);
     }
 
 
-    public Vector2 Center
-    {
-        get => _position;
-    }
+
+    public Vector2 Center;
     public Matrix4 CameraMatrix { get => _cameraMatrix; }
 
     public void SetMatrix() => GL.LoadMatrix(ref _cameraMatrix);
     private Matrix4 _cameraMatrix = Matrix4.Identity;
     private Vector2 _position;
-    public Vector2 Movement = new Vector2(0, 0);
+    public Vector2 Direction = new Vector2(0, 0);
     private float _invAspectRatio;
 
-    private void UpdateMatrix()
+    internal void UpdateMatrix(float elapsedTime)
     {
-        _position = _position + Movement;
-        var translate = Translate(-_position);
+        Center = Center + Direction * elapsedTime;
+        var translate = Translate(-Center);
         var scale = Scale(1f / 1f);
         var aspect = Scale(_invAspectRatio, 1);
         _cameraMatrix = Combine(translate, scale, aspect);
@@ -80,7 +38,7 @@ internal class Camera
 
     public Camera()
     {
-        _position = new Vector2(0, 0);
+        Center = new Vector2(0, 0);
     }
 
 }
