@@ -26,7 +26,7 @@ internal class Draw
         texPlayer = EmbeddedResource.LoadTexture("survivor-idle_rifle_0.png");
         texZombie = EmbeddedResource.LoadTexture("zombie.png");
         texCat = EmbeddedResource.LoadTexture("Topdown-Monster-Token-jule-cat.png");
-        texGiant = EmbeddedResource.LoadTexture("Topdown-Monster-Token-Demon-Goristro.png");
+        texGiant = EmbeddedResource.LoadTexture("Topdown-Monster-Token-Elemental-Fire.png");
         texBullet = EmbeddedResource.LoadTexture("bullet.png");
         texFont = EmbeddedResource.LoadTexture("nullptr_hq4x.png");
 

@@ -21,7 +21,7 @@ internal class Program
         Wave wave = new Wave();
         Update update = new Update(enemySpawner);
         Draw draw = new Draw();
-        bool reset = false;
+        bool reset = true;
         window.UpdateFrame += args =>
         {
             if (wave.timePlayed >= 2f && wave.readyForNewWave)
@@ -30,8 +30,8 @@ internal class Program
                 listOfEnemies = enemySpawner.MakeEnemies(player);
                 wave.WaveCount++;
             }
-            gameState = update.update(args, gameState, listOfEnemies, camera, player, listOfBullets, wave);
             player.movePlayer(window.KeyboardState);
+            gameState = update.update(args, gameState, listOfEnemies, camera, player, listOfBullets, wave);
             if (gameState == 2 && reset)
             {
                 reset = false;
@@ -39,9 +39,9 @@ internal class Program
                 listOfEnemies = new List<Enemy>();
                 listOfBullets = new List<Bullet>();
                 player = new Player(0.1f, 4);
-                enemySpawner = new EnemySpawner();
-                camera = new Camera();
                 wave = new Wave();
+                //Do not reset the camera!!!!!
+                //camera = new Camera();       
             }
         };
 
