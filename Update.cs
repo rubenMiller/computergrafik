@@ -8,28 +8,13 @@ using OpenTK.Windowing.Desktop;
 
 internal class Update
 {
-
-    GameWindow gameWindow;
-    List<Enemy> listOfEnemies;
     int numberOfKilledEnemies;
-    List<Bullet> listOfBullets;
-    public float timePlayed;
-    Player player;
-    Camera camera;
     EnemySpawner enemySpawner;
-    public bool readyForNewWave = true;
-    public int Wave;
-    public Update(GameWindow window, List<Bullet> listOfBullets, Player player, Camera camera, EnemySpawner enemySpawner)
+    public Update(EnemySpawner enemySpawner)
     {
-        gameWindow = window;
-        this.listOfBullets = listOfBullets;
-        this.player = player;
-        this.camera = camera;
         this.enemySpawner = enemySpawner;
-        timePlayed = 0;
-
     }
-    private int Collissions(GameWindow window, List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player, int gameState)
+    private int Collissions(List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player, int gameState)
     {
         foreach (Enemy enemy in listOfEnemies.ToList())
         {
@@ -48,7 +33,6 @@ internal class Update
                     {
                         listOfEnemies.Remove(enemy);
                         numberOfKilledEnemies++;
-                        window.Title = $"Killed Enemies: {numberOfKilledEnemies}";
                     }
 
                     listOfBullets.Remove(bullet);
@@ -140,23 +124,23 @@ internal class Update
     }
 
 
-    public int update(FrameEventArgs args, int gameState, List<Enemy> listOfEnemies)
+    public int update(FrameEventArgs args, int gameState, List<Enemy> listOfEnemies, Camera camera, Player player, List<Bullet> listOfBullets, Wave wave)
     {
         if (gameState == 1)
         {
             var elapsedTime = (float)args.Time;
-            timePlayed = timePlayed + elapsedTime;
+            wave.timePlayed = wave.timePlayed + elapsedTime;
             camera.UpdateMatrix(elapsedTime);
             MoveEnemies(listOfEnemies, elapsedTime, player);
             MoveBullets(elapsedTime, listOfBullets);
             MovePlayer(player, elapsedTime);
             MoveCamera(player, camera);
-            gameState = Collissions(gameWindow, listOfEnemies, listOfBullets, player, gameState);
+            gameState = Collissions(listOfEnemies, listOfBullets, player, gameState);
 
-            if (listOfEnemies.Count == 0 && readyForNewWave == false)
+            if (listOfEnemies.Count == 0 && wave.readyForNewWave == false)
             {
-                readyForNewWave = true;
-                timePlayed = 0f;
+                wave.readyForNewWave = true;
+                wave.timePlayed = 0f;
             }
         }
 

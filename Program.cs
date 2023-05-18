@@ -18,23 +18,37 @@ internal class Program
         Player player = new Player(0.1f, 4);
         EnemySpawner enemySpawner = new EnemySpawner();
         Camera camera = new Camera();
-        Update update = new Update(window, listOfBullets, player, camera, enemySpawner);
+        Wave wave = new Wave();
+        Update update = new Update(enemySpawner);
         Draw draw = new Draw();
+        bool reset = false;
         window.UpdateFrame += args =>
         {
-            if (update.timePlayed >= 2f && update.readyForNewWave)
+            if (wave.timePlayed >= 2f && wave.readyForNewWave)
             {
-                update.readyForNewWave = false;
+                wave.readyForNewWave = false;
                 listOfEnemies = enemySpawner.MakeEnemies(player);
-                update.Wave++;
+                wave.WaveCount++;
             }
-            gameState = update.update(args, gameState, listOfEnemies);
+            gameState = update.update(args, gameState, listOfEnemies, camera, player, listOfBullets, wave);
             player.movePlayer(window.KeyboardState);
+            if (gameState == 2 && reset)
+            {
+                reset = false;
+
+                listOfEnemies = new List<Enemy>();
+                listOfBullets = new List<Bullet>();
+                player = new Player(0.1f, 4);
+                enemySpawner = new EnemySpawner();
+                camera = new Camera();
+                wave = new Wave();
+            }
         };
+
         window.Resize += args1 => camera.Resize(args1);
         window.KeyDown += args => { if (Keys.Escape == args.Key) window.Close(); };
-        window.RenderFrame += args1 => draw.draw(listOfEnemies, listOfBullets, player, camera, gameState, update); // called once each frame; callback should contain drawing code
-        window.KeyDown += args => { if (gameState != 1) gameState = 1; };
+        window.RenderFrame += args1 => draw.draw(listOfEnemies, listOfBullets, player, camera, gameState, wave.WaveCount, (int)wave.timePlayed); // called once each frame; callback should contain drawing code
+        window.KeyDown += args => { if (gameState != 1) gameState = 1; reset = true; };
         window.RenderFrame += _ => window.SwapBuffers(); // buffer swap needed for double buffering
         window.MouseDown += _ => player.shootBullet(window, listOfBullets, player, camera);
 
@@ -43,4 +57,5 @@ internal class Program
 
         window.Run();
     }
+
 }

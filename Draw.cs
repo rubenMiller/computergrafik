@@ -39,7 +39,7 @@ internal class Draw
 
     }
 
-    public void draw(List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player, Camera camera, int gameState, Update update)
+    public void draw(List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player, Camera camera, int gameState, int updateWave, int updatetimePlayed)
     {
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
@@ -49,12 +49,12 @@ internal class Draw
         }
         if (gameState == 1)
         {
-            camera.SetMatrix();
+            //camera.SetMatrix();
             DrawBackground();
             DrawPlayer(player, camera);
             DrawEnemies(listOfEnemies, camera);
             DrawBullets(listOfBullets, camera);
-            DrawText($"Wave: {update.Wave}, time in Wave: {(int)update.timePlayed} seconds.", -.99f, 0.9f, 0.05f, camera);
+            DrawText($"Wave: {updateWave}, time in Wave: {updatetimePlayed} seconds.", -.99f, 0.9f, 0.05f, camera);
         }
         if (gameState == 2)
         {
