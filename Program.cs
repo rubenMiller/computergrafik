@@ -12,15 +12,18 @@ internal class Program
     {
         GameWindow window = new(GameWindowSettings.Default, new NativeWindowSettings { Profile = ContextProfile.Compatability }); // window with immediate mode rendering enabled
 
+        int gameState = 0;
         List<Enemy> listOfEnemies = new List<Enemy>();
         List<Bullet> listOfBullets = new List<Bullet>();
         Player player = new Player(0.1f, 4);
+        EnemySpawner enemySpawner = new EnemySpawner();
+        listOfEnemies = enemySpawner.MakeEnemies(player);
         Camera camera = new Camera();
         Update update = new Update(window, listOfEnemies, listOfBullets, player, camera);
         Draw draw = new Draw();
         window.UpdateFrame += args =>
         {
-            update.update(args);
+            update.update(args, gameState);
             player.movePlayer(window.KeyboardState);
         };
         window.Resize += args1 => camera.Resize(args1);

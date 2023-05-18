@@ -11,7 +11,10 @@ internal class Draw
     private readonly Texture2D texBackground;
     private readonly Texture2D texPlayer;
     private readonly Texture2D texZombie;
+    private readonly Texture2D texCat;
+    private readonly Texture2D texGiant;
     private readonly Texture2D texBullet;
+    private readonly Texture2D texFont;
     public Draw()
     {
         texBackground = EmbeddedResource.LoadTexture("Cartoon_green_texture_grass.jpg");
@@ -22,7 +25,13 @@ internal class Draw
 
         texPlayer = EmbeddedResource.LoadTexture("survivor-idle_rifle_0.png");
         texZombie = EmbeddedResource.LoadTexture("zombie.png");
+        texCat = EmbeddedResource.LoadTexture("Topdown-Monster-Token-jule-cat.png");
+        texGiant = EmbeddedResource.LoadTexture("Topdown-Monster-Token-Demon-Goristro.png");
         texBullet = EmbeddedResource.LoadTexture("bullet.png");
+        texFont = EmbeddedResource.LoadTexture("nullptr_hq4x.png");
+
+        texFont.MinFilter = Zenseless.OpenTK.TextureMinFilter.Nearest; // avoids problems on the sprite cell borders, but no anti aliased text borders
+        texFont.MagFilter = Zenseless.OpenTK.TextureMagFilter.Nearest;
 
         GL.Enable(EnableCap.Texture2D);
         GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -40,8 +49,38 @@ internal class Draw
         DrawPlayer(player, camera);
         DrawEnemies(listOfEnemies, camera);
         DrawBullets(listOfBullets, camera);
+        DrawText($"abcdefghjiklA019!z", -.99f, 0.9f, 0.05f, camera);
         //DrawGrid();
     }
+
+    private void DrawText(string text, float x, float y, float size, Camera camera)
+    {
+
+        var cam = camera.CameraMatrix;
+
+        cam = Transformation2d.Combine(Transformation2d.Translate(camera.Center), cam);
+        GL.LoadMatrix(ref cam);
+
+        GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
+        GL.Color4(Color4.White);
+        //A string is an array of characters. Each character is a number defined in a code page like the[ASCII](https://en.wikipedia.org/wiki/ASCII) code.
+        const uint firstCharacter = 32; // the ASCII code of the first character stored in the bitmap font
+        const uint charactersPerColumn = 12; // how many characters are in each column
+        const uint charactersPerRow = 8; // how many characters are in each row
+        var rect = new Box2(x, y, x + size, y + size); // rectangle of the first character
+        foreach (var spriteId in SpriteSheetTools.StringToSpriteIds(text, firstCharacter))
+        {
+            var texCoords = SpriteSheetTools.CalcTexCoords(spriteId, charactersPerRow, charactersPerColumn);
+            //texCoords.Scale(new Vector2(0.98f), texCoords.Center); // if you want to use a linear (or mipmap) filter do not use the texels on the border of one sprite tile
+            DrawRect(rect, texCoords);
+            rect.Translate(new Vector2(rect.Size.X, 0f));
+        }
+        GL.BindTexture(TextureTarget.Texture2D, 0);
+
+        cam = camera.CameraMatrix;
+        GL.LoadMatrix(ref cam);
+    }
+
     private static List<Vector2> CreateCirclePoints()
     {
         List<Vector2> pointList = new List<Vector2>();
@@ -76,6 +115,7 @@ internal class Draw
             GL.BindTexture(TextureTarget.Texture2D, texBullet.Handle);
             var bulletBox = new Box2(-bullet.Radius, -bullet.Radius, bullet.Radius, bullet.Radius);
             DrawRect(bulletBox, new Box2(0f, 0f, 1f, 1f));
+            GL.BindTexture(TextureTarget.Texture2D, 0);
 
             cam = camera.CameraMatrix;
             GL.LoadMatrix(ref cam);
@@ -96,12 +136,32 @@ internal class Draw
 
 
             GL.Color4(1f, 1f, 1f, 1f);
-            GL.BindTexture(TextureTarget.Texture2D, texZombie.Handle);
+            if (enemy.Type == 1)
+            {
+                GL.BindTexture(TextureTarget.Texture2D, texZombie.Handle);
+            }
+            if (enemy.Type == 2)
+            {
+                GL.BindTexture(TextureTarget.Texture2D, texCat.Handle);
+            }
+            if (enemy.Type == 3)
+            {
+                GL.BindTexture(TextureTarget.Texture2D, texGiant.Handle);
+            }
+
             var enemyBox = new Box2(-enemy.Radius, -enemy.Radius, enemy.Radius, enemy.Radius);
             DrawRect(enemyBox, new Box2(0f, 0f, 1f, 1f));
+            GL.BindTexture(TextureTarget.Texture2D, 0);
 
             cam = camera.CameraMatrix;
             GL.LoadMatrix(ref cam);
+
+            if (enemy.Type == 3)
+            {
+                GL.Color4(Color4.Red);
+                Vector2 offsetCenter = new Vector2(enemy.Center.X - 0.2f, enemy.Center.Y + 0.2f);
+                DrawRectangle(offsetCenter, 0.05f * enemy.Health, 0.03f);
+            }
         }
     }
 
@@ -151,6 +211,7 @@ internal class Draw
         GL.BindTexture(TextureTarget.Texture2D, texPlayer.Handle);
         var playerBox = new Box2(-player.Radius, -player.Radius, player.Radius, player.Radius);
         DrawRect(playerBox, new Box2(0f, 0f, 1f, 1f));
+        GL.BindTexture(TextureTarget.Texture2D, 0);
 
         cam = camera.CameraMatrix;
         GL.LoadMatrix(ref cam);
@@ -171,8 +232,9 @@ internal class Draw
         static Box2 SizedBox(float minX, float minY, float sizeX, float sizeY) => new(minX, minY, minX + sizeX, minY + sizeY);
 
         GL.Color4(1f, 1f, 1f, 1f);
-        var rect = new Box2(-10f, -10f, 10f, 10f);
-        DrawRect(rect, SizedBox(0, 0f, 10f, 10f));
+        var rect = new Box2(-5f, -5f, 5f, 5f);
+        DrawRect(rect, SizedBox(0, 0f, 5f, 5f));
+        GL.BindTexture(TextureTarget.Texture2D, 0);
     }
 
     private static void DrawRect(Box2 rectangle, Box2 texCoords)
@@ -187,21 +249,5 @@ internal class Draw
         GL.TexCoord2(texCoords.Min.X, texCoords.Max.Y);
         GL.Vertex2(rectangle.Min.X, rectangle.Max.Y);
         GL.End();
-        GL.BindTexture(TextureTarget.Texture2D, 0);
     }
-
-    private static void DrawGrid()
-    {
-        GL.Begin(PrimitiveType.Lines);
-        for (int i = -10; i <= 10; i++)
-        {
-            GL.Vertex2(i, -10);
-            GL.Vertex2(i, 10);
-            GL.Vertex2(-10, i);
-            GL.Vertex2(10, i);
-        }
-        GL.End();
-    }
-
-
 }

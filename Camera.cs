@@ -22,7 +22,6 @@ internal class Camera
 
     public void SetMatrix() => GL.LoadMatrix(ref _cameraMatrix);
     private Matrix4 _cameraMatrix = Matrix4.Identity;
-    private Vector2 _position;
     public Vector2 Direction = new Vector2(0, 0);
     private float _invAspectRatio;
 
