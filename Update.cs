@@ -101,7 +101,7 @@ internal class Update
             newCenter = player.Center + player.Direction * player.Speed * elapsedTime;
         }*/
 
-        if (newCenter.X > 5 || newCenter.X < -5 || newCenter.Y > 5 || newCenter.Y < -5)
+        if (newCenter.X > 5 - player.Radius || newCenter.X < -5 + player.Radius || newCenter.Y > 5 - player.Radius || newCenter.Y < -5 +dd player.Radius)
         {
             return;
         }
@@ -113,7 +113,8 @@ internal class Update
     {
         Vector2 newCenter = new Vector2();
         newCenter = player.Center;
-        if (newCenter.X < 4 && newCenter.X > -4)
+        Console.WriteLine(4 - camera.cameraAspectRatio / 2f);
+        if (newCenter.X < 4.1f - camera.cameraAspectRatio / 2f && newCenter.X > -4.1f + camera.cameraAspectRatio / 2f)
         {
             camera.Center.X = newCenter.X;
         }

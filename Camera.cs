@@ -9,7 +9,7 @@ internal class Camera
     public void Resize(ResizeEventArgs args)
     {
         GL.Viewport(0, 0, args.Width, args.Height);
-        _invAspectRatio = args.Height / (float)args.Width;
+        cameraAspectRatio = args.Height / (float)args.Width;
         //var scaleWindow = Scale(_invAspectRatio, 1);
         //GL.LoadMatrix(ref scaleWindow);
         UpdateMatrix(0f);
@@ -23,14 +23,14 @@ internal class Camera
     public void SetMatrix() => GL.LoadMatrix(ref _cameraMatrix);
     private Matrix4 _cameraMatrix = Matrix4.Identity;
     public Vector2 Direction = new Vector2(0, 0);
-    private float _invAspectRatio;
+    public float cameraAspectRatio { get; private set; }
 
     internal void UpdateMatrix(float elapsedTime)
     {
         Center = Center + Direction * elapsedTime;
         var translate = Translate(-Center);
         var scale = Scale(1f / 1f);
-        var aspect = Scale(_invAspectRatio, 1);
+        var aspect = Scale(cameraAspectRatio, 1);
         _cameraMatrix = Combine(translate, scale, aspect);
         //Console.Write($"camera: {_position}");
     }
