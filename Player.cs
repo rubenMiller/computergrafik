@@ -7,22 +7,26 @@ using Zenseless.OpenTK;
 
 internal class Player
 {
-
-    public void shootBullet(GameWindow window, List<Bullet> listOfBullets, Player player, Camera camera)
+    public Bullet shootBullet(GameWindow window, Camera camera, MouseState mouseState)
     {
-        var pixelMousePosition = window.MousePosition;
-        var posX = (pixelMousePosition.X * 2f / window.Size.X) - 1;
-        var posY = (pixelMousePosition.Y * -2f / window.Size.Y) + 1;
-        Vector2 mousePosition = new Vector2(posX, posY);
-        var transformedPosition = mousePosition.Transform(camera.CameraMatrix.Inverted());
-        var direction = transformedPosition - player.Center;
-        direction.Normalize();
+        if (mouseState.IsButtonDown(MouseButton.Left) && timeSinceLastShot > reloadTime)
+        {
+            timeSinceLastShot = 0;
+            var pixelMousePosition = window.MousePosition;
+            var posX = (pixelMousePosition.X * 2f / window.Size.X) - 1;
+            var posY = (pixelMousePosition.Y * -2f / window.Size.Y) + 1;
+            Vector2 mousePosition = new Vector2(posX, posY);
+            var transformedPosition = mousePosition.Transform(camera.CameraMatrix.Inverted());
+            var direction = transformedPosition - Center;
+            direction.Normalize();
 
-        Orientation = direction;
-        var rotation = Rotate(new Vector2(0.07f, -0.05f), direction.PolarAngle());
-        Vector2 bulletStart = new Vector2(player.Center.X + rotation.X, player.Center.Y + rotation.Y);
-        Bullet bullet = new Bullet(bulletStart, direction);
-        listOfBullets.Add(bullet);
+            Orientation = direction;
+            var rotation = Rotate(new Vector2(0.07f, -0.05f), direction.PolarAngle());
+            Vector2 bulletStart = new Vector2(Center.X + rotation.X, Center.Y + rotation.Y);
+            Bullet bullet = new Bullet(bulletStart, direction);
+            return bullet;
+        }
+        return null;
     }
 
     public static Vector2 Rotate(Vector2 vector, float angle)
@@ -78,6 +82,8 @@ internal class Player
     public float Radius;
     public int Health;
     public Vector2 Orientation = new Vector2(0, 0);
+    public float timeSinceLastShot = 0f;
+    private float reloadTime = 0.2f;
 
     public Player(float radius, int health)
     {

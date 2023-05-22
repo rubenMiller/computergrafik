@@ -9,10 +9,8 @@ using OpenTK.Windowing.Desktop;
 internal class Update
 {
     int numberOfKilledEnemies;
-    EnemySpawner enemySpawner;
-    public Update(EnemySpawner enemySpawner)
+    public Update()
     {
-        this.enemySpawner = enemySpawner;
     }
     private int Collissions(List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player, int gameState)
     {
@@ -92,15 +90,6 @@ internal class Update
         Vector2 newCenter = new Vector2();
 
         newCenter = player.Center + player.Direction * player.Speed * elapsedTime;
-        /*Vector2 direction = camera.Center - player.Center;
-        player.Direction = direction;
-        player.Direction.Normalize();
-        if (direction.Length > 0.05f)
-        {
-            //player.Center = player.Center + player.Direction * (1 + direction.Length) * player.Speed * elapsedTime;
-            newCenter = player.Center + player.Direction * player.Speed * elapsedTime;
-        }*/
-
         if (newCenter.X < 5 - player.Radius && newCenter.X > -5 + player.Radius)
         {
             player.Center.X = newCenter.X;
@@ -133,7 +122,8 @@ internal class Update
         if (gameState == 1)
         {
             var elapsedTime = (float)args.Time;
-            wave.timePlayed = wave.timePlayed + elapsedTime;
+            wave.Update(elapsedTime, player, listOfEnemies);
+            player.timeSinceLastShot = player.timeSinceLastShot + elapsedTime;
             camera.UpdateMatrix(elapsedTime);
             MoveEnemies(listOfEnemies, elapsedTime, player);
             MoveBullets(elapsedTime, listOfBullets);
@@ -144,7 +134,7 @@ internal class Update
             if (listOfEnemies.Count == 0 && wave.readyForNewWave == false)
             {
                 wave.readyForNewWave = true;
-                wave.timePlayed = 0f;
+                wave.waveTime = 0f;
             }
         }
 

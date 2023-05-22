@@ -1,6 +1,6 @@
 # computergrafik
 
-TODO: Kamera darf nur bis zum skalierten Rand gehen.
+TODO: Kamera resized abhängig von Rand.
 
 TODO: einfügen von PowerUps
 TODO: überlegen: Wellen zeitbasiert oder nicht?

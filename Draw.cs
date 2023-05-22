@@ -9,7 +9,7 @@ internal class Draw
 {
 
     private readonly Texture2D texBackground;
-    private readonly Texture2D texPlayer;
+    private readonly Texture2D texPlayerHandgun;
     private readonly Texture2D texZombie;
     private readonly Texture2D texCat;
     private readonly Texture2D texGiant;
@@ -23,7 +23,7 @@ internal class Draw
         //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
         GL.BindTexture(TextureTarget.Texture2D, 0);
 
-        texPlayer = EmbeddedResource.LoadTexture("survivor-idle_rifle_0.png");
+        texPlayerHandgun = EmbeddedResource.LoadTexture("survivor-idle_handgun_0.png");
         texZombie = EmbeddedResource.LoadTexture("zombie.png");
         texCat = EmbeddedResource.LoadTexture("Topdown-Monster-Token-jule-cat.png");
         texGiant = EmbeddedResource.LoadTexture("Topdown-Monster-Token-Elemental-Fire.png");
@@ -220,7 +220,7 @@ internal class Draw
 
 
         GL.Color4(1f, 1f, 1f, 1f);
-        GL.BindTexture(TextureTarget.Texture2D, texPlayer.Handle);
+        GL.BindTexture(TextureTarget.Texture2D, texPlayerHandgun.Handle);
         var playerBox = new Box2(-player.Radius, -player.Radius, player.Radius, player.Radius);
         DrawRect(playerBox, new Box2(0f, 0f, 1f, 1f));
         GL.BindTexture(TextureTarget.Texture2D, 0);

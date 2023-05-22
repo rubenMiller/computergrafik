@@ -16,21 +16,16 @@ internal class Program
         List<Enemy> listOfEnemies = new List<Enemy>();
         List<Bullet> listOfBullets = new List<Bullet>();
         Player player = new Player(0.1f, 4);
-        EnemySpawner enemySpawner = new EnemySpawner();
         Camera camera = new Camera();
         Wave wave = new Wave();
-        Update update = new Update(enemySpawner);
+        Update update = new Update();
         Draw draw = new Draw();
         bool reset = true;
         window.UpdateFrame += args =>
         {
-            if (wave.timePlayed >= 2f && wave.readyForNewWave)
-            {
-                wave.readyForNewWave = false;
-                //listOfEnemies = enemySpawner.MakeEnemies(player, wave.WaveCount);
-                wave.WaveCount++;
-            }
             player.movePlayer(window.KeyboardState);
+            Bullet newBullet = player.shootBullet(window, camera, window.MouseState);
+            if (newBullet != null) { listOfBullets.Add(newBullet); }
             gameState = update.update(args, gameState, listOfEnemies, camera, player, listOfBullets, wave);
             if (gameState == 2 && reset)
             {
@@ -47,10 +42,10 @@ internal class Program
 
         window.Resize += args1 => camera.Resize(args1);
         window.KeyDown += args => { if (Keys.Escape == args.Key) window.Close(); };
-        window.RenderFrame += args1 => draw.draw(listOfEnemies, listOfBullets, player, camera, gameState, wave.WaveCount, (int)wave.timePlayed); // called once each frame; callback should contain drawing code
+        window.RenderFrame += args1 => draw.draw(listOfEnemies, listOfBullets, player, camera, gameState, wave.WaveCount, (int)wave.waveTime); // called once each frame; callback should contain drawing code
         window.KeyDown += args => { if (gameState != 1) gameState = 1; reset = true; };
         window.RenderFrame += _ => window.SwapBuffers(); // buffer swap needed for double buffering
-        window.MouseDown += _ => player.shootBullet(window, listOfBullets, player, camera);
+        //window.MouseDown += args => player.shootBullet(window, listOfBullets, player, camera);
 
         // setup code executed once
         GL.ClearColor(Color4.LightGray);
