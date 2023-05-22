@@ -14,6 +14,8 @@ internal class Draw
     private readonly Texture2D texCat;
     private readonly Texture2D texGiant;
     private readonly Texture2D texBullet;
+    private readonly Texture2D texShootingEnemy;
+    private readonly Texture2D texArrow;
     private readonly Texture2D texFont;
     public Draw()
     {
@@ -28,6 +30,8 @@ internal class Draw
         texCat = EmbeddedResource.LoadTexture("Topdown-Monster-Token-jule-cat.png");
         texGiant = EmbeddedResource.LoadTexture("Topdown-Monster-Token-Elemental-Fire.png");
         texBullet = EmbeddedResource.LoadTexture("bullet.png");
+        texArrow = EmbeddedResource.LoadTexture("Pfeil.png");
+        texShootingEnemy = EmbeddedResource.LoadTexture("tempShooter.png");
         texFont = EmbeddedResource.LoadTexture("nullptr_hq4x.png");
 
         texFont.MinFilter = Zenseless.OpenTK.TextureMinFilter.Nearest; // avoids problems on the sprite cell borders, but no anti aliased text borders
@@ -159,6 +163,14 @@ internal class Draw
             if (enemy.Type == 3)
             {
                 GL.BindTexture(TextureTarget.Texture2D, texGiant.Handle);
+            }
+            if (enemy.Type == 4)
+            {
+                GL.BindTexture(TextureTarget.Texture2D, texShootingEnemy.Handle);
+            }
+            if (enemy.Type == 5)
+            {
+                GL.BindTexture(TextureTarget.Texture2D, texArrow.Handle);
             }
 
             var enemyBox = new Box2(-enemy.Radius, -enemy.Radius, enemy.Radius, enemy.Radius);

@@ -18,6 +18,11 @@ internal class Update
         {
             foreach (Bullet bullet in listOfBullets.ToList())
             {
+                if (enemy.unkillable)
+                {
+                    continue;
+                }
+
                 //checks whether it collides with an enemy
                 var deltaX = bullet.Center.X - enemy.Center.X;
                 var deltaY = bullet.Center.Y - enemy.Center.Y;
@@ -76,13 +81,41 @@ internal class Update
 
     private static void MoveEnemies(List<Enemy> listOfEnemies, float elapsedTime, Player player)
     {
+        List<Enemy> newEnemies = new List<Enemy>();
         foreach (Enemy enemy in listOfEnemies)
         {
+            if (enemy.Type == 4 && enemy.timeSinceShoot < enemy.reloadTime)
+            {
+                enemy.timeSinceShoot += elapsedTime;
+            }
+            if (enemy.Type == 4 && enemy.timeSinceShoot > enemy.reloadTime && enemy.timeStanding < 1f)
+            {
+                enemy.timeStanding += elapsedTime;
+                continue;
+            }
+            if (enemy.Type == 4 && enemy.timeSinceShoot > enemy.reloadTime && enemy.timeStanding > 1f)
+            {
+                newEnemies.Add(enemy.Shoot(player.Center, enemy.Center));
+            }
+            // An enemy of type 4 keeps a distance to the player
+            if (enemy.Type == 4 && Vector2.Distance(enemy.Center, player.Center) < 1)
+            {
+                enemy.timeStanding += elapsedTime;
+                continue;
+            }
+            if (enemy.Type == 5)
+            {
+                enemy.Center = enemy.Center + enemy.arrowOrientation * enemy.Speed * elapsedTime;
+                continue;
+            }
+
+            enemy.timeStanding = 0;
             Vector2 enemyDirection = player.Center - enemy.Center;
             enemyDirection.Normalize();
             enemy.Orientation = enemyDirection;
             enemy.Center = enemy.Center + enemyDirection * enemy.Speed * elapsedTime;
         }
+        listOfEnemies.AddRange(newEnemies);
     }
 
     private static void MovePlayer(Player player, float elapsedTime)

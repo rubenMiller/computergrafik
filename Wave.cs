@@ -15,7 +15,7 @@ internal class Wave
                 i--;
                 continue;
             }
-            Enemy enemy = new Enemy(center, enemyType);
+            Enemy enemy = new Enemy(center, enemyType, new Vector2(0, 0));
             listOfEnemies.Add(enemy);
         }
         return listOfEnemies;
@@ -26,6 +26,7 @@ internal class Wave
         List<Enemy> listOfEnemies = SpawnEnemies(5 + 2 * WaveCount, player, 1);
         listOfEnemies.AddRange(SpawnEnemies(5 + 2 * WaveCount, player, 2));
         listOfEnemies.AddRange(SpawnEnemies(1 + 1 * WaveCount, player, 3));
+        listOfEnemies.AddRange(SpawnEnemies(1 + WaveCount * 1, player, 4));
 
         return listOfEnemies;
     }

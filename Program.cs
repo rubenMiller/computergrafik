@@ -35,7 +35,7 @@ internal class Program
                 listOfBullets = new List<Bullet>();
                 player = new Player(0.1f, 4);
                 wave = new Wave();
-                //Do not reset the camera!!!!!
+                //Do not reset the camera!
                 //camera = new Camera();       
             }
         };
