@@ -101,20 +101,23 @@ internal class Update
             newCenter = player.Center + player.Direction * player.Speed * elapsedTime;
         }*/
 
-        if (newCenter.X > 5 - player.Radius || newCenter.X < -5 + player.Radius || newCenter.Y > 5 - player.Radius || newCenter.Y < -5 +dd player.Radius)
+        if (newCenter.X < 5 - player.Radius && newCenter.X > -5 + player.Radius)
         {
-            return;
+            player.Center.X = newCenter.X;
         }
-        player.Center = newCenter;
-
+        if (newCenter.Y < 5 - player.Radius && newCenter.Y > -5 + player.Radius)
+        {
+            player.Center.Y = newCenter.Y;
+        }
     }
 
     private static void MoveCamera(Player player, Camera camera)
     {
         Vector2 newCenter = new Vector2();
         newCenter = player.Center;
-        Console.WriteLine(4 - camera.cameraAspectRatio / 2f);
-        if (newCenter.X < 4.1f - camera.cameraAspectRatio / 2f && newCenter.X > -4.1f + camera.cameraAspectRatio / 2f)
+        Console.WriteLine($"ratio: {camera.cameraAspectRatio}, stop: {-1 / camera.cameraAspectRatio + 4}, camera.X: {camera.Center.X}, player.Center.X {player.Center.X}");
+        if (newCenter.X < -1 / camera.cameraAspectRatio + 5 && newCenter.X > 1 / camera.cameraAspectRatio - 5)
+        //if (newCenter.X < 4.1f && newCenter.X > -4.1f)
         {
             camera.Center.X = newCenter.X;
         }

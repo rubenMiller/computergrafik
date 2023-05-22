@@ -27,7 +27,7 @@ internal class Program
             if (wave.timePlayed >= 2f && wave.readyForNewWave)
             {
                 wave.readyForNewWave = false;
-                listOfEnemies = enemySpawner.MakeEnemies(player, wave.WaveCount);
+                //listOfEnemies = enemySpawner.MakeEnemies(player, wave.WaveCount);
                 wave.WaveCount++;
             }
             player.movePlayer(window.KeyboardState);
