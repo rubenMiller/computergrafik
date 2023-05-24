@@ -14,7 +14,6 @@ internal class Program
 
         int gameState = 0;
         List<Enemy> listOfEnemies = new List<Enemy>();
-        List<Bullet> listOfBullets = new List<Bullet>();
         Player player = new Player(0.1f, 4);
         Camera camera = new Camera();
         Wave wave = new Wave();
@@ -24,15 +23,14 @@ internal class Program
         window.UpdateFrame += args =>
         {
             player.movePlayer(window.KeyboardState);
-            Bullet newBullet = player.shootBullet(window, camera, window.MouseState);
-            if (newBullet != null) { listOfBullets.Add(newBullet); }
-            gameState = update.update(args, gameState, listOfEnemies, camera, player, listOfBullets, wave);
+            player.shootBullet(window, camera, window.MouseState);
+            gameState = update.update(args, gameState, listOfEnemies, camera, player, wave);
             if (gameState == 2 && reset)
             {
                 reset = false;
 
                 listOfEnemies = new List<Enemy>();
-                listOfBullets = new List<Bullet>();
+                player.listOfBullets = new List<Bullet>();
                 player = new Player(0.1f, 4);
                 wave = new Wave();
                 //Do not reset the camera!
@@ -42,7 +40,7 @@ internal class Program
 
         window.Resize += args1 => camera.Resize(args1);
         window.KeyDown += args => { if (Keys.Escape == args.Key) window.Close(); };
-        window.RenderFrame += args1 => draw.draw(listOfEnemies, listOfBullets, player, camera, gameState, wave.WaveCount, (int)wave.waveTime); // called once each frame; callback should contain drawing code
+        window.RenderFrame += args1 => draw.draw(listOfEnemies, player.listOfBullets, player, camera, gameState, wave.WaveCount, (int)wave.waveTime); // called once each frame; callback should contain drawing code
         window.KeyDown += args => { if (gameState != 1) gameState = 1; reset = true; };
         window.RenderFrame += _ => window.SwapBuffers(); // buffer swap needed for double buffering
         //window.MouseDown += args => player.shootBullet(window, listOfBullets, player, camera);

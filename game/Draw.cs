@@ -152,7 +152,7 @@ internal class Draw
 
 
             GL.Color4(1f, 1f, 1f, 1f);
-            if (enemy is  baseEnemy)
+            if (enemy is baseEnemy)
             {
                 GL.BindTexture(TextureTarget.Texture2D, texZombie.Handle);
             }
@@ -181,6 +181,10 @@ internal class Draw
                 GL.Color4(Color4.Red);
                 Vector2 offsetCenter = new Vector2(enemy.Center.X - 0.2f, enemy.Center.Y + 0.2f);
                 DrawRectangle(offsetCenter, 0.05f * enemy.Health, 0.03f);
+            }
+            if (enemy is shootingEnemy se)
+            {
+                DrawBullets(se.listOfBullets, camera);
             }
         }
     }

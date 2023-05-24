@@ -61,19 +61,11 @@ internal class Update
             if (deltaX > 4 || deltaY > 4 || deltaX < -4 || deltaY < -4)
             {
                 listOfBullets.Remove(bullet);
-                //Console.WriteLine($"Removed bullet, remaining bullets: {listOfBullets.Count}");
             }
         }
         return 1;
     }
 
-    private static void MoveBullets(float elapsedTime, List<Bullet> listOfBullets)
-    {
-        foreach (Bullet bullet in listOfBullets)
-        {
-            bullet.Center = bullet.Center + bullet.Direction * bullet.Speed * elapsedTime;
-        }
-    }
 
 
     private static void MovePlayer(Player player, float elapsedTime)
@@ -95,7 +87,7 @@ internal class Update
     {
         Vector2 newCenter = new Vector2();
         newCenter = player.Center;
-        Console.WriteLine($"ratio: {camera.cameraAspectRatio}, stop: {-1 / camera.cameraAspectRatio + 4}, camera.X: {camera.Center.X}, player.Center.X {player.Center.X}");
+        //Console.WriteLine($"ratio: {camera.cameraAspectRatio}, stop: {-1 / camera.cameraAspectRatio + 4}, camera.X: {camera.Center.X}, player.Center.X {player.Center.X}");
         if (newCenter.X < -1 / camera.cameraAspectRatio + 5 && newCenter.X > 1 / camera.cameraAspectRatio - 5)
         {
             camera.Center.X = newCenter.X;
@@ -107,7 +99,7 @@ internal class Update
     }
 
 
-    public int update(FrameEventArgs args, int gameState, List<Enemy> listOfEnemies, Camera camera, Player player, List<Bullet> listOfBullets, Wave wave)
+    public int update(FrameEventArgs args, int gameState, List<Enemy> listOfEnemies, Camera camera, Player player, Wave wave)
     {
         if (gameState == 1)
         {
@@ -119,10 +111,13 @@ internal class Update
             {
                 enemy.Update(elapsedTime, player);
             }
-            MoveBullets(elapsedTime, listOfBullets);
+            foreach (Bullet bullet in player.listOfBullets)
+            {
+                bullet.Update(elapsedTime);
+            }
             MovePlayer(player, elapsedTime);
             MoveCamera(player, camera);
-            gameState = Collissions(listOfEnemies, listOfBullets, player, gameState);
+            gameState = Collissions(listOfEnemies, player.listOfBullets, player, gameState);
 
             if (listOfEnemies.Count == 0 && wave.readyForNewWave == false)
             {

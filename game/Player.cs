@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
@@ -6,7 +7,7 @@ using Zenseless.OpenTK;
 
 internal class Player
 {
-    public Bullet shootBullet(GameWindow window, Camera camera, MouseState mouseState)
+    public void shootBullet(GameWindow window, Camera camera, MouseState mouseState)
     {
         if (mouseState.IsButtonDown(MouseButton.Left) && timeSinceLastShot > reloadTime)
         {
@@ -22,10 +23,10 @@ internal class Player
             Orientation = direction;
             var rotation = Rotate(new Vector2(0.07f, -0.05f), direction.PolarAngle());
             Vector2 bulletStart = new Vector2(Center.X + rotation.X, Center.Y + rotation.Y);
-            Bullet bullet = new Bullet(bulletStart, direction, 3f);
-            return bullet;
+            Bullet bullet = new PlayerBullet(bulletStart, direction);
+
+            listOfBullets.Add(bullet);
         }
-        return null;
     }
 
     public static Vector2 Rotate(Vector2 vector, float angle)
@@ -82,6 +83,7 @@ internal class Player
     public Vector2 Orientation = new Vector2(0, 0);
     public float timeSinceLastShot = 0f;
     private float reloadTime = 0.2f;
+    public List<Bullet> listOfBullets = new List<Bullet>();
 
     public Player(float radius, int health)
     {
