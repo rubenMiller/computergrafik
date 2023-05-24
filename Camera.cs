@@ -1,7 +1,6 @@
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
-using OpenTK.Windowing.GraphicsLibraryFramework;
 using static Zenseless.OpenTK.Transformation2d;
 
 internal class Camera

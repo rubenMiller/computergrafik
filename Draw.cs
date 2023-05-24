@@ -152,25 +152,21 @@ internal class Draw
 
 
             GL.Color4(1f, 1f, 1f, 1f);
-            if (enemy.Type == 1)
+            if (enemy is  baseEnemy)
             {
                 GL.BindTexture(TextureTarget.Texture2D, texZombie.Handle);
             }
-            if (enemy.Type == 2)
+            if (enemy is runnerEnemy)
             {
                 GL.BindTexture(TextureTarget.Texture2D, texCat.Handle);
             }
-            if (enemy.Type == 3)
+            if (enemy is bigEnemy)
             {
                 GL.BindTexture(TextureTarget.Texture2D, texGiant.Handle);
             }
-            if (enemy.Type == 4)
+            if (enemy is shootingEnemy)
             {
                 GL.BindTexture(TextureTarget.Texture2D, texShootingEnemy.Handle);
-            }
-            if (enemy.Type == 5)
-            {
-                GL.BindTexture(TextureTarget.Texture2D, texArrow.Handle);
             }
 
             var enemyBox = new Box2(-enemy.Radius, -enemy.Radius, enemy.Radius, enemy.Radius);
@@ -180,7 +176,7 @@ internal class Draw
             cam = camera.CameraMatrix;
             GL.LoadMatrix(ref cam);
 
-            if (enemy.Type == 3)
+            if (enemy is bigEnemy)
             {
                 GL.Color4(Color4.Red);
                 Vector2 offsetCenter = new Vector2(enemy.Center.X - 0.2f, enemy.Center.Y + 0.2f);

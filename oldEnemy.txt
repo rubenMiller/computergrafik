@@ -1,6 +1,6 @@
 using OpenTK.Mathematics;
 
-internal class Enemy
+internal class oldEnemy
 {
     // these are neede only for type 4, should be outsorced
     public float timeSinceShoot = 0;
@@ -23,10 +23,11 @@ internal class Enemy
     public float Speed;
     public Vector2 Orientation = new Vector2(0, 0);
     public bool unkillable = false;
-    public Enemy(Vector2 center, int type, Vector2 arrowOrientation)
+    public oldEnemy(Vector2 center, int type, Vector2 arrowOrientation)
     {
         Center = center;
         Type = type;
+        //TODO make switch
         if (type == 1)
         {
             Health = 2;

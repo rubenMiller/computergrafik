@@ -4,7 +4,7 @@ using OpenTK.Mathematics;
 
 internal class Wave
 {
-    private List<Enemy> SpawnEnemies(int numberOfEnemies, Player player, int enemyType)
+    private List<Enemy> SpawnEnemies(int numberOfEnemies, Player player, Func<Vector2, Enemy> enemyCreator)
     {
         List<Enemy> listOfEnemies = new List<Enemy>();
         for (int i = 0; i < numberOfEnemies; i++)
@@ -15,18 +15,17 @@ internal class Wave
                 i--;
                 continue;
             }
-            Enemy enemy = new Enemy(center, enemyType, new Vector2(0, 0));
+            Enemy enemy = enemyCreator(center);
             listOfEnemies.Add(enemy);
         }
         return listOfEnemies;
     }
-
     private List<Enemy> MakeEnemies(Player player)
     {
-        List<Enemy> listOfEnemies = SpawnEnemies(5 + 2 * WaveCount, player, 1);
-        listOfEnemies.AddRange(SpawnEnemies(5 + 2 * WaveCount, player, 2));
-        listOfEnemies.AddRange(SpawnEnemies(1 + 1 * WaveCount, player, 3));
-        listOfEnemies.AddRange(SpawnEnemies(1 + WaveCount * 1, player, 4));
+        List<Enemy> listOfEnemies = SpawnEnemies(5 + 2 * WaveCount, player, center => new baseEnemy(center));
+        listOfEnemies.AddRange(SpawnEnemies(5 + 2 * WaveCount, player, center => new runnerEnemy(center)));
+        listOfEnemies.AddRange(SpawnEnemies(1 + 1 * WaveCount, player, center => new bigEnemy(center)));
+        listOfEnemies.AddRange(SpawnEnemies(1 + WaveCount * 1, player, center => new shootingEnemy(center)));
 
         return listOfEnemies;
     }
@@ -46,7 +45,6 @@ internal class Wave
             timeSinceLastSpawn = 0f;
         }
     }
-
 
     public bool readyForNewWave = true;
     public int WaveCount = 1;

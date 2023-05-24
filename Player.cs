@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
@@ -23,7 +22,7 @@ internal class Player
             Orientation = direction;
             var rotation = Rotate(new Vector2(0.07f, -0.05f), direction.PolarAngle());
             Vector2 bulletStart = new Vector2(Center.X + rotation.X, Center.Y + rotation.Y);
-            Bullet bullet = new Bullet(bulletStart, direction);
+            Bullet bullet = new Bullet(bulletStart, direction, 3f);
             return bullet;
         }
         return null;
@@ -71,7 +70,6 @@ internal class Player
             Direction = new Vector2(0, 0);
             return;
         }
-        //Console.Write("Hello");
         direction.Normalize();
         Direction = direction;
     }
