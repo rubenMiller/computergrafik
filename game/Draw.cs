@@ -7,69 +7,6 @@ using Zenseless.OpenTK;
 
 internal class Draw
 {
-
-    private readonly Texture2D texBackground;
-    private readonly Texture2D texPlayerHandgun;
-    private readonly Texture2D texZombie;
-    private readonly Texture2D texCat;
-    private readonly Texture2D texGiant;
-    private readonly Texture2D texBullet;
-    private readonly Texture2D texShootingEnemy;
-    private readonly Texture2D texArrow;
-    private readonly Texture2D texFont;
-    public Draw()
-    {
-        texBackground = EmbeddedResource.LoadTexture("Cartoon_green_texture_grass.jpg");
-        GL.BindTexture(TextureTarget.Texture2D, texBackground.Handle);
-        texBackground.Function = TextureFunction.Repeat;
-        //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
-        GL.BindTexture(TextureTarget.Texture2D, 0);
-
-        texPlayerHandgun = EmbeddedResource.LoadTexture("survivor-idle_handgun_0.png");
-        texZombie = EmbeddedResource.LoadTexture("zombie.png");
-        texCat = EmbeddedResource.LoadTexture("Topdown-Monster-Token-jule-cat.png");
-        texGiant = EmbeddedResource.LoadTexture("Topdown-Monster-Token-Elemental-Fire.png");
-        texBullet = EmbeddedResource.LoadTexture("bullet.png");
-        texArrow = EmbeddedResource.LoadTexture("Pfeil.png");
-        texShootingEnemy = EmbeddedResource.LoadTexture("tempShooter.png");
-        texFont = EmbeddedResource.LoadTexture("nullptr_hq4x.png");
-
-        texFont.MinFilter = Zenseless.OpenTK.TextureMinFilter.Nearest; // avoids problems on the sprite cell borders, but no anti aliased text borders
-        texFont.MagFilter = Zenseless.OpenTK.TextureMagFilter.Nearest;
-
-        GL.Enable(EnableCap.Texture2D);
-        GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-        GL.Enable(EnableCap.Blend);
-
-    }
-
-    public void draw(List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, List<Bullet> listPlayerOfBullets, Player player, Camera camera, int gameState, int updateWave, int updatetimePlayed)
-    {
-        GL.Clear(ClearBufferMask.ColorBufferBit);
-
-        if (gameState == 0)
-        {
-            DrawText($"To start the game, press any Key.", -0.9f, 0, 0.05f, camera);
-        }
-        if (gameState == 1)
-        {
-            //camera.SetMatrix();
-            DrawBackground();
-            DrawPlayer(player, camera);
-            DrawEnemies(listOfEnemies, camera);
-            DrawBullets(listPlayerOfBullets, camera);
-            DrawBullets(listOfEnemyBullets, camera);
-            DrawText($"Wave: {updateWave}, time in Wave: {updatetimePlayed} seconds.", -.99f, 0.9f, 0.05f, camera);
-        }
-        if (gameState == 2)
-        {
-            DrawText($"You died!", -0.5f, 0, 0.1f, camera);
-            DrawText($"To start the game, press any Key.", -0.9f, -0.2f, 0.05f, camera);
-        }
-
-    }
-
-
     private void DrawText(string text, float x, float y, float size, Camera camera)
     {
 
@@ -129,7 +66,15 @@ internal class Draw
 
 
             GL.Color4(1f, 1f, 1f, 1f);
-            GL.BindTexture(TextureTarget.Texture2D, texBullet.Handle);
+            if (bullet is PlayerBullet)
+            {
+                GL.BindTexture(TextureTarget.Texture2D, texBullet.Handle);
+            }
+            if (bullet is EnemyBullet)
+            {
+                GL.BindTexture(TextureTarget.Texture2D, texEnergyBall.Handle);
+            }
+
             var bulletBox = new Box2(-bullet.Radius, -bullet.Radius, bullet.Radius, bullet.Radius);
             DrawRect(bulletBox, new Box2(0f, 0f, 1f, 1f));
             GL.BindTexture(TextureTarget.Texture2D, 0);
@@ -250,7 +195,7 @@ internal class Draw
 
 
 
-    private void DrawBackground()
+    private void DrawBackground(GameBorder gameBorder)
     {
         //GL.BlendFunc(BlendingFactor.One, BlendingFactor.One);
         GL.BindTexture(TextureTarget.Texture2D, texBackground.Handle);
@@ -258,8 +203,8 @@ internal class Draw
         static Box2 SizedBox(float minX, float minY, float sizeX, float sizeY) => new(minX, minY, minX + sizeX, minY + sizeY);
 
         GL.Color4(1f, 1f, 1f, 1f);
-        var rect = new Box2(-5f, -5f, 5f, 5f);
-        DrawRect(rect, SizedBox(0, 0f, 5f, 5f));
+        var rect = new Box2(gameBorder.MinX, gameBorder.MinY, gameBorder.MaxX, gameBorder.MaxY);
+        DrawRect(rect, SizedBox(0, 0f, gameBorder.MaxX, gameBorder.MaxY));
         GL.BindTexture(TextureTarget.Texture2D, 0);
     }
 
@@ -275,5 +220,65 @@ internal class Draw
         GL.TexCoord2(texCoords.Min.X, texCoords.Max.Y);
         GL.Vertex2(rectangle.Min.X, rectangle.Max.Y);
         GL.End();
+    }
+
+    public void draw(List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, List<Bullet> listPlayerOfBullets, Player player, Camera camera, int gameState, int updateWave, int updatetimePlayed, GameBorder gameBorder)
+    {
+        GL.Clear(ClearBufferMask.ColorBufferBit);
+
+        if (gameState == 0)
+        {
+            DrawText($"To start the game, press any Key.", -0.9f, 0, 0.05f, camera);
+        }
+        if (gameState == 1)
+        {
+            DrawBackground(gameBorder);
+            DrawPlayer(player, camera);
+            DrawEnemies(listOfEnemies, camera);
+            DrawBullets(listPlayerOfBullets, camera);
+            DrawBullets(listOfEnemyBullets, camera);
+            DrawText($"Wave: {updateWave}, time in Wave: {updatetimePlayed} seconds.", -.99f, 0.9f, 0.05f, camera);
+        }
+        if (gameState == 2)
+        {
+            DrawText($"You died!", -0.5f, 0, 0.1f, camera);
+            DrawText($"To start the game, press any Key.", -0.9f, -0.2f, 0.05f, camera);
+        }
+
+    }
+
+    private readonly Texture2D texBackground;
+    private readonly Texture2D texPlayerHandgun;
+    private readonly Texture2D texZombie;
+    private readonly Texture2D texCat;
+    private readonly Texture2D texGiant;
+    private readonly Texture2D texBullet;
+    private readonly Texture2D texShootingEnemy;
+    private readonly Texture2D texEnergyBall;
+    private readonly Texture2D texFont;
+    public Draw()
+    {
+        texBackground = EmbeddedResource.LoadTexture("Cartoon_green_texture_grass.jpg");
+        GL.BindTexture(TextureTarget.Texture2D, texBackground.Handle);
+        texBackground.Function = TextureFunction.Repeat;
+        //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+        GL.BindTexture(TextureTarget.Texture2D, 0);
+
+        texPlayerHandgun = EmbeddedResource.LoadTexture("survivor-idle_handgun_0.png");
+        texZombie = EmbeddedResource.LoadTexture("zombie.png");
+        texCat = EmbeddedResource.LoadTexture("Topdown-Monster-Token-jule-cat.png");
+        texGiant = EmbeddedResource.LoadTexture("Topdown-Monster-Token-Elemental-Fire.png");
+        texBullet = EmbeddedResource.LoadTexture("bullet.png");
+        texEnergyBall = EmbeddedResource.LoadTexture("energy-ball.png");
+        texShootingEnemy = EmbeddedResource.LoadTexture("tempShooter.png");
+        texFont = EmbeddedResource.LoadTexture("nullptr_hq4x.png");
+
+        texFont.MinFilter = Zenseless.OpenTK.TextureMinFilter.Nearest; // avoids problems on the sprite cell borders, but no anti aliased text borders
+        texFont.MagFilter = Zenseless.OpenTK.TextureMagFilter.Nearest;
+
+        GL.Enable(EnableCap.Texture2D);
+        GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+        GL.Enable(EnableCap.Blend);
+
     }
 }

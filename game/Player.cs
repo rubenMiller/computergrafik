@@ -75,7 +75,7 @@ internal class Player
         Direction = direction;
     }
 
-    public void Update(float elapsedTime, GameWindow window, Camera camera)
+    public void Update(float elapsedTime, GameWindow window, Camera camera, GameBorder gameBorder)
     {
         timeSinceLastShot = timeSinceLastShot + elapsedTime;
 
@@ -83,11 +83,11 @@ internal class Player
         shootBullet(window, camera, window.MouseState);
 
         Vector2 newCenter = Center + Direction * Speed * elapsedTime;
-        if (newCenter.X < 5 - Radius && newCenter.X > -5 + Radius)
+        if (newCenter.X < gameBorder.MaxX - Radius && newCenter.X > gameBorder.MinX + Radius)
         {
             Center.X = newCenter.X;
         }
-        if (newCenter.Y < 5 - Radius && newCenter.Y > -5 + Radius)
+        if (newCenter.Y < gameBorder.MaxY - Radius && newCenter.Y > gameBorder.MinY + Radius)
         {
             Center.Y = newCenter.Y;
         }

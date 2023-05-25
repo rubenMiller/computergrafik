@@ -83,30 +83,30 @@ internal class Update
     }
 
 
-    private static void MoveCamera(Player player, Camera camera)
+    private static void MoveCamera(Player player, Camera camera, GameBorder gameBorder)
     {
         Vector2 newCenter = new Vector2();
         newCenter = player.Center;
         //Console.WriteLine($"ratio: {camera.cameraAspectRatio}, stop: {-1 / camera.cameraAspectRatio + 4}, camera.X: {camera.Center.X}, player.Center.X {player.Center.X}");
-        if (newCenter.X < -1 / camera.cameraAspectRatio + 5 && newCenter.X > 1 / camera.cameraAspectRatio - 5)
+        if (newCenter.X < -1 / camera.cameraAspectRatio + gameBorder.MaxX && newCenter.X > 1 / camera.cameraAspectRatio + gameBorder.MinX)
         {
             camera.Center.X = newCenter.X;
         }
-        if (newCenter.Y < 4 && newCenter.Y > -4)
+        if (newCenter.Y < gameBorder.MaxY - 1 && newCenter.Y > gameBorder.MinY + 1)
         {
             camera.Center.Y = newCenter.Y;
         }
     }
 
 
-    public int update(FrameEventArgs args, GameWindow window, int gameState, List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, Camera camera, Player player, Wave wave)
+    public int update(FrameEventArgs args, GameWindow window, int gameState, List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, Camera camera, Player player, Wave wave, GameBorder gameBorder)
     {
         if (gameState == 1)
         {
             var elapsedTime = (float)args.Time;
-            wave.Update(elapsedTime, player, listOfEnemies);
+            wave.Update(elapsedTime, player, listOfEnemies, gameBorder);
             camera.UpdateMatrix(elapsedTime);
-            player.Update(elapsedTime, window, camera);
+            player.Update(elapsedTime, window, camera, gameBorder);
 
             foreach (Enemy enemy in listOfEnemies)
             {
@@ -123,7 +123,7 @@ internal class Update
             }
 
 
-            MoveCamera(player, camera);
+            MoveCamera(player, camera, gameBorder);
             gameState = Collissions(listOfEnemies, listOfEnemyBullets, player, player.listOfBullets, gameState);
 
             if (listOfEnemies.Count == 0 && wave.readyForNewWave == false)
