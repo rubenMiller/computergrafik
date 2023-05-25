@@ -244,6 +244,8 @@ internal class Draw
     {
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
+        //TODO Make multiple Draws: Draw that calls DrawGame, DrawInterface, DrawStart and DrawDead
+
         switch (gameState.State)
         {
             case GameState.STATE.STATE_START:
