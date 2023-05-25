@@ -12,7 +12,7 @@ internal class Program
     {
         GameWindow window = new(GameWindowSettings.Default, new NativeWindowSettings { Profile = ContextProfile.Compatability }); // window with immediate mode rendering enabled
 
-        int gameState = 0;
+        //int gameState = 0;
         List<Enemy> listOfEnemies = new List<Enemy>();
         List<Bullet> listOfEnemyBullets = new List<Bullet>();
         Player player = new Player(0.1f, 4);
@@ -21,11 +21,12 @@ internal class Program
         Update update = new Update();
         Draw draw = new Draw();
         GameBorder gameBorder = new GameBorder(3, 3, -3, -3);
+        GameState gameState = new GameState(GameState.STATE.STATE_START);
         bool reset = true;
         window.UpdateFrame += args =>
         {
-            gameState = update.update(args, window, gameState, listOfEnemies, listOfEnemyBullets, camera, player, wave, gameBorder);
-            if (gameState == 2 && reset)
+            update.update(args, window, gameState, listOfEnemies, listOfEnemyBullets, camera, player, wave, gameBorder);
+            if (reset && gameState.State is GameState.STATE.STATE_DEAD)
             {
                 reset = false;
 
@@ -41,7 +42,7 @@ internal class Program
         window.Resize += args1 => camera.Resize(args1);
         window.KeyDown += args => { if (Keys.Escape == args.Key) window.Close(); };
         window.RenderFrame += args1 => draw.draw(listOfEnemies, listOfEnemyBullets, player.listOfBullets, player, camera, gameState, wave.WaveCount, (int)wave.waveTime, gameBorder); // called once each frame; callback should contain drawing code
-        window.KeyDown += args => { if (gameState != 1) gameState = 1; reset = true; };
+        window.KeyDown += args => { if (gameState.State is GameState.STATE.STATE_DEAD || gameState.State is GameState.STATE.STATE_START) gameState.State = GameState.STATE.STATE_PLAYING; reset = true; };
         window.RenderFrame += _ => window.SwapBuffers(); // buffer swap needed for double buffering
         //window.MouseDown += args => player.shootBullet(window, listOfBullets, player, camera);
 

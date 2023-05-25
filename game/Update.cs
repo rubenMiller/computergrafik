@@ -11,7 +11,7 @@ internal class Update
     public Update()
     {
     }
-    private int Collissions(List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, Player player, List<Bullet> listOfPlayerBullets, int gameState)
+    private int Collissions(List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, Player player, List<Bullet> listOfPlayerBullets, GameState gameState)
     {
         foreach (Enemy enemy in listOfEnemies.ToList())
         {
@@ -47,7 +47,7 @@ internal class Update
                 player.Health--;
                 if (player.Health < 1)
                 {
-                    gameState = 2;
+                    gameState.State = GameState.STATE.STATE_DEAD;
                     return 2;
                 }
             }
@@ -74,7 +74,7 @@ internal class Update
                 player.Health--;
                 if (player.Health < 1)
                 {
-                    gameState = 2;
+                    gameState.State = GameState.STATE.STATE_DEAD;
                     return 2;
                 }
             }
@@ -99,40 +99,44 @@ internal class Update
     }
 
 
-    public int update(FrameEventArgs args, GameWindow window, int gameState, List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, Camera camera, Player player, Wave wave, GameBorder gameBorder)
+    public void update(FrameEventArgs args, GameWindow window, GameState gameState, List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, Camera camera, Player player, Wave wave, GameBorder gameBorder)
     {
-        if (gameState == 1)
+        switch (gameState.State)
         {
-            var elapsedTime = (float)args.Time;
-            wave.Update(elapsedTime, player, listOfEnemies, gameBorder);
-            camera.UpdateMatrix(elapsedTime);
-            player.Update(elapsedTime, window, camera, gameBorder);
-
-            foreach (Enemy enemy in listOfEnemies)
-            {
-                enemy.Update(elapsedTime, player);
-                if (enemy is shootingEnemy se)
+            case GameState.STATE.STATE_PLAYING:
                 {
-                    var bullet = se.Shoot(player.Center);
-                    if (bullet != null) { listOfEnemyBullets.Add(bullet); }
+                    var elapsedTime = (float)args.Time;
+                    wave.Update(elapsedTime, player, listOfEnemies, gameBorder);
+                    camera.UpdateMatrix(elapsedTime);
+                    player.Update(elapsedTime, window, camera, gameBorder);
+
+                    foreach (Enemy enemy in listOfEnemies)
+                    {
+                        enemy.Update(elapsedTime, player);
+                        if (enemy is shootingEnemy se)
+                        {
+                            var bullet = se.Shoot(player.Center);
+                            if (bullet != null) { listOfEnemyBullets.Add(bullet); }
+                        }
+                    }
+                    foreach (Bullet bullet in listOfEnemyBullets)
+                    {
+                        bullet.Update(elapsedTime);
+                    }
+
+
+                    MoveCamera(player, camera, gameBorder);
+                    Collissions(listOfEnemies, listOfEnemyBullets, player, player.listOfBullets, gameState);
+
+                    if (listOfEnemies.Count == 0 && wave.readyForNewWave == false)
+                    {
+                        wave.readyForNewWave = true;
+                        wave.waveTime = 0f;
+                    }
+                    break;
                 }
-            }
-            foreach (Bullet bullet in listOfEnemyBullets)
-            {
-                bullet.Update(elapsedTime);
-            }
-
-
-            MoveCamera(player, camera, gameBorder);
-            gameState = Collissions(listOfEnemies, listOfEnemyBullets, player, player.listOfBullets, gameState);
-
-            if (listOfEnemies.Count == 0 && wave.readyForNewWave == false)
-            {
-                wave.readyForNewWave = true;
-                wave.waveTime = 0f;
-            }
+            default:
+                return;
         }
-
-        return gameState;
     }
 }

@@ -222,29 +222,39 @@ internal class Draw
         GL.End();
     }
 
-    public void draw(List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, List<Bullet> listPlayerOfBullets, Player player, Camera camera, int gameState, int updateWave, int updatetimePlayed, GameBorder gameBorder)
+    public void draw(List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, List<Bullet> listPlayerOfBullets, Player player, Camera camera, GameState gameState, int updateWave, int updatetimePlayed, GameBorder gameBorder)
     {
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
-        if (gameState == 0)
+        switch (gameState.State)
         {
-            DrawText($"To start the game, press any Key.", -0.9f, 0, 0.05f, camera);
+            case GameState.STATE.STATE_START:
+                {
+                    DrawText($"To start the game, press any Key.", -0.9f, 0, 0.05f, camera);
+                    break;
+                }
+            case GameState.STATE.STATE_PLAYING:
+                {
+                    DrawBackground(gameBorder);
+                    DrawPlayer(player, camera);
+                    DrawEnemies(listOfEnemies, camera);
+                    DrawBullets(listPlayerOfBullets, camera);
+                    DrawBullets(listOfEnemyBullets, camera);
+                    DrawText($"Wave: {updateWave}, time in Wave: {updatetimePlayed} seconds.", -.99f, 0.9f, 0.05f, camera);
+                    break;
+                }
+            case GameState.STATE.STATE_WAVEOVER:
+                {
+                    // Show the interface
+                    break;
+                }
+            case GameState.STATE.STATE_DEAD:
+                {
+                    DrawText($"You died!", -0.5f, 0, 0.1f, camera);
+                    DrawText($"To start the game, press any Key.", -0.9f, -0.2f, 0.05f, camera);
+                    break;
+                }
         }
-        if (gameState == 1)
-        {
-            DrawBackground(gameBorder);
-            DrawPlayer(player, camera);
-            DrawEnemies(listOfEnemies, camera);
-            DrawBullets(listPlayerOfBullets, camera);
-            DrawBullets(listOfEnemyBullets, camera);
-            DrawText($"Wave: {updateWave}, time in Wave: {updatetimePlayed} seconds.", -.99f, 0.9f, 0.05f, camera);
-        }
-        if (gameState == 2)
-        {
-            DrawText($"You died!", -0.5f, 0, 0.1f, camera);
-            DrawText($"To start the game, press any Key.", -0.9f, -0.2f, 0.05f, camera);
-        }
-
     }
 
     private readonly Texture2D texBackground;
