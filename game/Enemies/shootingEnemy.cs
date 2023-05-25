@@ -16,11 +16,6 @@ internal class shootingEnemy : Enemy
     public override void Update(float elapsedTime, Player player)
     {
         timeSinceShoot += elapsedTime;
-        if (timeSinceShoot > reloadTime)
-        {
-            timeSinceShoot = 0;
-            listOfBullets.Add(Shoot(player.Center));
-        }
         foreach (Bullet bullet in listOfBullets)
         {
             bullet.Update(elapsedTime);
@@ -30,8 +25,13 @@ internal class shootingEnemy : Enemy
 
     public Bullet Shoot(Vector2 playerCenter)
     {
-        Vector2 direction = playerCenter - Center;
-        direction.Normalize();
-        return new EnemyBullet(Center, direction);
+        if (timeSinceShoot > reloadTime)
+        {
+            timeSinceShoot = 0;
+            Vector2 direction = playerCenter - Center;
+            direction.Normalize();
+            return new EnemyBullet(Center, direction);
+        }
+        return null;
     }
 }

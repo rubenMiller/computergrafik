@@ -43,7 +43,7 @@ internal class Draw
 
     }
 
-    public void draw(List<Enemy> listOfEnemies, List<Bullet> listOfBullets, Player player, Camera camera, int gameState, int updateWave, int updatetimePlayed)
+    public void draw(List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, List<Bullet> listPlayerOfBullets, Player player, Camera camera, int gameState, int updateWave, int updatetimePlayed)
     {
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
@@ -57,7 +57,8 @@ internal class Draw
             DrawBackground();
             DrawPlayer(player, camera);
             DrawEnemies(listOfEnemies, camera);
-            DrawBullets(listOfBullets, camera);
+            DrawBullets(listPlayerOfBullets, camera);
+            DrawBullets(listOfEnemyBullets, camera);
             DrawText($"Wave: {updateWave}, time in Wave: {updatetimePlayed} seconds.", -.99f, 0.9f, 0.05f, camera);
         }
         if (gameState == 2)
@@ -240,6 +241,7 @@ internal class Draw
         cam = camera.CameraMatrix;
         GL.LoadMatrix(ref cam);
 
+        // Healthbar
         GL.Color4(Color4.Red);
         Vector2 offsetCenter = new Vector2(player.Center.X - 0.1f, player.Center.Y + 0.1f);
         DrawRectangle(offsetCenter, 0.05f * player.Health, 0.03f);

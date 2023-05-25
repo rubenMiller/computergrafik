@@ -1,12 +1,11 @@
 # computergrafik
 
 TODO: Kamera resized abhängig von Rand.
-
 TODO: einfügen von PowerUps
-TODO: Gegner können schießen
-TODO: global game Border einfügen
-TODO: Bullets erst außerhalb des Bildschirms abfangen
-
+TODO: Spielfelde Grenze einfügen
+TODO: Bullets erst außerhalb des Spielfeldes
+TODO: Hitbox der Bullets anpassen, das diese eher eckig sind.
+        Oder einfach den Schuss ändern...
 Add:
 
 ## Upgrade System
@@ -23,8 +22,3 @@ You can pick up money which can be used to buy more Health or other upgrades.
 ## for gamestate
 
 https://gameprogrammingpatterns.com/state.html
-
-## enemies
-
-Base Klasse und die verschiedenen erweiter diese.
-Haben Update Methode, die die base Update Methode der Enemies überschreibt.

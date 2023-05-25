@@ -14,6 +14,7 @@ internal class Program
 
         int gameState = 0;
         List<Enemy> listOfEnemies = new List<Enemy>();
+        List<Bullet> listOfEnemyBullets = new List<Bullet>();
         Player player = new Player(0.1f, 4);
         Camera camera = new Camera();
         Wave wave = new Wave();
@@ -22,9 +23,7 @@ internal class Program
         bool reset = true;
         window.UpdateFrame += args =>
         {
-            player.movePlayer(window.KeyboardState);
-            player.shootBullet(window, camera, window.MouseState);
-            gameState = update.update(args, gameState, listOfEnemies, camera, player, wave);
+            gameState = update.update(args, window, gameState, listOfEnemies, listOfEnemyBullets, camera, player, wave);
             if (gameState == 2 && reset)
             {
                 reset = false;
@@ -40,7 +39,7 @@ internal class Program
 
         window.Resize += args1 => camera.Resize(args1);
         window.KeyDown += args => { if (Keys.Escape == args.Key) window.Close(); };
-        window.RenderFrame += args1 => draw.draw(listOfEnemies, player.listOfBullets, player, camera, gameState, wave.WaveCount, (int)wave.waveTime); // called once each frame; callback should contain drawing code
+        window.RenderFrame += args1 => draw.draw(listOfEnemies, listOfEnemyBullets, player.listOfBullets, player, camera, gameState, wave.WaveCount, (int)wave.waveTime); // called once each frame; callback should contain drawing code
         window.KeyDown += args => { if (gameState != 1) gameState = 1; reset = true; };
         window.RenderFrame += _ => window.SwapBuffers(); // buffer swap needed for double buffering
         //window.MouseDown += args => player.shootBullet(window, listOfBullets, player, camera);

@@ -23,10 +23,10 @@ internal class Wave
     private List<Enemy> MakeEnemies(Player player)
     {
         List<Enemy> listOfEnemies = new List<Enemy>();
-        //listOfEnemies.AddRange(SpawnEnemies(5 + 2 * WaveCount, player, center => new baseEnemy(center)));
-        //listOfEnemies.AddRange(SpawnEnemies(5 + 2 * WaveCount, player, center => new runnerEnemy(center)));
-        //listOfEnemies.AddRange(SpawnEnemies(1 + 1 * WaveCount, player, center => new bigEnemy(center)));
-        listOfEnemies.AddRange(SpawnEnemies(3 + WaveCount * 1, player, center => new shootingEnemy(center)));
+        listOfEnemies.AddRange(SpawnEnemies(5 + 2 * WaveCount, player, center => new baseEnemy(center)));
+        listOfEnemies.AddRange(SpawnEnemies(5 + 2 * WaveCount, player, center => new runnerEnemy(center)));
+        listOfEnemies.AddRange(SpawnEnemies(1 + 1 * WaveCount, player, center => new bigEnemy(center)));
+        listOfEnemies.AddRange(SpawnEnemies(0 + WaveCount * 1, player, center => new shootingEnemy(center)));
 
         return listOfEnemies;
     }
