@@ -9,7 +9,7 @@ internal class Player
 {
     public void shootBullet(GameWindow window, Camera camera, MouseState mouseState)
     {
-        if (mouseState.IsButtonDown(MouseButton.Left) && timeSinceLastShot > reloadTime)
+        if (mouseState.IsButtonDown(MouseButton.Left) && timeSinceLastShot > weapon.ReloadTime)
         {
             timeSinceLastShot = 0;
             var pixelMousePosition = window.MousePosition;
@@ -23,9 +23,9 @@ internal class Player
             Orientation = direction;
             var rotation = Rotate(new Vector2(0.07f, -0.05f), direction.PolarAngle());
             Vector2 bulletStart = new Vector2(Center.X + rotation.X, Center.Y + rotation.Y);
-            Bullet bullet = new PlayerBullet(bulletStart, direction);
+            List<Bullet> newList = weapon.shoot(bulletStart, direction);
 
-            listOfBullets.Add(bullet);
+            listOfBullets.AddRange(newList);
         }
     }
 
@@ -105,8 +105,9 @@ internal class Player
     public int Health;
     public Vector2 Orientation = new Vector2(0, 0);
     public float timeSinceLastShot = 0f;
-    private float reloadTime = 0.2f;
     public List<Bullet> listOfBullets = new List<Bullet>();
+
+    public Weapon weapon = new ShotgunWeapon();
 
     public Player(float radius, int health)
     {

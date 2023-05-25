@@ -178,7 +178,25 @@ internal class Draw
 
 
         GL.Color4(1f, 1f, 1f, 1f);
-        GL.BindTexture(TextureTarget.Texture2D, texPlayerHandgun.Handle);
+        switch (player.weapon)
+        {
+            case HandgunWeapon:
+                {
+                    GL.BindTexture(TextureTarget.Texture2D, texPlayerHandgun.Handle);
+                    break;
+                }
+            case RifleWeapon:
+                {
+                    GL.BindTexture(TextureTarget.Texture2D, texPlayerRifle.Handle);
+                    break;
+                }
+            case ShotgunWeapon:
+                {
+                    GL.BindTexture(TextureTarget.Texture2D, texPlayerShotgun.Handle);
+                    break;
+                }
+        }
+
         var playerBox = new Box2(-player.Radius, -player.Radius, player.Radius, player.Radius);
         DrawRect(playerBox, new Box2(0f, 0f, 1f, 1f));
         GL.BindTexture(TextureTarget.Texture2D, 0);
@@ -259,6 +277,8 @@ internal class Draw
 
     private readonly Texture2D texBackground;
     private readonly Texture2D texPlayerHandgun;
+    private readonly Texture2D texPlayerRifle;
+    private readonly Texture2D texPlayerShotgun;
     private readonly Texture2D texZombie;
     private readonly Texture2D texCat;
     private readonly Texture2D texGiant;
@@ -275,6 +295,8 @@ internal class Draw
         GL.BindTexture(TextureTarget.Texture2D, 0);
 
         texPlayerHandgun = EmbeddedResource.LoadTexture("survivor-idle_handgun_0.png");
+        texPlayerRifle = EmbeddedResource.LoadTexture("survivor-idle_rifle_0.png");
+        texPlayerShotgun = EmbeddedResource.LoadTexture("survivor-idle_shotgun_0.png");
         texZombie = EmbeddedResource.LoadTexture("zombie.png");
         texCat = EmbeddedResource.LoadTexture("Topdown-Monster-Token-jule-cat.png");
         texGiant = EmbeddedResource.LoadTexture("Topdown-Monster-Token-Elemental-Fire.png");

@@ -57,7 +57,7 @@ internal class Update
             //checks whether it is far away from player
             var deltaX = bullet.Center.X - player.Center.X;
             var deltaY = bullet.Center.Y - player.Center.Y;
-            if (deltaX > 4 || deltaY > 4 || deltaX < -4 || deltaY < -4)
+            if (deltaX > player.weapon.Range || deltaY > player.weapon.Range || deltaX < -player.weapon.Range || deltaY < -player.weapon.Range)
             {
                 listOfPlayerBullets.Remove(bullet);
             }
