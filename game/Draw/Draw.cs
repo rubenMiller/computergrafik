@@ -116,7 +116,7 @@ internal class Draw
     }
 
 
-    public void draw(List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, List<Bullet> listPlayerOfBullets, Player player, Camera camera, GameState gameState, int updateWave, int updatetimePlayed, GameBorder gameBorder)
+    public void draw(List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, List<Bullet> listPlayerOfBullets, Player player, Camera camera, GameState gameState, int updateWave, int updatetimePlayed, GameBorder gameBorder, UpgradeMenu upgradeMenu)
     {
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
@@ -141,7 +141,12 @@ internal class Draw
                 }
             case GameState.STATE.STATE_WAVEOVER:
                 {
-                    // Show the interface
+                    DrawText($"Choose one of the Upgrades: ", -.99f, 0.9f, 0.05f, camera);
+                    DrawBackground(gameBorder);
+                    GL.Color4(Color4.Black);
+                    DrawRect(upgradeMenu.button1Position, upgradeMenu.button1Position);
+                    DrawRect(upgradeMenu.button2Position, upgradeMenu.button2Position);
+                    DrawRect(upgradeMenu.button3Position, upgradeMenu.button3Position);
                     break;
                 }
             case GameState.STATE.STATE_DEAD:

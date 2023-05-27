@@ -17,6 +17,7 @@ internal class Player
             var posY = (pixelMousePosition.Y * -2f / window.Size.Y) + 1;
             Vector2 mousePosition = new Vector2(posX, posY);
             var transformedPosition = mousePosition.Transform(camera.CameraMatrix.Inverted());
+
             var direction = transformedPosition - Center;
             direction.Normalize();
 
@@ -102,6 +103,7 @@ internal class Player
     public Vector2 Direction = new Vector2(0, 0);
     public float Speed = 1f;
     public float Radius;
+    public int maxHealth = 4;
     public int Health;
     public Vector2 Orientation = new Vector2(0, 0);
     public float timeSinceLastShot = 0f;

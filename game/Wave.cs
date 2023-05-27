@@ -31,14 +31,15 @@ internal class Wave
         return listOfEnemies;
     }
 
-    public void Update(float elapsedTime, Player player, List<Enemy> listOfEnemies, GameBorder gameBorder)
+    public void Update(float elapsedTime, Player player, List<Enemy> listOfEnemies, GameBorder gameBorder, GameState gameState)
     {
         waveTime = waveTime + elapsedTime;
         timeSinceLastSpawn = timeSinceLastSpawn + elapsedTime;
-        if (waveTime > 90f)
+        if (waveTime > 15f)
         {
             WaveCount++;
             waveTime = 0f;
+            gameState.State = GameState.STATE.STATE_WAVEOVER;
         }
         if (timeSinceLastSpawn > timeBetweenSPawns)
         {

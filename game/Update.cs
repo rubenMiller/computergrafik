@@ -99,14 +99,14 @@ internal class Update
     }
 
 
-    public void update(FrameEventArgs args, GameWindow window, GameState gameState, List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, Camera camera, Player player, Wave wave, GameBorder gameBorder)
+    public void update(FrameEventArgs args, GameWindow window, GameState gameState, List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, Camera camera, Player player, Wave wave, GameBorder gameBorder, UpgradeMenu upgradeMenu)
     {
         switch (gameState.State)
         {
             case GameState.STATE.STATE_PLAYING:
                 {
                     var elapsedTime = (float)args.Time;
-                    wave.Update(elapsedTime, player, listOfEnemies, gameBorder);
+                    wave.Update(elapsedTime, player, listOfEnemies, gameBorder, gameState);
                     camera.UpdateMatrix(elapsedTime);
                     player.Update(elapsedTime, window, camera, gameBorder);
 
@@ -135,8 +135,18 @@ internal class Update
                     }
                     break;
                 }
-            default:
-                return;
+            case GameState.STATE.STATE_WAVEOVER:
+                {
+                    var elapsedTime = (float)args.Time;
+                    camera.Center = new Vector2(0, 0);
+                    camera.Direction = new Vector2(0, 0);
+                    player.Center = new Vector2(0, 0);
+                    camera.UpdateMatrix(elapsedTime);
+                    player.Update(elapsedTime, window, camera, gameBorder);
+                    
+                    upgradeMenu.Update(player, window, camera, window.MouseState, gameState);
+                    break;
+                }
         }
     }
 }
