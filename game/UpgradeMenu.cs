@@ -40,7 +40,7 @@ internal class UpgradeMenu
         mouseClicked(player, window, camera, mouseState);
         if (upgradesPossible <= 0)
         {
-            gameState.State = GameState.STATE.STATE_PLAYING;
+            gameState.transitionToState(GameState.STATE.STATE_PLAYING);
         }
     }
     public Box2 button1Position { get; private set; }

@@ -39,7 +39,7 @@ internal class Wave
         {
             WaveCount++;
             waveTime = 0f;
-            gameState.State = GameState.STATE.STATE_WAVEOVER;
+            gameState.transitionToState(GameState.STATE.STATE_WAVEOVER);
         }
         if (timeSinceLastSpawn > timeBetweenSPawns)
         {

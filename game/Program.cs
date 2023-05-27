@@ -27,7 +27,7 @@ internal class Program
         window.UpdateFrame += args =>
             {
                 update.update(args, window, gameState, listOfEnemies, listOfEnemyBullets, camera, player, wave, gameBorder, upgradeMenu);
-                if (reset && gameState.State is GameState.STATE.STATE_DEAD)
+                if (reset && gameState.CurrentState is GameState.STATE.STATE_DEAD)
                 {
                     reset = false;
 
@@ -43,7 +43,7 @@ internal class Program
         window.Resize += args1 => camera.Resize(args1);
         window.KeyDown += args => { if (Keys.Escape == args.Key) window.Close(); };
         window.RenderFrame += args1 => draw.draw(listOfEnemies, listOfEnemyBullets, player.listOfBullets, player, camera, gameState, wave.WaveCount, (int)wave.waveTime, gameBorder, upgradeMenu); // called once each frame; callback should contain drawing code
-        window.KeyDown += args => { if (gameState.State is GameState.STATE.STATE_DEAD || gameState.State is GameState.STATE.STATE_START) gameState.State = GameState.STATE.STATE_PLAYING; reset = true; };
+        window.KeyDown += args => { if (gameState.CurrentState is GameState.STATE.STATE_DEAD || gameState.CurrentState is GameState.STATE.STATE_START) gameState.transitionToState(GameState.STATE.STATE_PLAYING) ; reset = true; };
         window.RenderFrame += _ => window.SwapBuffers(); // buffer swap needed for double buffering
                                                          //window.MouseDown += args => player.shootBullet(window, listOfBullets, player, camera);
 

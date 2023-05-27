@@ -3,7 +3,8 @@
 Hier sind die nächsten Schritte festgehalten.
 
 TODO: Kamera resized abhängig von Rand.
-TODO: Interface
+TODO: Interface verbessern
+TODO: gameState Änderungen bei Veränderungen der states an einer Stelle festelgen, so dass nur noch transition state aufgeruden werden muss.
 
 ## Upgrade System
 

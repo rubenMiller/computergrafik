@@ -47,7 +47,7 @@ internal class Update
                 player.Health--;
                 if (player.Health < 1)
                 {
-                    gameState.State = GameState.STATE.STATE_DEAD;
+                    gameState.transitionToState(GameState.STATE.STATE_DEAD);
                     return 2;
                 }
             }
@@ -74,7 +74,7 @@ internal class Update
                 player.Health--;
                 if (player.Health < 1)
                 {
-                    gameState.State = GameState.STATE.STATE_DEAD;
+                    gameState.transitionToState(GameState.STATE.STATE_DEAD);
                     return 2;
                 }
             }
@@ -101,7 +101,7 @@ internal class Update
 
     public void update(FrameEventArgs args, GameWindow window, GameState gameState, List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, Camera camera, Player player, Wave wave, GameBorder gameBorder, UpgradeMenu upgradeMenu)
     {
-        switch (gameState.State)
+        switch (gameState.CurrentState)
         {
             case GameState.STATE.STATE_PLAYING:
                 {
@@ -143,7 +143,7 @@ internal class Update
                     player.Center = new Vector2(0, 0);
                     camera.UpdateMatrix(elapsedTime);
                     player.Update(elapsedTime, window, camera, gameBorder);
-                    
+
                     upgradeMenu.Update(player, window, camera, window.MouseState, gameState);
                     break;
                 }

@@ -122,7 +122,7 @@ internal class Draw
 
         //TODO Make multiple Draws: Draw that calls DrawGame, DrawInterface, DrawStart and DrawDead
 
-        switch (gameState.State)
+        switch (gameState.CurrentState)
         {
             case GameState.STATE.STATE_START:
                 {
