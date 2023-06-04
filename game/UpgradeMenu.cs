@@ -14,22 +14,19 @@ internal class UpgradeMenu
             var posY = (pixelMousePosition.Y * -2f / window.Size.Y) + 1;
             Vector2 mousePosition = new Vector2(posX, posY);
             var transformedPosition = mousePosition.Transform(camera.CameraMatrix.Inverted());
-            if (button1Position.ContainsInclusive(transformedPosition))
+            if (Button1.Position.ContainsInclusive(transformedPosition))
             {
-                UpgradeHealth upgrade = new UpgradeHealth();
-                upgrade.action(player);
+                Button1.Upgrade.action(player);
                 upgradesPossible--;
             }
-            if (button2Position.ContainsInclusive(transformedPosition))
+            if (Button2.Position.ContainsInclusive(transformedPosition))
             {
-                UpgradeToRifle upgrade = new UpgradeToRifle();
-                upgrade.action(player);
+                Button2.Upgrade.action(player);
                 upgradesPossible--;
             }
-            if (button3Position.ContainsInclusive(transformedPosition))
+            if (Button3.Position.ContainsInclusive(transformedPosition))
             {
-                UpgradeToShotgun upgrade = new UpgradeToShotgun();
-                upgrade.action(player);
+                Button3.Upgrade.action(player);
                 upgradesPossible--;
             }
         }
@@ -43,15 +40,13 @@ internal class UpgradeMenu
             gameState.transitionToState(GameState.STATE.STATE_PLAYING);
         }
     }
-    public Box2 button1Position { get; private set; }
-    public Box2 button2Position { get; private set; }
-    public Box2 button3Position { get; private set; }
+    public Button Button1 = new Button(new Box2(-0.9f, -0.3f, -0.4f, 0.2f), "Upgrade Health", new UpgradeHealth());
+    public Button Button2 = new Button(new Box2(-0.25f, -0.3f, 0.25f, 0.2f), "Pick the Shotgun.", new UpgradeToShotgun());
+    public Button Button3 = new Button(new Box2(0.4f, -0.3f, 0.9f, 0.2f), "Pick the Rifle", new UpgradeToRifle());
     public int upgradesPossible = 1;
 
     public UpgradeMenu()
     {
-        button1Position = new Box2(-0.9f, -0.3f, -0.4f, 0.2f);
-        button2Position = new Box2(-0.25f, -0.3f, 0.25f, 0.2f);
-        button3Position = new Box2(0.4f, -0.3f, 0.9f, 0.2f);
+
     }
 }

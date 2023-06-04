@@ -150,15 +150,15 @@ internal class Draw
                     DrawText($"Choose one of the Upgrades: ", -.99f, 0.9f, 0.05f, camera);
                     DrawBackground(gameBorder);
                     GL.Color4(Color4.Black);
-                    DrawRect(upgradeMenu.button1Position, upgradeMenu.button1Position);
-                    DrawRect(upgradeMenu.button2Position, upgradeMenu.button2Position);
-                    DrawRect(upgradeMenu.button3Position, upgradeMenu.button3Position);
+                    DrawRect(upgradeMenu.Button1.Position, upgradeMenu.Button1.Position);
+                    DrawRect(upgradeMenu.Button2.Position, upgradeMenu.Button2.Position);
+                    DrawRect(upgradeMenu.Button3.Position, upgradeMenu.Button3.Position);
                     break;
                 }
             case GameState.STATE.STATE_DEAD:
                 {
                     DrawText($"You died!", -0.5f, 0, 0.1f, camera);
-                    DrawText($"To start the game, press Space.", -0.9f, -0.2f, 0.05f, camera);
+                    DrawText($"To restart the game, press Space.", -0.9f, -0.2f, 0.05f, camera);
                     break;
                 }
         }

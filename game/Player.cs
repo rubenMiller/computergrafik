@@ -109,7 +109,7 @@ internal class Player
     public float timeSinceLastShot = 0f;
     public List<Bullet> listOfBullets = new List<Bullet>();
 
-    public Weapon weapon = new ShotgunWeapon();
+    public Weapon weapon = new HandgunWeapon();
 
     public Player(float radius, int health)
     {

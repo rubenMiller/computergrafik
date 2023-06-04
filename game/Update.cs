@@ -135,7 +135,7 @@ internal class Update
                     }
                     break;
                 }
-            case GameState.STATE.STATE_UPGRADEMENU:
+            case GameState.STATE.STATE_WAVEOVER:
                 {
                     var elapsedTime = (float)args.Time;
                     camera.Center = new Vector2(0, 0);
@@ -143,8 +143,14 @@ internal class Update
                     player.Center = new Vector2(0, 0);
                     camera.UpdateMatrix(elapsedTime);
                     player.Update(elapsedTime, window, camera, gameBorder);
+                    upgradeMenu.upgradesPossible = 1;
+                    break;
+                }
 
+            case GameState.STATE.STATE_UPGRADEMENU:
+                {
                     upgradeMenu.Update(player, window, camera, window.MouseState, gameState);
+                    player.Health = player.maxHealth;
                     break;
                 }
         }
