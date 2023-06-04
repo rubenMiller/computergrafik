@@ -135,7 +135,7 @@ internal class Update
                     }
                     break;
                 }
-            case GameState.STATE.STATE_WAVEOVER:
+            case GameState.STATE.STATE_UPGRADEMENU:
                 {
                     var elapsedTime = (float)args.Time;
                     camera.Center = new Vector2(0, 0);

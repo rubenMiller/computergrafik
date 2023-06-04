@@ -126,7 +126,7 @@ internal class Draw
         {
             case GameState.STATE.STATE_START:
                 {
-                    DrawText($"To start the game, press any Key.", -0.9f, 0, 0.05f, camera);
+                    DrawText($"To start the game, press Space.", -0.9f, 0, 0.05f, camera);
                     break;
                 }
             case GameState.STATE.STATE_PLAYING:
@@ -141,6 +141,12 @@ internal class Draw
                 }
             case GameState.STATE.STATE_WAVEOVER:
                 {
+                    DrawText($"Youcompleted a Wave!", -0.5f, 0, 0.1f, camera);
+                    DrawText($"To choose an upgrade, press Space.", -0.9f, -0.2f, 0.05f, camera);
+                    break;
+                }
+            case GameState.STATE.STATE_UPGRADEMENU:
+                {
                     DrawText($"Choose one of the Upgrades: ", -.99f, 0.9f, 0.05f, camera);
                     DrawBackground(gameBorder);
                     GL.Color4(Color4.Black);
@@ -152,7 +158,7 @@ internal class Draw
             case GameState.STATE.STATE_DEAD:
                 {
                     DrawText($"You died!", -0.5f, 0, 0.1f, camera);
-                    DrawText($"To start the game, press any Key.", -0.9f, -0.2f, 0.05f, camera);
+                    DrawText($"To start the game, press Space.", -0.9f, -0.2f, 0.05f, camera);
                     break;
                 }
         }
