@@ -4,12 +4,25 @@ using OpenTK.Mathematics;
 
 internal class Wave
 {
+    private float getRandomCoordinates(int Max, int Min)
+    {
+        bool useNegativeRange = random.Next(2) == 0;
+
+        if (useNegativeRange)
+        {
+            return random.Next((Min - 5) * 10, Min * 10) * 0.1f;
+        }
+        else
+        {
+            return random.Next(Max * 10, (Max + 5 * 10)) * 0.1f;
+        }
+    }
     private List<Enemy> SpawnEnemies(int numberOfEnemies, Player player, GameBorder gameBorder, Func<Vector2, Enemy> enemyCreator)
     {
         List<Enemy> listOfEnemies = new List<Enemy>();
         for (int i = 0; i < numberOfEnemies; i++)
         {
-            Vector2 center = new Vector2(random.Next(10 * gameBorder.MinX, 10 * gameBorder.MaxX) * 0.1f, random.Next(10 * gameBorder.MinY, 10 * gameBorder.MaxY) * 0.1f);
+            Vector2 center = new Vector2(getRandomCoordinates(gameBorder.MaxX, gameBorder.MinX), getRandomCoordinates(gameBorder.MaxY, gameBorder.MinY));
             if (Vector2.Distance(player.Center, center) < 1f)
             {
                 i--;
@@ -35,13 +48,13 @@ internal class Wave
     {
         waveTime = waveTime + elapsedTime;
         timeSinceLastSpawn = timeSinceLastSpawn + elapsedTime;
-        if (waveTime > 15f)
+        if (waveTime > 10f && listOfEnemies.Count == 0)
         {
             WaveCount++;
             waveTime = 0f;
             gameState.transitionToState(GameState.STATE.STATE_WAVEOVER);
         }
-        if (timeSinceLastSpawn > timeBetweenSPawns)
+        if (timeSinceLastSpawn > timeBetweenSPawns && waveTime < 90f)
         {
             listOfEnemies.AddRange(MakeEnemies(player, gameBorder));
             timeSinceLastSpawn = 0f;

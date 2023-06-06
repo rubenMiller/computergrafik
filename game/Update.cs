@@ -107,8 +107,9 @@ internal class Update
                 {
                     var elapsedTime = (float)args.Time;
                     wave.Update(elapsedTime, player, listOfEnemies, gameBorder, gameState);
-                    camera.UpdateMatrix(elapsedTime);
                     player.Update(elapsedTime, window, camera, gameBorder);
+                    camera.UpdateMatrix(elapsedTime);
+                    
 
                     foreach (Enemy enemy in listOfEnemies)
                     {

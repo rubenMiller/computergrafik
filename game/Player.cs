@@ -7,24 +7,14 @@ using Zenseless.OpenTK;
 
 internal class Player
 {
-    public void shootBullet(GameWindow window, Camera camera, MouseState mouseState)
+    public void shootBullet(MouseState mouseState)
     {
         if (mouseState.IsButtonDown(MouseButton.Left) && timeSinceLastShot > weapon.ReloadTime)
         {
             timeSinceLastShot = 0;
-            var pixelMousePosition = window.MousePosition;
-            var posX = (pixelMousePosition.X * 2f / window.Size.X) - 1;
-            var posY = (pixelMousePosition.Y * -2f / window.Size.Y) + 1;
-            Vector2 mousePosition = new Vector2(posX, posY);
-            var transformedPosition = mousePosition.Transform(camera.CameraMatrix.Inverted());
-
-            var direction = transformedPosition - Center;
-            direction.Normalize();
-
-            Orientation = direction;
-            var rotation = Rotate(new Vector2(0.07f, -0.05f), direction.PolarAngle());
+            var rotation = Rotate(new Vector2(0.07f, -0.05f), Orientation.PolarAngle());
             Vector2 bulletStart = new Vector2(Center.X + rotation.X, Center.Y + rotation.Y);
-            List<Bullet> newList = weapon.shoot(bulletStart, direction);
+            List<Bullet> newList = weapon.shoot(bulletStart, Orientation);
 
             listOfBullets.AddRange(newList);
         }
@@ -76,12 +66,27 @@ internal class Player
         Direction = direction;
     }
 
+    private void rotatePlayer(GameWindow window, Camera camera)
+    {
+        var pixelMousePosition = window.MousePosition;
+        var posX = (pixelMousePosition.X * 2f / window.Size.X) - 1;
+        var posY = (pixelMousePosition.Y * -2f / window.Size.Y) + 1;
+        Vector2 mousePosition = new Vector2(posX, posY);
+        var transformedPosition = mousePosition.Transform(camera.CameraMatrix.Inverted());
+
+        var direction = transformedPosition - Center;
+        direction.Normalize();
+
+        Orientation = direction;
+    }
+
     public void Update(float elapsedTime, GameWindow window, Camera camera, GameBorder gameBorder)
     {
         timeSinceLastShot = timeSinceLastShot + elapsedTime;
 
         movePlayer(window.KeyboardState);
-        shootBullet(window, camera, window.MouseState);
+        rotatePlayer(window, camera);   
+        shootBullet(window.MouseState);
 
         Vector2 newCenter = Center + Direction * Speed * elapsedTime;
         if (newCenter.X < gameBorder.MaxX - Radius && newCenter.X > gameBorder.MinX + Radius)

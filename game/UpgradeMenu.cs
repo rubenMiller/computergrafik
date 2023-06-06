@@ -14,6 +14,8 @@ internal class UpgradeMenu
             var posY = (pixelMousePosition.Y * -2f / window.Size.Y) + 1;
             Vector2 mousePosition = new Vector2(posX, posY);
             var transformedPosition = mousePosition.Transform(camera.CameraMatrix.Inverted());
+            // TODO: iterate over button list
+            // when weapon is choosen,, iterate over other list
             if (Button1.Position.ContainsInclusive(transformedPosition))
             {
                 Button1.Upgrade.action(player);

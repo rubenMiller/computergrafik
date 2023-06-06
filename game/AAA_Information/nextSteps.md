@@ -2,6 +2,14 @@
 
 Hier sind die nächsten Schritte festgehalten.
 
+Ideen:
+
+- Spielfeldrand sichbar vorher machen
+- Schüsse treffen mit Blut ein
+- Währung - Ja oder Nein
+- Wellenende lieber wenn alle Gegner Tod?
+
+TODO: Balancing
 TODO: Kamera resized abhängig von Rand.
 TODO: Interface verbessern
 TODO: gameState Änderungen bei Veränderungen der states an einer Stelle festelgen, so dass nur noch transition state aufgeruden werden muss.
