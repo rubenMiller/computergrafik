@@ -3,6 +3,7 @@ using Framework;
 using Zenseless.OpenTK;
 using System.Collections.Generic;
 using OpenTK.Mathematics;
+using System;
 
 internal class DrawPlaying
 {
@@ -116,8 +117,13 @@ internal class DrawPlaying
                 }
         }
 
+        const uint columns = 7;
+        const uint rows = 3;
+        var spriteId = (uint)MathF.Round(player.NormalizedAnimationTime * (columns * rows - 1));
+        var texCoords = SpriteSheetTools.CalcTexCoords(spriteId, columns, rows);
+
         var playerBox = new Box2(-player.Radius, -player.Radius, player.Radius, player.Radius);
-        Draw.DrawRect(playerBox, new Box2(0f, 0f, 1f, 1f));
+        Draw.DrawRect(playerBox, texCoords);
         GL.BindTexture(TextureTarget.Texture2D, 0);
 
         cam = camera.CameraMatrix;
@@ -142,7 +148,7 @@ internal class DrawPlaying
 
     internal DrawPlaying()
     {
-        texPlayerHandgun = EmbeddedResource.LoadTexture("survivor-idle_handgun_0.png");
+        texPlayerHandgun = EmbeddedResource.LoadTexture("handgun-move-sheet.png");
         texPlayerRifle = EmbeddedResource.LoadTexture("survivor-idle_rifle_0.png");
         texPlayerShotgun = EmbeddedResource.LoadTexture("survivor-idle_shotgun_0.png");
         texZombie = EmbeddedResource.LoadTexture("zombie.png");

@@ -83,9 +83,11 @@ internal class Player
     public void Update(float elapsedTime, GameWindow window, Camera camera, GameBorder gameBorder)
     {
         timeSinceLastShot = timeSinceLastShot + elapsedTime;
+        NormalizedAnimationTime += elapsedTime / AnimationLength;
+        NormalizedAnimationTime %= 1f;
 
         movePlayer(window.KeyboardState);
-        rotatePlayer(window, camera);   
+        rotatePlayer(window, camera);
         shootBullet(window.MouseState);
 
         Vector2 newCenter = Center + Direction * Speed * elapsedTime;
@@ -115,10 +117,13 @@ internal class Player
     public List<Bullet> listOfBullets = new List<Bullet>();
 
     public Weapon weapon = new HandgunWeapon();
+    public float AnimationLength { get; }
+    public float NormalizedAnimationTime { get; private set; } = 0f;
 
     public Player(float radius, int health)
     {
         Radius = radius;
         Health = health;
+        AnimationLength = 3f;
     }
 }

@@ -115,6 +115,12 @@ internal class Draw
         GL.End();
     }
 
+    internal void drawButton(Button button, Camera camera)
+    {
+        drawInterface.DrawButton(button, camera);
+        DrawText(button.ButtonText, button.Position.Min.X, button.Position.Max.Y + 0.2f, 0.03f, camera);
+    }
+
 
     public void draw(List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, List<Bullet> listPlayerOfBullets, Player player, Camera camera, GameState gameState, int updateWave, int updatetimePlayed, GameBorder gameBorder, UpgradeMenu upgradeMenu)
     {
@@ -150,12 +156,9 @@ internal class Draw
                     DrawText($"Choose one of the Upgrades: ", -.99f, 0.9f, 0.05f, camera);
                     DrawBackground(gameBorder);
 
-                    drawInterface.DrawButton(upgradeMenu.Button1, camera);
-                    DrawText(upgradeMenu.Button1.ButtonText, upgradeMenu.Button1.Position.Min.X, upgradeMenu.Button1.Position.Max.Y + 0.2f, 0.03f, camera);
-                    drawInterface.DrawButton(upgradeMenu.Button2, camera);
-                    DrawText(upgradeMenu.Button2.ButtonText, upgradeMenu.Button2.Position.Min.X, upgradeMenu.Button2.Position.Max.Y + 0.2f, 0.03f, camera);
-                    drawInterface.DrawButton(upgradeMenu.Button3, camera);
-                    DrawText(upgradeMenu.Button3.ButtonText, upgradeMenu.Button3.Position.Min.X, upgradeMenu.Button3.Position.Max.Y + 0.2f, 0.03f, camera);
+                    drawButton(upgradeMenu.Button1, camera);
+                    drawButton(upgradeMenu.Button2, camera);
+                    drawButton(upgradeMenu.Button3, camera);
                     break;
                 }
             case GameState.STATE.STATE_DEAD:
