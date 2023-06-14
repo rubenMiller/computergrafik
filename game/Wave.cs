@@ -36,10 +36,10 @@ internal class Wave
     private List<Enemy> MakeEnemies(Player player, GameBorder gameBorder)
     {
         List<Enemy> listOfEnemies = new List<Enemy>();
-        listOfEnemies.AddRange(SpawnEnemies(5 + 2 * WaveCount, player, gameBorder, center => new baseEnemy(center)));
-        listOfEnemies.AddRange(SpawnEnemies(5 + 2 * WaveCount, player, gameBorder, center => new runnerEnemy(center)));
-        listOfEnemies.AddRange(SpawnEnemies(1 + 1 * WaveCount, player, gameBorder, center => new bigEnemy(center)));
-        listOfEnemies.AddRange(SpawnEnemies(0 + WaveCount * 1, player, gameBorder, center => new shootingEnemy(center)));
+        //listOfEnemies.AddRange(SpawnEnemies(4 + 2 * WaveCount, player, gameBorder, center => new baseEnemy(center)));
+        //listOfEnemies.AddRange(SpawnEnemies(3 + 2 * WaveCount, player, gameBorder, center => new runnerEnemy(center)));
+        //listOfEnemies.AddRange(SpawnEnemies(0 + 1 * (WaveCount - 1), player, gameBorder, center => new bigEnemy(center)));
+        //listOfEnemies.AddRange(SpawnEnemies(0 + 1 * WaveCount, player, gameBorder, center => new shootingEnemy(center)));
 
         return listOfEnemies;
     }
@@ -54,7 +54,7 @@ internal class Wave
             waveTime = 0f;
             gameState.transitionToState(GameState.STATE.STATE_WAVEOVER);
         }
-        if (timeSinceLastSpawn > timeBetweenSPawns && waveTime < 90f)
+        if (timeSinceLastSpawn > timeBetweenSPawns && waveTime < 2f)
         {
             listOfEnemies.AddRange(MakeEnemies(player, gameBorder));
             timeSinceLastSpawn = 0f;

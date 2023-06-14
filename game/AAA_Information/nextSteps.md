@@ -9,10 +9,14 @@ Ideen:
 - Währung - Ja oder Nein
 - Wellenende lieber wenn alle Gegner Tod?
 
+TODO: ich brauche Animation
+
 TODO: Balancing
 TODO: Kamera resized abhängig von Rand.
 TODO: Interface verbessern
 TODO: gameState Änderungen bei Veränderungen der states an einer Stelle festelgen, so dass nur noch transition state aufgeruden werden muss.
+TODO: für Gegner Wahrscheinlichkeiten zum spawnen -> das macht es genauer
+TODO: Idee: Schussgegener können nur im Sichtfeld schießen
 
 ## Upgrade System
 

@@ -16,7 +16,7 @@ internal class Draw
         GL.LoadMatrix(ref cam);
 
         GL.BindTexture(TextureTarget.Texture2D, texFont.Handle);
-        GL.Color4(Color4.White);
+        GL.Color4(Color4.AntiqueWhite);
         //A string is an array of characters. Each character is a number defined in a code page like the[ASCII](https://en.wikipedia.org/wiki/ASCII) code.
         const uint firstCharacter = 32; // the ASCII code of the first character stored in the bitmap font
         const uint charactersPerColumn = 12; // how many characters are in each column
@@ -97,7 +97,7 @@ internal class Draw
 
         GL.Color4(1f, 1f, 1f, 1f);
         var rect = new Box2(gameBorder.MinX, gameBorder.MinY, gameBorder.MaxX, gameBorder.MaxY);
-        DrawRect(rect, SizedBox(0, 0f, gameBorder.MaxX, gameBorder.MaxY));
+        DrawRect(rect, SizedBox(0, 0f, gameBorder.MaxX * 2, gameBorder.MaxY * 2));
         GL.BindTexture(TextureTarget.Texture2D, 0);
     }
 
@@ -149,10 +149,13 @@ internal class Draw
                 {
                     DrawText($"Choose one of the Upgrades: ", -.99f, 0.9f, 0.05f, camera);
                     DrawBackground(gameBorder);
-                    GL.Color4(Color4.Black);
-                    DrawRect(upgradeMenu.Button1.Position, upgradeMenu.Button1.Position);
-                    DrawRect(upgradeMenu.Button2.Position, upgradeMenu.Button2.Position);
-                    DrawRect(upgradeMenu.Button3.Position, upgradeMenu.Button3.Position);
+
+                    drawInterface.DrawButton(upgradeMenu.Button1, camera);
+                    DrawText(upgradeMenu.Button1.ButtonText, upgradeMenu.Button1.Position.Min.X, upgradeMenu.Button1.Position.Max.Y + 0.2f, 0.03f, camera);
+                    drawInterface.DrawButton(upgradeMenu.Button2, camera);
+                    DrawText(upgradeMenu.Button2.ButtonText, upgradeMenu.Button2.Position.Min.X, upgradeMenu.Button2.Position.Max.Y + 0.2f, 0.03f, camera);
+                    drawInterface.DrawButton(upgradeMenu.Button3, camera);
+                    DrawText(upgradeMenu.Button3.ButtonText, upgradeMenu.Button3.Position.Min.X, upgradeMenu.Button3.Position.Max.Y + 0.2f, 0.03f, camera);
                     break;
                 }
             case GameState.STATE.STATE_DEAD:
@@ -170,7 +173,7 @@ internal class Draw
     private DrawPlaying drawPlaying = new DrawPlaying();
     public Draw()
     {
-        texBackground = EmbeddedResource.LoadTexture("Cartoon_green_texture_grass.jpg");
+        texBackground = EmbeddedResource.LoadTexture("dirt-background.jpg");
         GL.BindTexture(TextureTarget.Texture2D, texBackground.Handle);
         texBackground.Function = TextureFunction.Repeat;
         //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);

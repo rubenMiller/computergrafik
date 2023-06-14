@@ -1,3 +1,4 @@
+using Framework;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
@@ -42,9 +43,9 @@ internal class UpgradeMenu
             gameState.transitionToState(GameState.STATE.STATE_PLAYING);
         }
     }
-    public Button Button1 = new Button(new Box2(-0.9f, -0.3f, -0.4f, 0.2f), "Upgrade Health", new UpgradeHealth());
-    public Button Button2 = new Button(new Box2(-0.25f, -0.3f, 0.25f, 0.2f), "Pick the Shotgun.", new UpgradeToShotgun());
-    public Button Button3 = new Button(new Box2(0.4f, -0.3f, 0.9f, 0.2f), "Pick the Rifle", new UpgradeToRifle());
+    public Button Button1 = new Button(new Box2(-0.9f, -0.3f, -0.4f, 0.2f), "Upgrade Health", new UpgradeHealth(), EmbeddedResource.LoadTexture("health-upgrade.png"));
+    public Button Button2 = new Button(new Box2(-0.25f, -0.3f, 0.25f, 0.2f), "Pick the Shotgun.", new UpgradeToShotgun(), EmbeddedResource.LoadTexture("shotgun_sideview.png"));
+    public Button Button3 = new Button(new Box2(0.4f, -0.3f, 0.9f, 0.2f), "Pick the Rifle", new UpgradeToRifle(), EmbeddedResource.LoadTexture("rifle_sideview.png"));
     public int upgradesPossible = 1;
 
     public UpgradeMenu()
