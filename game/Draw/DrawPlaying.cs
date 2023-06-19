@@ -41,8 +41,8 @@ internal class DrawPlaying
     {
         foreach (Enemy enemy in listOfEnemies)
         {
-            GL.Color4(0f, 0f, 0f, 0.25f);
-            Draw.DrawCircle(enemy.Center, enemy.Radius, 1f);
+            //GL.Color4(0f, 0f, 0f, 0.25f);
+            //Draw.DrawCircle(enemy.Center, enemy.Radius, 1f);
 
             var cam = camera.CameraMatrix;
 
@@ -89,8 +89,8 @@ internal class DrawPlaying
     }
     internal void DrawPlayer(Player player, Camera camera)
     {
-        GL.Color4(0f, 0f, 0f, 0.25f);
-        Draw.DrawCircle(player.Center, player.Radius, 1f);
+        //GL.Color4(0f, 0f, 0f, 0.25f);
+        //Draw.DrawCircle(player.Center, player.Radius, 1f);
 
         var cam = camera.CameraMatrix;
 
