@@ -4,6 +4,7 @@ using Zenseless.OpenTK;
 using System.Collections.Generic;
 using OpenTK.Mathematics;
 using System;
+using System.Linq;
 
 internal class DrawPlaying
 {
@@ -98,29 +99,10 @@ internal class DrawPlaying
 
 
         GL.Color4(1f, 1f, 1f, 1f);
-        switch (player.weapon)
-        {
-            case HandgunWeapon:
-                {
-                    GL.BindTexture(TextureTarget.Texture2D, texPlayerHandgun.Handle);
-                    break;
-                }
-            case RifleWeapon:
-                {
-                    GL.BindTexture(TextureTarget.Texture2D, texPlayerRifle.Handle);
-                    break;
-                }
-            case ShotgunWeapon:
-                {
-                    GL.BindTexture(TextureTarget.Texture2D, texPlayerShotgun.Handle);
-                    break;
-                }
-        }
+        GL.BindTexture(TextureTarget.Texture2D, player.weapon.Animation.Texture.Handle);
 
-        const uint columns = 7;
-        const uint rows = 3;
-        var spriteId = (uint)MathF.Round(player.NormalizedAnimationTime * (columns * rows - 1));
-        var texCoords = SpriteSheetTools.CalcTexCoords(spriteId, columns, rows);
+
+        var texCoords = player.weapon.Animation.getTexCoords();
 
         var playerBox = new Box2(-player.Radius, -player.Radius, player.Radius, player.Radius);
         Draw.DrawRect(playerBox, texCoords);
@@ -136,9 +118,32 @@ internal class DrawPlaying
 
     }
 
-    private readonly Texture2D texPlayerHandgun;
-    private readonly Texture2D texPlayerRifle;
-    private readonly Texture2D texPlayerShotgun;
+    internal void DrawBloodSplashes(List<BloodSplash> listOfBloodSplashes, Camera camera)
+    {
+        foreach (BloodSplash bloodSplash in listOfBloodSplashes)
+        {
+            var cam = camera.CameraMatrix;
+
+            var test = bloodSplash.Orientation.PolarAngle();
+            Console.WriteLine(test);
+            cam = Transformation2d.Combine(Transformation2d.Rotation((float)(bloodSplash.Orientation.PolarAngle() + (Math.PI / 2))), Transformation2d.Translate(bloodSplash.Center), cam);
+            GL.LoadMatrix(ref cam);
+            GL.Color4(1f, 1f, 1f, 1f);
+            GL.BindTexture(TextureTarget.Texture2D, bloodSplash.Animation.Texture.Handle);
+
+
+            var texCoords = bloodSplash.Animation.getTexCoords();
+
+            var playerBox = new Box2(-bloodSplash.Radius, -bloodSplash.Radius, bloodSplash.Radius, bloodSplash.Radius);
+            Draw.DrawRect(playerBox, texCoords);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+
+            cam = camera.CameraMatrix;
+            GL.LoadMatrix(ref cam);
+        }
+
+    }
+
     private readonly Texture2D texZombie;
     private readonly Texture2D texCat;
     private readonly Texture2D texGiant;
@@ -148,9 +153,6 @@ internal class DrawPlaying
 
     internal DrawPlaying()
     {
-        texPlayerHandgun = EmbeddedResource.LoadTexture("handgun-move-sheet.png");
-        texPlayerRifle = EmbeddedResource.LoadTexture("survivor-idle_rifle_0.png");
-        texPlayerShotgun = EmbeddedResource.LoadTexture("survivor-idle_shotgun_0.png");
         texZombie = EmbeddedResource.LoadTexture("zombie.png");
         texCat = EmbeddedResource.LoadTexture("Topdown-Monster-Token-jule-cat.png");
         texGiant = EmbeddedResource.LoadTexture("Topdown-Monster-Token-Elemental-Fire.png");

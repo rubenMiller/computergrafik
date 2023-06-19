@@ -15,6 +15,7 @@ internal class Program
         //int gameState = 0;
         List<Enemy> listOfEnemies = new List<Enemy>();
         List<Bullet> listOfEnemyBullets = new List<Bullet>();
+        List<BloodSplash> listOfBloodSplashes = new List<BloodSplash>();
         Player player = new Player(0.1f, 4);
         Camera camera = new Camera();
         Wave wave = new Wave();
@@ -26,7 +27,7 @@ internal class Program
         bool reset = true;
         window.UpdateFrame += args =>
             {
-                update.update(args, window, gameState, listOfEnemies, listOfEnemyBullets, camera, player, wave, gameBorder, upgradeMenu);
+                update.update(args, window, gameState, listOfEnemies, listOfEnemyBullets, listOfBloodSplashes, camera, player, wave, gameBorder, upgradeMenu);
                 if (reset && gameState.CurrentState is GameState.STATE.STATE_DEAD)
                 {
                     reset = false;
@@ -42,7 +43,7 @@ internal class Program
 
         window.Resize += args1 => camera.Resize(args1);
         window.KeyDown += args => { if (Keys.Escape == args.Key) window.Close(); };
-        window.RenderFrame += args1 => draw.draw(listOfEnemies, listOfEnemyBullets, player.listOfBullets, player, camera, gameState, wave.WaveCount, (int)wave.waveTime, gameBorder, upgradeMenu); // called once each frame; callback should contain drawing code
+        window.RenderFrame += args1 => draw.draw(listOfEnemies, listOfEnemyBullets, player.listOfBullets, player, listOfBloodSplashes, camera, gameState, wave.WaveCount, (int)wave.waveTime, gameBorder, upgradeMenu); // called once each frame; callback should contain drawing code
         window.KeyDown += args =>
         {
             if (Keys.Space != args.Key)

@@ -11,7 +11,7 @@ internal class Update
     public Update()
     {
     }
-    private int Collissions(List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, Player player, List<Bullet> listOfPlayerBullets, GameState gameState)
+    private int Collissions(List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, Player player, List<Bullet> listOfPlayerBullets, List<BloodSplash> listOfBloodSplashes, GameState gameState)
     {
         foreach (Enemy enemy in listOfEnemies.ToList())
         {
@@ -26,6 +26,8 @@ internal class Update
                 var distance = MathF.Sqrt(distanceSq);
                 if (distance < bullet.Radius + enemy.Radius)
                 {
+                    BloodSplash newBloodSplash = new BloodSplash(bullet.Center, bullet.Direction);
+                    listOfBloodSplashes.Add(newBloodSplash);
                     enemy.Health--;
                     if (enemy.Health <= 0)
                     {
@@ -98,8 +100,20 @@ internal class Update
         }
     }
 
+    private void UpdateBloodSplasList(List<BloodSplash> listOfBloodSplashes, float elapsedTime)
+    {
+        foreach (BloodSplash bloodSplash in listOfBloodSplashes.ToList())
+        {
+            bloodSplash.Update(elapsedTime);
+            if (bloodSplash.TimeAlive > bloodSplash.TimeToLive)
+            {
+                listOfBloodSplashes.Remove(bloodSplash);
+            }
+        }
+    }
 
-    public void update(FrameEventArgs args, GameWindow window, GameState gameState, List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, Camera camera, Player player, Wave wave, GameBorder gameBorder, UpgradeMenu upgradeMenu)
+
+    public void update(FrameEventArgs args, GameWindow window, GameState gameState, List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, List<BloodSplash> listOfBloodSplashes, Camera camera, Player player, Wave wave, GameBorder gameBorder, UpgradeMenu upgradeMenu)
     {
         switch (gameState.CurrentState)
         {
@@ -109,7 +123,7 @@ internal class Update
                     wave.Update(elapsedTime, player, listOfEnemies, gameBorder, gameState);
                     player.Update(elapsedTime, window, camera, gameBorder);
                     camera.UpdateMatrix(elapsedTime);
-                    
+
 
                     foreach (Enemy enemy in listOfEnemies)
                     {
@@ -127,7 +141,8 @@ internal class Update
 
 
                     MoveCamera(player, camera, gameBorder);
-                    Collissions(listOfEnemies, listOfEnemyBullets, player, player.listOfBullets, gameState);
+                    Collissions(listOfEnemies, listOfEnemyBullets, player, player.listOfBullets, listOfBloodSplashes, gameState);
+                    UpdateBloodSplasList(listOfBloodSplashes, elapsedTime);
 
                     if (listOfEnemies.Count == 0 && wave.readyForNewWave == false)
                     {

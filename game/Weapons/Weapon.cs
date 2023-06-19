@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using OpenTK.Mathematics;
+using Zenseless.OpenTK;
+using Framework;
 
 public class Weapon
 {
@@ -13,11 +15,13 @@ public class Weapon
     internal float BulletSpeed;
     internal float Range;
     internal float ReloadTime;
-    public Weapon(float bulletRadius, float bulletSpeed, float range, float reloadTime)
+    public Animation Animation;
+    public Weapon(float bulletRadius, float bulletSpeed, float range, float reloadTime, Animation animation)
     {
         BulletRadius = bulletRadius;
         BulletSpeed = bulletSpeed;
         Range = range;
         ReloadTime = reloadTime;
+        Animation = animation;
     }
 }

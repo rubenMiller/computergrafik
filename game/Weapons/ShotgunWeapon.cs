@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Framework;
 using OpenTK.Mathematics;
 
 public class ShotgunWeapon : Weapon
@@ -26,7 +27,7 @@ public class ShotgunWeapon : Weapon
         return newList;
     }
 
-    public ShotgunWeapon() : base(0.04f, 4f, 1f, 0.5f)
+    public ShotgunWeapon() : base(0.04f, 4f, 1f, 0.5f, new Animation(5, 4, 3f, EmbeddedResource.LoadTexture("shotgun-move-sheet.png")))
     {
 
     }

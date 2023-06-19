@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
@@ -83,8 +84,7 @@ internal class Player
     public void Update(float elapsedTime, GameWindow window, Camera camera, GameBorder gameBorder)
     {
         timeSinceLastShot = timeSinceLastShot + elapsedTime;
-        NormalizedAnimationTime += elapsedTime / AnimationLength;
-        NormalizedAnimationTime %= 1f;
+        weapon.Animation.Update(elapsedTime);
 
         movePlayer(window.KeyboardState);
         rotatePlayer(window, camera);
@@ -117,13 +117,11 @@ internal class Player
     public List<Bullet> listOfBullets = new List<Bullet>();
 
     public Weapon weapon = new HandgunWeapon();
-    public float AnimationLength { get; }
-    public float NormalizedAnimationTime { get; private set; } = 0f;
+
 
     public Player(float radius, int health)
     {
         Radius = radius;
         Health = health;
-        AnimationLength = 3f;
     }
 }

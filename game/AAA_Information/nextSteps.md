@@ -9,7 +9,10 @@ Hier sind die nächsten Schritte festgehalten.
 TODO: ich brauche Animation, bzw muss diese verbessern
 
 - Hat momentan ein Loch -> Array das weiß, wie lange das Ding ist
-- eigene Animationsklasse
+- eigene Animationsklasse, diese muss enthalten:
+  - array mit range
+  - form der images
+  - eventuell erhält auch sie direkt das Bild?
 
 TODO: Balancing
 
@@ -32,9 +35,6 @@ TODO: gameState Änderungen bei Veränderungen der states an einer Stelle festel
 
 After every Wave you can choose:  
  Heal - more Health - upgrade Weapon
-
-Idee: während Welle kann eine Währung eingesammelt werden.
-Am Ende der Welle kann diese ausgegeben werden, um Upgrades zu kaufen.
 
 ## for gamestate
 
