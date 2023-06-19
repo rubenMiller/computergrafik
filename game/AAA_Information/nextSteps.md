@@ -6,14 +6,7 @@ Hier sind die nächsten Schritte festgehalten.
 
 ### wichtige Todos:
 
-TODO: ich brauche Animation, bzw muss diese verbessern
-
-- Hat momentan ein Loch -> Array das weiß, wie lange das Ding ist
-- eigene Animationsklasse, diese muss enthalten:
-  - array mit range
-  - form der images
-  - eventuell erhält auch sie direkt das Bild?
-
+TODO: komischer movement bug, dass die Kamera sich im Verzug bewegt lösen
 TODO: Balancing
 
 - für Gegner Wahrscheinlichkeiten zum spawnen -> das macht es genauer

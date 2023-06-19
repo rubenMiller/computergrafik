@@ -43,7 +43,7 @@ internal class Program
 
         window.Resize += args1 => camera.Resize(args1);
         window.KeyDown += args => { if (Keys.Escape == args.Key) window.Close(); };
-        window.RenderFrame += args1 => draw.draw(listOfEnemies, listOfEnemyBullets, player.listOfBullets, player, listOfBloodSplashes, camera, gameState, wave.WaveCount, (int)wave.waveTime, gameBorder, upgradeMenu); // called once each frame; callback should contain drawing code
+        window.RenderFrame += args1 => draw.draw(listOfEnemies, listOfEnemyBullets, player.listOfBullets, player, listOfBloodSplashes, camera, gameState, wave.WaveCount, wave.waveTime, gameBorder, upgradeMenu); // called once each frame; callback should contain drawing code
         window.KeyDown += args =>
         {
             if (Keys.Space != args.Key)

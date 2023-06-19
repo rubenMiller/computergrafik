@@ -10,7 +10,7 @@ public class BloodSplash
     }
     public Vector2 Center;
     public Vector2 Orientation;
-    public float Radius = 0.3f;
+    public float Radius = 0.2f;
     public float TimeToLive = 0.5f;
     public float TimeAlive = 0f;
 

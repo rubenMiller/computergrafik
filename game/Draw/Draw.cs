@@ -35,6 +35,36 @@ internal class Draw
         GL.LoadMatrix(ref cam);
     }
 
+    public void DrawBloodyOverlay(Camera camera, float time)
+    {
+
+        float elapsedTime = moduloRest(time, 2f);
+        var value = 0.5 + 0.25 * Math.Sin(2 * Math.PI * 0.5f * elapsedTime);
+        Console.WriteLine(value);
+        GL.Color4(1.0f, 1.0f, 1.0f, value);
+
+        var cam = camera.CameraMatrix;
+
+        cam = Transformation2d.Combine(Transformation2d.Translate(camera.Center), cam);
+        GL.LoadMatrix(ref cam);
+
+        GL.BindTexture(TextureTarget.Texture2D, texBloodyOverlay.Handle);
+        var rect = new Box2(-1 / camera.cameraAspectRatio, -1, 1 / camera.cameraAspectRatio, 1);
+        DrawRect(rect, new Box2(0, 0, 1, 1));
+
+        GL.BindTexture(TextureTarget.Texture2D, 0);
+
+        cam = camera.CameraMatrix;
+        GL.LoadMatrix(ref cam);
+    }
+
+    private float moduloRest(float dividend, float divisor)
+    {
+        double quotient = Math.Floor(dividend / divisor);
+        float remainder = dividend % divisor;
+        return (float)(remainder + quotient * divisor);
+    }
+
     internal static List<Vector2> CreateCirclePoints()
     {
         List<Vector2> pointList = new List<Vector2>();
@@ -122,7 +152,7 @@ internal class Draw
     }
 
 
-    public void draw(List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, List<Bullet> listPlayerOfBullets, Player player, List<BloodSplash> listOfBloodSplashes, Camera camera, GameState gameState, int updateWave, int updatetimePlayed, GameBorder gameBorder, UpgradeMenu upgradeMenu)
+    public void draw(List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, List<Bullet> listPlayerOfBullets, Player player, List<BloodSplash> listOfBloodSplashes, Camera camera, GameState gameState, int updateWave, float updatetimePlayed, GameBorder gameBorder, UpgradeMenu upgradeMenu)
     {
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
@@ -143,7 +173,11 @@ internal class Draw
                     drawPlaying.DrawBullets(listPlayerOfBullets, camera);
                     drawPlaying.DrawBullets(listOfEnemyBullets, camera);
                     drawPlaying.DrawBloodSplashes(listOfBloodSplashes, camera);
-                    DrawText($"Wave: {updateWave}, time in Wave: {updatetimePlayed} seconds.", -.99f, 0.9f, 0.05f, camera);
+                    if (player.Health == 1)
+                    {
+                        DrawBloodyOverlay(camera, updatetimePlayed);
+                    }
+                    DrawText($"Wave: {updateWave}, time in Wave: {(int)updatetimePlayed} seconds.", -.99f, 0.9f, 0.05f, camera);
                     break;
                 }
             case GameState.STATE.STATE_WAVEOVER:
@@ -164,6 +198,7 @@ internal class Draw
                 }
             case GameState.STATE.STATE_DEAD:
                 {
+                    DrawBloodyOverlay(camera, 1f);
                     DrawText($"You died!", -0.5f, 0, 0.1f, camera);
                     DrawText($"To restart the game, press Space.", -0.9f, -0.2f, 0.05f, camera);
                     break;
@@ -173,6 +208,7 @@ internal class Draw
 
     private readonly Texture2D texBackground;
     private readonly Texture2D texFont;
+    private readonly Texture2D texBloodyOverlay;
     private DrawInterface drawInterface = new DrawInterface();
     private DrawPlaying drawPlaying = new DrawPlaying();
     public Draw()
@@ -187,6 +223,10 @@ internal class Draw
 
         texFont.MinFilter = Zenseless.OpenTK.TextureMinFilter.Nearest; // avoids problems on the sprite cell borders, but no anti aliased text borders
         texFont.MagFilter = Zenseless.OpenTK.TextureMagFilter.Nearest;
+
+        texBloodyOverlay = EmbeddedResource.LoadTexture("BloodOverlay.png");
+        GL.BindTexture(TextureTarget.Texture2D, texBloodyOverlay.Handle);
+        GL.BindTexture(TextureTarget.Texture2D, 0);
 
         GL.Enable(EnableCap.Texture2D);
         GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);

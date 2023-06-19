@@ -125,7 +125,7 @@ internal class DrawPlaying
             var cam = camera.CameraMatrix;
 
             var test = bloodSplash.Orientation.PolarAngle();
-            Console.WriteLine(test);
+            //Console.WriteLine(test);
             cam = Transformation2d.Combine(Transformation2d.Rotation((float)(bloodSplash.Orientation.PolarAngle() + (Math.PI / 2))), Transformation2d.Translate(bloodSplash.Center), cam);
             GL.LoadMatrix(ref cam);
             GL.Color4(1f, 1f, 1f, 1f);
@@ -143,6 +143,7 @@ internal class DrawPlaying
         }
 
     }
+
 
     private readonly Texture2D texZombie;
     private readonly Texture2D texCat;
