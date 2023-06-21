@@ -152,7 +152,7 @@ internal class Draw
     }
 
 
-    public void draw(List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, List<Bullet> listPlayerOfBullets, Player player, List<BloodSplash> listOfBloodSplashes, Camera camera, GameState gameState, int updateWave, float updatetimePlayed, GameBorder gameBorder, UpgradeMenu upgradeMenu)
+    public void draw(List<Enemy> listOfEnemies, List<ParticleSystem> listOfEnemyBullets, List<Bullet> listPlayerOfBullets, Player player, List<BloodSplash> listOfBloodSplashes, Camera camera, GameState gameState, int updateWave, float updatetimePlayed, GameBorder gameBorder, UpgradeMenu upgradeMenu)
     {
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
@@ -171,7 +171,8 @@ internal class Draw
                     drawPlaying.DrawPlayer(player, camera);
                     drawPlaying.DrawEnemies(listOfEnemies, camera);
                     drawPlaying.DrawBullets(listPlayerOfBullets, camera);
-                    drawPlaying.DrawBullets(listOfEnemyBullets, camera);
+                    //drawPlaying.DrawBullets(listOfEnemyBullets, camera);
+                    drawPlaying.DrawParticleSystem(listOfEnemyBullets, camera);
                     drawPlaying.DrawBloodSplashes(listOfBloodSplashes, camera);
                     if (player.Health == 1)
                     {

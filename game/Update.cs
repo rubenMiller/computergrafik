@@ -11,7 +11,7 @@ internal class Update
     public Update()
     {
     }
-    private int Collissions(List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, Player player, List<Bullet> listOfPlayerBullets, List<BloodSplash> listOfBloodSplashes, GameState gameState)
+    private int Collissions(List<Enemy> listOfEnemies, List<ParticleSystem> listOfEnemyBullets, Player player, List<Bullet> listOfPlayerBullets, List<BloodSplash> listOfBloodSplashes, GameState gameState)
     {
         foreach (Enemy enemy in listOfEnemies.ToList())
         {
@@ -64,7 +64,7 @@ internal class Update
                 listOfPlayerBullets.Remove(bullet);
             }
         }
-        foreach (Bullet bullet in listOfEnemyBullets.ToList())
+        foreach (var bullet in listOfEnemyBullets.ToList())
         {
             var deltaX = bullet.Center.X - player.Center.X;
             var deltaY = bullet.Center.Y - player.Center.Y;
@@ -113,7 +113,7 @@ internal class Update
     }
 
 
-    public void update(FrameEventArgs args, GameWindow window, GameState gameState, List<Enemy> listOfEnemies, List<Bullet> listOfEnemyBullets, List<BloodSplash> listOfBloodSplashes, Camera camera, Player player, Wave wave, GameBorder gameBorder, UpgradeMenu upgradeMenu)
+    public void update(FrameEventArgs args, GameWindow window, GameState gameState, List<Enemy> listOfEnemies, List<ParticleSystem> listOfEnemyBullets, List<BloodSplash> listOfBloodSplashes, Camera camera, Player player, Wave wave, GameBorder gameBorder, UpgradeMenu upgradeMenu)
     {
         switch (gameState.CurrentState)
         {
@@ -132,9 +132,13 @@ internal class Update
                         {
                             var bullet = se.Shoot(player.Center);
                             if (bullet != null) { listOfEnemyBullets.Add(bullet); }
+                            foreach (var ps in se.listOfBullets)
+                            {
+                                ps.Update(elapsedTime);
+                            }
                         }
                     }
-                    foreach (Bullet bullet in listOfEnemyBullets)
+                    foreach (var bullet in listOfEnemyBullets)
                     {
                         bullet.Update(elapsedTime);
                     }

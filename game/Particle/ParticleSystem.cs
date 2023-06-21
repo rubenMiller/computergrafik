@@ -1,48 +1,45 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using Framework;
 using OpenTK.Mathematics;
 using Zenseless.OpenTK;
 
-class ParticleSystem
+public class ParticleSystem
 {
-    List<Particle> particles; // A List for all the particles
-    Vector2 origin; // An origin point for where particles are birthed
-    Texture2D img; // Assuming you have a Texture2D class for loading and storing textures
-
-    public ParticleSystem(int num, Vector2 v, Texture2D img_)
+    public Vector2 Center;
+    public Vector2 Direction;
+    public float Speed = 1f;
+    public float Radius = 0.1f;
+    public float SpriteSize = 0.12f;
+    private float TimeSinceLstSpawn = 0f;
+    private float TimeToSpawn = 0.02f;
+    public Texture2D Texture;
+    private static Random random = new Random();
+    public List<Particle> listOfParticles = new List<Particle>();
+    public void Update(float elapsedTime)
     {
-        particles = new List<Particle>(); // Initialize the list
-        origin = v;
-        img = img_;
-        for (int i = 0; i < num; i++)
+        TimeSinceLstSpawn += elapsedTime;
+        Center = Center + Direction * Speed * elapsedTime;
+        foreach (Particle particle in listOfParticles.ToList())
         {
-            particles.Add(new Particle(origin, img)); // Add "num" amount of particles to the list
-        }
-    }
-
-    public void Run()
-    {
-        for (int i = particles.Count - 1; i >= 0; i--)
-        {
-            Particle p = particles[i];
-            p.Run();
-            if (p.IsDead())
+            particle.Update(elapsedTime, Direction);
+            if (particle.IsDead())
             {
-                particles.RemoveAt(i);
+                listOfParticles.Remove(particle);
             }
         }
-    }
-
-    // Method to add a force vector to all particles currently in the system
-    public void ApplyForce(Vector2 dir)
-    {
-        foreach (Particle p in particles)
+        if (TimeSinceLstSpawn >= TimeToSpawn)
         {
-            p.ApplyForce(dir);
+            TimeSinceLstSpawn = 0;
+            Particle particle = new Particle(Center,random.Next(2) * 2 - 1);
+            listOfParticles.Add(particle);
         }
     }
-
-    public void AddParticle()
+    public ParticleSystem(Vector2 center, Vector2 direction)
     {
-        particles.Add(new Particle(origin, img));
+        Center = center;
+        Direction = direction;
+        Texture = EmbeddedResource.LoadTexture("smoke_256a.png");
     }
 }

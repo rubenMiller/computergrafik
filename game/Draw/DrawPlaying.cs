@@ -52,8 +52,51 @@ internal class DrawPlaying
             }
             if (enemy is shootingEnemy se)
             {
-                DrawBullets(se.listOfBullets, camera);
+                DrawParticleSystem(se.listOfBullets, camera);
+                //DrawBullets(se.listOfBullets, camera);
             }
+        }
+    }
+    internal void DrawParticleSystem(List<ParticleSystem> listOfParticleSystems, Camera camera)
+    {
+
+        foreach (ParticleSystem ps in listOfParticleSystems)
+        {
+            for (int i = 0; i < ps.listOfParticles.Count; i++)
+            {
+
+
+                var cam = camera.CameraMatrix;
+
+                cam = Transformation2d.Combine(Transformation2d.Rotation(ps.Direction.PolarAngle()), Transformation2d.Translate(ps.listOfParticles[i].Center), cam);
+                GL.LoadMatrix(ref cam);
+                if (ps.listOfParticles[i].TimeAlive > 0)
+                {
+                    var c = ps.listOfParticles[i].TimeAlive / ps.listOfParticles[i].TimeToLive;
+                    c = c * c;
+                    GL.Color4(1f, 1f, 1f, 1 - c);
+                }
+                else
+                {
+                    break;
+                }
+                //GL.Color4(1f, 1f, 1f, 1f);
+                if (i > ps.listOfParticles.Count - 2)
+                {
+                    GL.BindTexture(TextureTarget.Texture2D, texEnergyBall.Handle);
+                }
+                else
+                {
+                    GL.BindTexture(TextureTarget.Texture2D, texParticle.Handle);
+                }
+
+                var playerBox = new Box2(-ps.Radius, -ps.Radius, ps.Radius, ps.Radius);
+                Draw.DrawRect(playerBox, new Box2(0f, 0f, 1f, 1f));
+                GL.BindTexture(TextureTarget.Texture2D, 0);
+                cam = camera.CameraMatrix;
+                GL.LoadMatrix(ref cam);
+            }
+
         }
     }
 
@@ -124,10 +167,12 @@ internal class DrawPlaying
 
     private readonly Texture2D texBullet;
     private readonly Texture2D texEnergyBall;
+    private readonly Texture2D texParticle;
 
     internal DrawPlaying()
     {
         texBullet = EmbeddedResource.LoadTexture("bullet.png");
-        texEnergyBall = EmbeddedResource.LoadTexture("energy-ball.png");
+        texEnergyBall = EmbeddedResource.LoadTexture("fireball-tiny.png");
+        texParticle = EmbeddedResource.LoadTexture("smoke_256a.png");
     }
 }

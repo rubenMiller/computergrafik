@@ -1,87 +1,42 @@
-using OpenTK.Graphics.OpenGL;
+using System;
 using OpenTK.Mathematics;
-using Zenseless.OpenTK;
-
-class Particle
+public class Particle
 {
-    Vector2 loc;
-    Vector2 vel;
-    Vector2 acc;
-    float lifespan;
-    Texture2D img; // Assuming you have a Texture2D class for loading and storing textures
-
-    public Particle(Vector2 l, Texture2D img_)
+    public Vector2 Center;
+    int OffsetDirection;
+    public float TimeAlive = 0f;
+    public float TimeToLive = 1f;
+    public void Update(float elapsedTime, Vector2 direction)
     {
-        acc = Vector2.Zero;
-        float vx = (float)(RandomGaussian() * 0.3);
-        float vy = (float)(RandomGaussian() * 0.3 - 1.0);
-        vel = new Vector2(vx, vy);
-        loc = l;
-        lifespan = 100.0f;
-        img = img_;
+        TimeAlive += elapsedTime;
+        Center = Center + TimeAlive * OffsetVector(Center, direction) * OffsetDirection;
     }
-
-    public void Run()
-    {
-        Update();
-        Render();
-    }
-
-    // Method to apply a force vector to the Particle object
-    // Note we are ignoring "mass" here
-    public void ApplyForce(Vector2 f)
-    {
-        acc += f;
-    }
-
-    // Method to update position
-    public void Update()
-    {
-        vel += acc;
-        loc += vel;
-        lifespan -= 2.5f;
-        acc = Vector2.Zero; // clear Acceleration
-    }
-
-    // Method to display
-    public void Render()
-    {
-        GL.MatrixMode(MatrixMode.Modelview);
-        GL.LoadIdentity();
-        GL.Ortho(0, 800, 0, 600, -1, 1); // Assuming a 800x600 window size, adjust as needed
-
-        GL.Enable(EnableCap.Texture2D);
-        GL.BlendFunc((BlendingFactor)BlendingFactorSrc.SrcAlpha, (BlendingFactor)BlendingFactorDest.OneMinusSrcAlpha);
-        GL.Enable(EnableCap.Blend);
-
-        img.Bind(); // Assuming you have a method to bind the texture
-        GL.Color4(1.0f, 1.0f, 1.0f, lifespan / 255.0f);
-
-        GL.Begin(PrimitiveType.Quads);
-        GL.TexCoord2(0, 0);
-        GL.Vertex2(loc.X - img.Width / 2, loc.Y - img.Height / 2);
-        GL.TexCoord2(1, 0);
-        GL.Vertex2(loc.X + img.Width / 2, loc.Y - img.Height / 2);
-        GL.TexCoord2(1, 1);
-        GL.Vertex2(loc.X + img.Width / 2, loc.Y + img.Height / 2);
-        GL.TexCoord2(0, 1);
-        GL.Vertex2(loc.X - img.Width / 2, loc.Y + img.Height / 2);
-        GL.End();
-
-        GL.Disable(EnableCap.Blend);
-        GL.Disable(EnableCap.Texture2D);
-    }
-
-    // Is the particle still useful?
     public bool IsDead()
     {
-        return lifespan <= 0.0f;
+        return TimeAlive >= TimeToLive;
     }
-
-    // Helper function for generating random Gaussian values
-    private double RandomGaussian()
+    public static Vector2 OffsetVector(Vector2 center, Vector2 direction)
     {
-        // Implement your random Gaussian distribution function here
-        return 0.0;
+        // Convert the angle to radians
+        float angleRadians = (float)(MathF.PI / 2);
+
+        // Calculate the offset vector
+        float offsetX = direction.X * (float)MathF.Cos(angleRadians) - direction.Y * (float)Math.Sin(angleRadians);
+        float offsetY = direction.X * (float)MathF.Sin(angleRadians) + direction.Y * (float)Math.Cos(angleRadians);
+
+        // Create the offset vector by adding the offset to the center
+        Vector2 offset = new Vector2(center.X + offsetX, center.Y + offsetY);
+
+        Random rand = new Random(); //reuse this if you are generating many
+        double u1 = 1.0 - rand.NextDouble(); //uniform(0,1] random doubles
+        double u2 = 1.0 - rand.NextDouble();
+        double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2); //random normal(0,1)
+
+        return (float)randStdNormal * offset / 200f;
+    }
+    public Particle(Vector2 center, int offsetDirection)
+    {
+        Center = center;
+        OffsetDirection = offsetDirection;
     }
 }

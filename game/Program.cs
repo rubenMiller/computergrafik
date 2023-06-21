@@ -14,7 +14,7 @@ internal class Program
 
         //int gameState = 0;
         List<Enemy> listOfEnemies = new List<Enemy>();
-        List<Bullet> listOfEnemyBullets = new List<Bullet>();
+        List<ParticleSystem> listOfEnemyBullets = new List<ParticleSystem>();
         List<BloodSplash> listOfBloodSplashes = new List<BloodSplash>();
         Player player = new Player(0.1f, 4);
         Camera camera = new Camera();
