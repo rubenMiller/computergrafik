@@ -7,12 +7,14 @@ internal class Enemy
     public float Radius;
     public float Speed;
     public Vector2 Orientation = new Vector2(0, 0);
-    public Enemy(Vector2 center, int health, float radius, float speed)
+    public Animation Animation;
+    public Enemy(Vector2 center, int health, float radius, float speed, Animation animation)
     {
         Center = center;
         Health = health;
         Radius = radius;
         Speed = speed;
+        Animation = animation;
     }
 
     public virtual void Update(float elapsedTime, Player player)
@@ -21,6 +23,7 @@ internal class Enemy
         enemyDirection.Normalize();
         Orientation = enemyDirection;
         Center = Center + enemyDirection * Speed * elapsedTime;
+        Animation.Update(elapsedTime);
     }
 
 }

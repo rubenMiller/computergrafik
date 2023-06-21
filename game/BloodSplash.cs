@@ -19,6 +19,6 @@ public class BloodSplash
     {
         Center = center;
         Orientation = orientation;
-        Animation = new Animation(8, 1, TimeToLive, EmbeddedResource.LoadTexture("blood-splatter-sheet.png"));
+        Animation = new Animation(8, 1, TimeToLive, EmbeddedResource.LoadTexture("blood-splatter-sheet.png"), Radius);
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Framework;
 using OpenTK.Mathematics;
 
 internal class shootingEnemy : Enemy
@@ -8,7 +9,7 @@ internal class shootingEnemy : Enemy
     private float reloadTime = 3f;
     //private float timeStanding = 0;
     public List<Bullet> listOfBullets = new List<Bullet>();
-    public shootingEnemy(Vector2 center) : base(center, 1, 0.2f, 0.3f)
+    public shootingEnemy(Vector2 center) : base(center, 1, 0.2f, 0.3f, new Animation(1, 1, 1, EmbeddedResource.LoadTexture("tempShooter.png"), 0.2f))
     {
 
     }

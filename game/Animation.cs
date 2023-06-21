@@ -13,20 +13,37 @@ public class Animation
     public Box2 getTexCoords()
     {
         var spriteId = (uint)MathF.Round(NormalizedAnimationTime * (Columns * Rows - 1));
+        if (AnimationParts.Contains((int)spriteId) == false)
+        {
+            spriteId = (uint)AnimationParts[0];
+        }
         return SpriteSheetTools.CalcTexCoords(spriteId, Columns, Rows);
     }
 
     private uint Columns;
     private uint Rows;
-    public int[] AnimationParts = Enumerable.Range(0, 20).ToArray<int>();
+    public int[] AnimationParts;
     public float AnimationLength { get; }
     public float NormalizedAnimationTime { get; private set; } = 0f;
     public Texture2D Texture;
-    public Animation(uint columns, uint rows, float animationLength, Texture2D texture)
+    public float SpriteSize;
+    public Animation(uint columns, uint rows, float animationLength, Texture2D texture, float spriteSize)
     {
         Columns = columns;
         Rows = rows;
         AnimationLength = animationLength;
         Texture = texture;
+        SpriteSize = spriteSize;
+        AnimationParts = Enumerable.Range(0, (int)(columns * rows)).ToArray<int>();
+    }
+
+    public Animation(uint columns, uint rows, float animationLength, Texture2D texture, float spriteSize, int SheetStart, int SheetEnd)
+    {
+        Columns = columns;
+        Rows = rows;
+        AnimationLength = animationLength;
+        Texture = texture;
+        SpriteSize = spriteSize;
+        AnimationParts = Enumerable.Range(SheetStart, SheetEnd).ToArray<int>();
     }
 }
