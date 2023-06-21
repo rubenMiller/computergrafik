@@ -6,7 +6,6 @@ Hier sind die nächsten Schritte festgehalten.
 
 ### wichtige Todos:
 
-TODO: komischer movement bug, dass die Kamera sich im Verzug bewegt lösen
 TODO: Balancing
 
 - für Gegner Wahrscheinlichkeiten zum spawnen -> das macht es genauer
@@ -20,9 +19,6 @@ TODO: gameState Änderungen bei Veränderungen der states an einer Stelle festel
 ## weitere Ideen:
 
 - Spielfeldrand sichbar vorher machen
-- Schüsse treffen mit Blut ein
-- Währung - Ja oder Nein
-- Wellenende lieber wenn alle Gegner Tod?
 
 ## Upgrade System
 

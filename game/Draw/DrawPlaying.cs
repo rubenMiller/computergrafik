@@ -81,7 +81,7 @@ internal class DrawPlaying
                     break;
                 }
                 //GL.Color4(1f, 1f, 1f, 1f);
-                if (i > ps.listOfParticles.Count - 2)
+                if (i > ps.listOfParticles.Count - 3)
                 {
                     GL.BindTexture(TextureTarget.Texture2D, texEnergyBall.Handle);
                 }
