@@ -1,0 +1,68 @@
+using System.Drawing;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Input;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.GraphicsLibraryFramework;
+using Zenseless.OpenTK;
+
+ParticleSystem ps;
+
+void Setup()
+{
+    int width = 640;
+    int height = 360;
+    // Set up your OpenTK window here with the desired width and height
+    // ...
+
+    Texture2D img = new Texture2D("texture.png"); // Assuming you have a Texture2D class for loading and storing textures
+    ps = new ParticleSystem(0, new Vector2(width / 2, height - 60), img);
+}
+
+void Render()
+{
+    GL.ClearColor(Color4.Black);
+    GL.Clear(ClearBufferMask.ColorBufferBit);
+
+    // Calculate a "wind" force based on mouse horizontal position
+    float dx = MathHelper.Lerp(-0.2f, 0.2f, (float)Mouse.X / Window.Width);
+    Vector2 wind = new Vector2(dx, 0);
+    ps.ApplyForce(wind);
+    ps.Run();
+    for (int i = 0; i < 2; i++)
+    {
+        ps.AddParticle();
+    }
+
+    // Draw an arrow representing the wind force
+    DrawVector(wind, new Vector2(Window.Width / 2, 50), 500);
+
+    // Swap the back buffer with the front buffer to display the rendered frame
+    // ...
+}
+
+// Renders a vector object 'v' as an arrow and a position 'loc'
+void DrawVector(Vector2 v, Vector2 loc, float scale)
+{
+    GL.MatrixMode(MatrixMode.Modelview);
+    GL.LoadIdentity();
+    GL.Ortho(0, Window.Width, Window.Height, 0, -1, 1); // Assuming you have set up an Orthographic projection
+
+    GL.Begin(PrimitiveType.Lines);
+    GL.Color3(Color.White);
+
+    float len = v.Length * scale;
+    GL.Vertex2(loc.X, loc.Y);
+    GL.Vertex2(loc.X + len, loc.Y);
+
+    float arrowSize = 4;
+    float angle = (float)Math.Atan2(v.Y, v.X);
+    GL.Vertex2(loc.X + len, loc.Y);
+    GL.Vertex2(loc.X + len - arrowSize, loc.Y + arrowSize / 2);
+
+    GL.Vertex2(loc.X + len, loc.Y);
+    GL.Vertex2(loc.X + len - arrowSize, loc.Y - arrowSize / 2);
+
+    GL.End();
+}

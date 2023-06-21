@@ -1,0 +1,54 @@
+// Credits to: https://processing.org/examples/smokeparticlesystem.html
+// A class to describe a group of Particles
+// An ArrayList is used to manage the list of Particles 
+
+using System.Collections.Generic;
+using OpenTK.Mathematics;
+using Zenseless.OpenTK;
+
+class ParticleSystem
+{
+
+    List<Particle> particles;    // An arraylist for all the particles
+    Vector2 origin;                   // An origin point for where particles are birthed
+    Texture2D img;
+
+    ParticleSystem(int num, Vector2 v, Texture2D img_)
+    {
+        particles = new List<Particle>();              // Initialize the arraylist
+        origin = v;                                  // Store the origin point
+        img = img_;
+        for (int i = 0; i < num; i++)
+        {
+            particles.Add(new Particle(origin, img));         // Add "num" amount of particles to the arraylist
+        }
+    }
+
+    void run()
+    {
+        for (int i = particles.Count - 1; i >= 0; i--)
+        {
+            Particle p = particles[i];
+            p.run();
+            if (p.isDead())
+            {
+                particles.remove(i);
+            }
+        }
+    }
+
+    // Method to add a force vector to all particles currently in the system
+    void applyForce(PVector dir)
+    {
+        // Enhanced loop!!!
+        for (Particle p : particles)
+        {
+            p.applyForce(dir);
+        }
+    }
+
+    void addParticle()
+    {
+        particles.add(new Particle(origin, img));
+    }
+}
