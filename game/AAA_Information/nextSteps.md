@@ -6,13 +6,9 @@ Hier sind die nächsten Schritte festgehalten.
 
 ### wichtige Todos:
 
-TODO: Balancing
-
-- für Gegner Wahrscheinlichkeiten zum spawnen -> das macht es genauer
-- Schussgegener können nur im Sichtfeld schießen
+TODO: Wenn Welle x vorbei, win-screen einblenden
 
 ### optionale Todos:
-
 
 TODO: bessere Bilder für Upgrades
 TODO: Kamera resized abhängig von Rand.

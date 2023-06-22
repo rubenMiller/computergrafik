@@ -36,16 +36,4 @@ internal class shootingEnemy : Enemy
         }
         return null;
     }
-
-/*    public Bullet Shoot(Vector2 playerCenter)
-    {
-        if (timeSinceShoot > reloadTime)
-        {
-            timeSinceShoot = 0;
-            Vector2 direction = playerCenter - Center;
-            direction.Normalize();
-            return new EnemyBullet(Center, direction);
-        }
-        return null;
-    }*/
 }

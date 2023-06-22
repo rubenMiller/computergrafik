@@ -55,9 +55,22 @@ internal class Program
                 gameState.transitionToState(GameState.STATE.STATE_PLAYING);
                 reset = true;
             }
+            if (gameState.CurrentState is GameState.STATE.STATE_WON)
+            {
+                gameState.transitionToState(GameState.STATE.STATE_PLAYING);
+                reset = true;
+            }
             if (gameState.CurrentState is GameState.STATE.STATE_WAVEOVER)
             {
-                gameState.transitionToState(GameState.STATE.STATE_UPGRADEMENU);
+                if (wave.WaveCount > 6)
+                {
+                    gameState.transitionToState(GameState.STATE.STATE_WON);
+                }
+                else
+                {
+                    gameState.transitionToState(GameState.STATE.STATE_UPGRADEMENU);
+                }
+
             }
 
         };

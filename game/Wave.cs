@@ -57,7 +57,7 @@ internal class Wave
             waveTime = 0f;
             gameState.transitionToState(GameState.STATE.STATE_WAVEOVER);
         }
-        if (timeSinceLastSpawn > timeBetweenSPawns && waveTime < 20f)
+        if (timeSinceLastSpawn > timeBetweenSPawns && waveTime < 45f)
         {
             listOfEnemies.AddRange(MakeEnemies(player, gameBorder));
             timeSinceLastSpawn = 0f;

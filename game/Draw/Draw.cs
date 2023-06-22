@@ -204,6 +204,12 @@ internal class Draw
                     DrawText($"To restart the game, press Space.", -0.9f, -0.2f, 0.05f, camera);
                     break;
                 }
+            case GameState.STATE.STATE_WON:
+                {
+                    DrawText($"You WON!", -0.5f, 0, 0.1f, camera);
+                    DrawText($"To restart the game, press Space.", -0.9f, -0.2f, 0.05f, camera);
+                    break;
+                }
         }
     }
 

@@ -6,7 +6,8 @@ public class GameState
         STATE_PLAYING,
         STATE_WAVEOVER,
         STATE_UPGRADEMENU,
-        STATE_DEAD
+        STATE_DEAD,
+        STATE_WON
     }
     public void transitionToState(STATE nextState)
     {
@@ -36,12 +37,12 @@ public class GameState
                 }
             case STATE.STATE_WAVEOVER:
                 {
-                    if (nextState != STATE.STATE_UPGRADEMENU)
+                    if (nextState == STATE.STATE_UPGRADEMENU || nextState == STATE.STATE_WON)
                     {
-                        throw new GameStateTransitionException("STATE_WAVEOVER to a state that is not STATE_UPGRADEMENU.");
+                        CurrentState = nextState;
+                        break;
                     }
-                    CurrentState = nextState;
-                    break;
+                    throw new GameStateTransitionException("STATE_WAVEOVER to a state that is not STATE_UPGRADEMENU.");
                 }
             case STATE.STATE_UPGRADEMENU:
                 {
@@ -57,6 +58,15 @@ public class GameState
                     if (nextState != STATE.STATE_PLAYING)
                     {
                         throw new GameStateTransitionException("STATE_DEAD to a state that is not STATE_PLAYING.");
+                    }
+                    CurrentState = nextState;
+                    break;
+                }
+            case STATE.STATE_WON:
+                {
+                    if (nextState != STATE.STATE_PLAYING)
+                    {
+                        throw new GameStateTransitionException("STATE_WON to a state that is not STATE_PLAYING.");
                     }
                     CurrentState = nextState;
                     break;
