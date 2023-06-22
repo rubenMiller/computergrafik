@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using OpenTK.Mathematics;
+using System.Text.Json;
+using System.IO;
 
 internal class Wave
 {
@@ -36,10 +38,11 @@ internal class Wave
     private List<Enemy> MakeEnemies(Player player, GameBorder gameBorder)
     {
         List<Enemy> listOfEnemies = new List<Enemy>();
-        listOfEnemies.AddRange(SpawnEnemies(4 + 2 * WaveCount, player, gameBorder, center => new baseEnemy(center)));
-        listOfEnemies.AddRange(SpawnEnemies(3 + 2 * WaveCount, player, gameBorder, center => new runnerEnemy(center)));
-        listOfEnemies.AddRange(SpawnEnemies(0 + 1 * (WaveCount - 1), player, gameBorder, center => new bigEnemy(center)));
-        listOfEnemies.AddRange(SpawnEnemies(0 + 1 * WaveCount, player, gameBorder, center => new shootingEnemy(center)));
+        string waveString = "wave_" + WaveCount;
+        listOfEnemies.AddRange(SpawnEnemies(WaveInformation[waveString][0], player, gameBorder, center => new baseEnemy(center)));
+        listOfEnemies.AddRange(SpawnEnemies(WaveInformation[waveString][1], player, gameBorder, center => new runnerEnemy(center)));
+        listOfEnemies.AddRange(SpawnEnemies(WaveInformation[waveString][2], player, gameBorder, center => new bigEnemy(center)));
+        listOfEnemies.AddRange(SpawnEnemies(WaveInformation[waveString][3], player, gameBorder, center => new shootingEnemy(center)));
 
         return listOfEnemies;
     }
@@ -68,8 +71,17 @@ internal class Wave
     private float timeBetweenSPawns = 10f;
     private Random random = new Random();
 
+    Dictionary<string, List<int>> WaveInformation = new();
+
+
+    string filePath = "./waveInformation.json";
+    string json;
+
+
     public Wave()
     {
+        json = File.ReadAllText(filePath);
+        WaveInformation = JsonSerializer.Deserialize<Dictionary<string, List<int>>>(json)!;
 
     }
 }
