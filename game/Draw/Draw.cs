@@ -148,7 +148,7 @@ internal class Draw
     internal void drawButton(Button button, Camera camera)
     {
         drawInterface.DrawButton(button, camera);
-        DrawText(button.ButtonText, button.Position.Min.X, button.Position.Max.Y + 0.2f, 0.03f, camera);
+        DrawText(button.ButtonAction.ButtonText, button.Position.Min.X, button.Position.Max.Y + 0.2f, 0.03f, camera);
     }
 
 
@@ -192,7 +192,7 @@ internal class Draw
                     DrawText($"Choose one of the Upgrades: ", -.99f, 0.9f, 0.05f, camera);
                     DrawBackground(gameBorder);
 
-                    drawButton(upgradeMenu.Button1, camera);
+                    drawButton(upgradeMenu.ButtonHealth, camera);
                     drawButton(upgradeMenu.Button2, camera);
                     drawButton(upgradeMenu.Button3, camera);
                     break;

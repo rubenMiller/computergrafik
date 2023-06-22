@@ -73,7 +73,7 @@ internal class DrawPlaying
                 if (ps.listOfParticles[i].TimeAlive > 0)
                 {
                     var c = ps.listOfParticles[i].TimeAlive / ps.listOfParticles[i].TimeToLive;
-                    c = c;
+                    //c = c;
                     GL.Color4(0f, 0f, 0f, 1 - c);
                 }
                 else

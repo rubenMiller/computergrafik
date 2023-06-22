@@ -5,6 +5,8 @@ using OpenTK.Mathematics;
 
 public class ShotgunWeapon : Weapon
 {
+    public int AdditionalBulletsPerSide = 2;
+    float SpreadingFactor = 0.125f;
     public static Vector2 Rotate(Vector2 vector, float angle)
     {
         float cos = (float)Math.Cos(angle);
@@ -15,14 +17,15 @@ public class ShotgunWeapon : Weapon
     {
         List<Bullet> newList = new List<Bullet>();
         newList.Add(new PlayerBullet(startingPoint, direction, BulletRadius, BulletSpeed, Range));
-        var rotation = Rotate(direction, 0.5f);
-        newList.Add(new PlayerBullet(startingPoint, rotation, BulletRadius, BulletSpeed, Range));
-        rotation = Rotate(direction, 0.25f);
-        newList.Add(new PlayerBullet(startingPoint, rotation, BulletRadius, BulletSpeed, Range));
-        rotation = Rotate(direction, -0.5f);
-        newList.Add(new PlayerBullet(startingPoint, rotation, BulletRadius, BulletSpeed, Range));
-        rotation = Rotate(direction, -0.25f);
-        newList.Add(new PlayerBullet(startingPoint, rotation, BulletRadius, BulletSpeed, Range));
+        var rotation = Rotate(direction, 0f); ;
+        for (int i = 1; i <= AdditionalBulletsPerSide; i++)
+        {
+            rotation = Rotate(direction, i * SpreadingFactor);
+            newList.Add(new PlayerBullet(startingPoint, rotation, BulletRadius, BulletSpeed, Range));
+            rotation = Rotate(direction, -i * SpreadingFactor);
+            newList.Add(new PlayerBullet(startingPoint, rotation, BulletRadius, BulletSpeed, Range));
+        }
+
 
         return newList;
     }
