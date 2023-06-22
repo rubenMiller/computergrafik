@@ -62,41 +62,35 @@ internal class DrawPlaying
 
         foreach (ParticleSystem ps in listOfParticleSystems)
         {
+            Matrix4 cam;
+            Box2 playerBox;
             for (int i = 0; i < ps.listOfParticles.Count; i++)
             {
-
-
-                var cam = camera.CameraMatrix;
+                cam = camera.CameraMatrix;
 
                 cam = Transformation2d.Combine(Transformation2d.Rotation(ps.Direction.PolarAngle()), Transformation2d.Translate(ps.listOfParticles[i].Center), cam);
                 GL.LoadMatrix(ref cam);
                 if (ps.listOfParticles[i].TimeAlive > 0)
                 {
                     var c = ps.listOfParticles[i].TimeAlive / ps.listOfParticles[i].TimeToLive;
-                    c = c * c;
-                    GL.Color4(1f, 1f, 1f, 1 - c);
+                    c = c;
+                    GL.Color4(0f, 0f, 0f, 1 - c);
                 }
                 else
                 {
                     break;
                 }
-                //GL.Color4(1f, 1f, 1f, 1f);
-                if (i > ps.listOfParticles.Count - 3)
-                {
-                    GL.BindTexture(TextureTarget.Texture2D, texEnergyBall.Handle);
-                }
-                else
-                {
-                    GL.BindTexture(TextureTarget.Texture2D, texParticle.Handle);
-                }
 
-                var playerBox = new Box2(-ps.Radius, -ps.Radius, ps.Radius, ps.Radius);
+                GL.BindTexture(TextureTarget.Texture2D, texParticle.Handle);
+
+                playerBox = new Box2(-ps.Radius, -ps.Radius, ps.Radius, ps.Radius);
                 Draw.DrawRect(playerBox, new Box2(0f, 0f, 1f, 1f));
                 GL.BindTexture(TextureTarget.Texture2D, 0);
                 cam = camera.CameraMatrix;
                 GL.LoadMatrix(ref cam);
             }
 
+            DrawEntity(ps.Direction, ps.FireAnimation, ps.Center, camera);
         }
     }
 

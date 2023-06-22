@@ -14,13 +14,15 @@ public class ParticleSystem
     public float SpriteSize = 0.12f;
     private float TimeSinceLstSpawn = 0f;
     private float TimeToSpawn = 0.02f;
-    public Texture2D Texture;
+    public Texture2D SmokeTexture;
+    public Animation FireAnimation;
     private static Random random = new Random();
     public List<Particle> listOfParticles = new List<Particle>();
     public void Update(float elapsedTime)
     {
         TimeSinceLstSpawn += elapsedTime;
         Center = Center + Direction * Speed * elapsedTime;
+        FireAnimation.Update(elapsedTime);
         foreach (Particle particle in listOfParticles.ToList())
         {
             particle.Update(elapsedTime, Direction);
@@ -32,7 +34,7 @@ public class ParticleSystem
         if (TimeSinceLstSpawn >= TimeToSpawn)
         {
             TimeSinceLstSpawn = 0;
-            Particle particle = new Particle(Center,random.Next(2) * 2 - 1);
+            Particle particle = new Particle(Center, random.Next(2) * 2 - 1);
             listOfParticles.Add(particle);
         }
     }
@@ -40,6 +42,7 @@ public class ParticleSystem
     {
         Center = center;
         Direction = direction;
-        Texture = EmbeddedResource.LoadTexture("smoke_256a.png");
+        SmokeTexture = EmbeddedResource.LoadTexture("smoke_256a.png");
+        FireAnimation = new Animation(2, 2, 0.5f, EmbeddedResource.LoadTexture("fireball.png"), Radius * 2);
     }
 }
