@@ -13,7 +13,7 @@ internal class Player
         if (mouseState.IsButtonDown(MouseButton.Left) && timeSinceLastShot > weapon.ReloadTime)
         {
             timeSinceLastShot = 0;
-            var rotation = Rotate(new Vector2(0.07f, -0.05f), Orientation.PolarAngle());
+            var rotation = Rotate(weapon.BulletOffset, Orientation.PolarAngle());
             Vector2 bulletStart = new Vector2(Center.X + rotation.X, Center.Y + rotation.Y);
             List<Bullet> newList = weapon.shoot(bulletStart, Orientation);
 
@@ -105,7 +105,6 @@ internal class Player
             bullet.Update(elapsedTime);
         }
     }
-
     public Vector2 Center = new Vector2(0, 0);
     public Vector2 Direction = new Vector2(0, 0);
     public float Speed = 1f;
@@ -117,8 +116,6 @@ internal class Player
     public List<Bullet> listOfBullets = new List<Bullet>();
 
     public Weapon weapon = new HandgunWeapon();
-
-
     public Player(float radius, int health)
     {
         Radius = radius;

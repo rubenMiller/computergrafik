@@ -15,13 +15,15 @@ public class Weapon
     internal float BulletSpeed;
     internal float Range;
     internal float ReloadTime;
+    public Vector2 BulletOffset;
     public Animation Animation;
-    public Weapon(float bulletRadius, float bulletSpeed, float range, float reloadTime, Animation animation)
+    public Weapon(float bulletRadius, float bulletSpeed, float range, float reloadTime, Vector2 bulletOffset, Animation animation)
     {
         BulletRadius = bulletRadius;
         BulletSpeed = bulletSpeed;
         Range = range;
         ReloadTime = reloadTime;
+        BulletOffset = bulletOffset;
         Animation = animation;
     }
 }

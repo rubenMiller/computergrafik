@@ -13,6 +13,8 @@ TODO: Balancing
 
 ### optionale Todos:
 
+TODO: Bullet offset für einzelne Waffen
+TODO: bessere Bilder für Upgrades
 TODO: Kamera resized abhängig von Rand.
 TODO: gameState Änderungen bei Veränderungen der states an einer Stelle festelgen, so dass nur noch transition state aufgeruden werden muss.
 
