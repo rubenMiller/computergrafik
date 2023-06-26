@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using OpenTK.Mathematics;
 using System;
 using System.Linq;
+using System.Drawing;
 
 internal class DrawPlaying
 {
@@ -24,10 +25,7 @@ internal class DrawPlaying
             {
                 GL.BindTexture(TextureTarget.Texture2D, texBullet.Handle);
             }
-            if (bullet is EnemyBullet)
-            {
-                GL.BindTexture(TextureTarget.Texture2D, texEnergyBall.Handle);
-            }
+
 
             var bulletBox = new Box2(-bullet.Radius, -bullet.Radius, bullet.Radius, bullet.Radius);
             Draw.DrawRect(bulletBox, new Box2(0f, 0f, 1f, 1f));
@@ -131,6 +129,24 @@ internal class DrawPlaying
 
     }
 
+    internal void DrawEnemyIcons(Enemy enemy, Camera camera)
+    {
+        if (!SpriteSheetTools.InCamera(camera.Center, enemy.Center, enemy.Radius, camera))
+        {
+            Vector2 Direction = camera.Center - enemy.Center;
+            var Angle = Direction.PolarAngle();
+
+            var Xcoord = camera.Center.X - 1 / camera.cameraAspectRatio + EnemyIconAnimation.SpriteSize;
+            var Ycoord = camera.Center.Y - 1 + EnemyIconAnimation.SpriteSize;
+            var Width = (2f / camera.cameraAspectRatio) - (2 * EnemyIconAnimation.SpriteSize);
+            var Heigth = 2 - 2 * EnemyIconAnimation.SpriteSize;
+
+            var rect = new RectangleF(Xcoord, Ycoord, Width, Heigth);
+            var anotherCenter = SpriteSheetTools.Intersects(camera.Center, -Direction, rect);
+            DrawEntity(new Vector2(1, 0), EnemyIconAnimation, anotherCenter, camera);
+        }
+    }
+
 
     internal void DrawEntity(Vector2 Orientation, Animation animation, Vector2 Center, Camera camera)
     {
@@ -159,14 +175,15 @@ internal class DrawPlaying
 
 
 
+
     private readonly Texture2D texBullet;
-    private readonly Texture2D texEnergyBall;
     private readonly Texture2D texParticle;
+    private Animation EnemyIconAnimation;
 
     internal DrawPlaying()
     {
         texBullet = EmbeddedResource.LoadTexture("bullet.png");
-        texEnergyBall = EmbeddedResource.LoadTexture("fireball-tiny.png");
         texParticle = EmbeddedResource.LoadTexture("smoke_256a.png");
+        EnemyIconAnimation = new Animation(1, 1, 1, EmbeddedResource.LoadTexture("Enemy_Icon.png"), 0.1f);
     }
 }

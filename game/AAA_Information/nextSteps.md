@@ -7,6 +7,7 @@ Hier sind die nächsten Schritte festgehalten.
 ### wichtige Todos:
 
 TODO: Wenn Welle x vorbei, win-screen einblenden
+TODO: letzten Gegner mit Richtung anzeigen
 
 ### optionale Todos:
 

@@ -7,11 +7,10 @@ using OpenTK.Windowing.Desktop;
 
 internal class Update
 {
-    int numberOfKilledEnemies;
     public Update()
     {
     }
-    private int Collissions(List<Enemy> listOfEnemies, List<ParticleSystem> listOfEnemyBullets, Player player, List<Bullet> listOfPlayerBullets, List<BloodSplash> listOfBloodSplashes, GameState gameState)
+    private int Collissions(List<Enemy> listOfEnemies, List<ParticleSystem> listOfEnemyBullets, Player player, List<Bullet> listOfPlayerBullets, List<BloodSplash> listOfBloodSplashes, GameState gameState, Wave wave)
     {
         foreach (Enemy enemy in listOfEnemies.ToList())
         {
@@ -32,7 +31,7 @@ internal class Update
                     if (enemy.Health <= 0)
                     {
                         listOfEnemies.Remove(enemy);
-                        numberOfKilledEnemies++;
+                        wave.RemainingEnemies--;
                     }
 
                     listOfPlayerBullets.Remove(bullet);
@@ -45,6 +44,7 @@ internal class Update
             var distanceToPlayer = MathF.Sqrt(dX * dX + dY * dY);
             if (distanceToPlayer < enemy.Radius + player.Radius)
             {
+                wave.RemainingEnemies--;
                 listOfEnemies.Remove(enemy);
                 player.Health--;
                 if (player.Health < 1)
@@ -145,7 +145,7 @@ internal class Update
 
 
 
-                    Collissions(listOfEnemies, listOfEnemyBullets, player, player.listOfBullets, listOfBloodSplashes, gameState);
+                    Collissions(listOfEnemies, listOfEnemyBullets, player, player.listOfBullets, listOfBloodSplashes, gameState, wave);
                     UpdateBloodSplasList(listOfBloodSplashes, elapsedTime);
 
                     if (listOfEnemies.Count == 0 && wave.readyForNewWave == false)

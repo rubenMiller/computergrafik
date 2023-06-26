@@ -9,7 +9,6 @@ internal class Draw
 {
     internal void DrawText(string text, float x, float y, float size, Camera camera)
     {
-
         var cam = camera.CameraMatrix;
 
         cam = Transformation2d.Combine(Transformation2d.Translate(camera.Center), cam);
@@ -152,7 +151,7 @@ internal class Draw
     }
 
 
-    public void draw(List<Enemy> listOfEnemies, List<ParticleSystem> listOfEnemyBullets, List<Bullet> listPlayerOfBullets, Player player, List<BloodSplash> listOfBloodSplashes, Camera camera, GameState gameState, int updateWave, float updatetimePlayed, GameBorder gameBorder, UpgradeMenu upgradeMenu)
+    public void draw(List<Enemy> listOfEnemies, List<ParticleSystem> listOfEnemyBullets, List<Bullet> listPlayerOfBullets, Player player, List<BloodSplash> listOfBloodSplashes, Camera camera, GameState gameState, int updateWave, float updatetimePlayed, int RemainingEnemies, GameBorder gameBorder, UpgradeMenu upgradeMenu)
     {
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
@@ -162,6 +161,7 @@ internal class Draw
         {
             case GameState.STATE.STATE_START:
                 {
+                    DrawBackground(gameBorder);
                     DrawText($"To start the game, press Space.", -0.9f, 0, 0.05f, camera);
                     break;
                 }
@@ -170,6 +170,13 @@ internal class Draw
                     DrawBackground(gameBorder);
                     drawPlaying.DrawPlayer(player, camera);
                     drawPlaying.DrawEnemies(listOfEnemies, camera);
+                    if (listOfEnemies.Count < 3)
+                    {
+                        foreach (Enemy enemy in listOfEnemies)
+                        {
+                            drawPlaying.DrawEnemyIcons(enemy, camera);
+                        }
+                    }
                     drawPlaying.DrawBullets(listPlayerOfBullets, camera);
                     //drawPlaying.DrawBullets(listOfEnemyBullets, camera);
                     drawPlaying.DrawParticleSystem(listOfEnemyBullets, camera);
@@ -178,17 +185,19 @@ internal class Draw
                     {
                         DrawBloodyOverlay(camera, updatetimePlayed);
                     }
-                    DrawText($"Wave: {updateWave}, time in Wave: {(int)updatetimePlayed} seconds.", -.99f, 0.9f, 0.05f, camera);
+                    DrawText($"Wave: {updateWave}, Enemies remaining: {RemainingEnemies}", -.99f, 0.9f, 0.05f, camera);
                     break;
                 }
             case GameState.STATE.STATE_WAVEOVER:
                 {
+                    DrawBackground(gameBorder);
                     DrawText($"Youcompleted a Wave!", -0.5f, 0, 0.1f, camera);
                     DrawText($"To choose an upgrade, press Space.", -0.9f, -0.2f, 0.05f, camera);
                     break;
                 }
             case GameState.STATE.STATE_UPGRADEMENU:
                 {
+                    DrawBackground(gameBorder);
                     DrawText($"Choose one of the Upgrades: ", -.99f, 0.9f, 0.05f, camera);
                     DrawBackground(gameBorder);
 
@@ -199,6 +208,7 @@ internal class Draw
                 }
             case GameState.STATE.STATE_DEAD:
                 {
+                    DrawBackground(gameBorder);
                     DrawBloodyOverlay(camera, 1f);
                     DrawText($"You died!", -0.5f, 0, 0.1f, camera);
                     DrawText($"To restart the game, press Space.", -0.9f, -0.2f, 0.05f, camera);

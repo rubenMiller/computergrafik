@@ -54,22 +54,31 @@ internal class Wave
         if (waveTime > 10f && listOfEnemies.Count == 0)
         {
             WaveCount++;
+            setRemainingEnemies();
             waveTime = 0f;
             gameState.transitionToState(GameState.STATE.STATE_WAVEOVER);
         }
-        if (timeSinceLastSpawn > timeBetweenSPawns && waveTime < 45f)
+        if (timeSinceLastSpawn > timeBetweenSpawns && waveTime < SpawnTime)
         {
             listOfEnemies.AddRange(MakeEnemies(player, gameBorder));
             timeSinceLastSpawn = 0f;
         }
+    }
+    private void setRemainingEnemies()
+    {
+        int SpawnInstances = (int)(SpawnTime / timeBetweenSpawns) + 1;
+        string waveString = "wave_" + WaveCount;
+        RemainingEnemies = SpawnInstances * (WaveInformation[waveString][0] + WaveInformation[waveString][1] + WaveInformation[waveString][2] + WaveInformation[waveString][3]);
     }
 
     public bool readyForNewWave = true;
     public int WaveCount = 1;
     public float waveTime = 0;
     private float timeSinceLastSpawn = 9f;
-    private float timeBetweenSPawns = 10f;
+    private readonly float timeBetweenSpawns = 10f;
     private Random random = new Random();
+    public int RemainingEnemies;
+    private int SpawnTime = 45;
 
     Dictionary<string, List<int>> WaveInformation = new();
 
@@ -82,6 +91,6 @@ internal class Wave
     {
         json = File.ReadAllText(filePath);
         WaveInformation = JsonSerializer.Deserialize<Dictionary<string, List<int>>>(json)!;
-
+        setRemainingEnemies();
     }
 }
