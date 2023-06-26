@@ -27,23 +27,26 @@ public class Animation
     public float NormalizedAnimationTime { get; private set; } = 0f;
     public Texture2D Texture;
     public float SpriteSize;
-    public Animation(uint columns, uint rows, float animationLength, Texture2D texture, float spriteSize)
+    public float WidthToHeigth;
+    public Animation(uint columns, uint rows, float animationLength, Texture2D texture, float spriteSize, float widthToHeigth)
     {
         Columns = columns;
         Rows = rows;
         AnimationLength = animationLength;
         Texture = texture;
         SpriteSize = spriteSize;
+        WidthToHeigth = widthToHeigth;
         AnimationParts = Enumerable.Range(0, (int)(columns * rows)).ToArray<int>();
     }
 
-    public Animation(uint columns, uint rows, float animationLength, Texture2D texture, float spriteSize, int SheetStart, int SheetEnd)
+    public Animation(uint columns, uint rows, float animationLength, Texture2D texture, float spriteSize, float widthToHeigth, int SheetStart, int SheetEnd)
     {
         Columns = columns;
         Rows = rows;
         AnimationLength = animationLength;
         Texture = texture;
         SpriteSize = spriteSize;
+        WidthToHeigth = widthToHeigth;
         AnimationParts = Enumerable.Range(SheetStart, SheetEnd).ToArray<int>();
     }
 }

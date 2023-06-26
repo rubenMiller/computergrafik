@@ -43,6 +43,6 @@ public class ParticleSystem
         Center = center;
         Direction = direction;
         SmokeTexture = EmbeddedResource.LoadTexture("smoke_256a.png");
-        FireAnimation = new Animation(2, 2, 0.5f, EmbeddedResource.LoadTexture("fireball.png"), Radius * 2);
+        FireAnimation = new Animation(2, 2, 0.5f, EmbeddedResource.LoadTexture("fireball.png"), Radius * 2, 1);
     }
 }

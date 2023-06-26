@@ -165,7 +165,7 @@ internal class DrawPlaying
 
         var texCoords = animation.getTexCoords();
 
-        var playerBox = new Box2(-animation.SpriteSize, -animation.SpriteSize, animation.SpriteSize, animation.SpriteSize);
+        var playerBox = new Box2(-animation.SpriteSize, -animation.SpriteSize * animation.WidthToHeigth, animation.SpriteSize, animation.SpriteSize * animation.WidthToHeigth);
         Draw.DrawRect(playerBox, texCoords);
         GL.BindTexture(TextureTarget.Texture2D, 0);
 
@@ -184,6 +184,6 @@ internal class DrawPlaying
     {
         texBullet = EmbeddedResource.LoadTexture("bullet.png");
         texParticle = EmbeddedResource.LoadTexture("smoke_256a.png");
-        EnemyIconAnimation = new Animation(1, 1, 1, EmbeddedResource.LoadTexture("Enemy_Icon.png"), 0.1f);
+        EnemyIconAnimation = new Animation(1, 1, 1, EmbeddedResource.LoadTexture("Enemy_Icon.png"), 0.1f, 1);
     }
 }

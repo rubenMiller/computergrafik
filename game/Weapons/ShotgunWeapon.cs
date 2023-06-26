@@ -30,7 +30,7 @@ public class ShotgunWeapon : Weapon
         return newList;
     }
 
-    public ShotgunWeapon() : base(0.04f, 4f, 1f, 0.5f, new Vector2(0.10f, -0.085f), new Animation(5, 4, 3f, EmbeddedResource.LoadTexture("shotgun-move-sheet.png"), 0.15f))
+    public ShotgunWeapon() : base(0.04f, 4f, 1f, 0.5f, new Vector2(0.10f, -0.055f), new Animation(5, 4, 3f, EmbeddedResource.LoadTexture("shotgun-move-sheet.png"), 0.15f, 0.65f))
     {
 
     }

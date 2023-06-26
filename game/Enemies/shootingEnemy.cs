@@ -10,7 +10,7 @@ internal class shootingEnemy : Enemy
     //private float timeStanding = 0;
     //public List<Bullet> listOfBullets = new List<Bullet>();
     public List<ParticleSystem> listOfBullets = new List<ParticleSystem>();
-    public shootingEnemy(Vector2 center) : base(center, 1, 0.2f, 0.3f, new Animation(1, 1, 1, EmbeddedResource.LoadTexture("tempShooter.png"), 0.2f))
+    public shootingEnemy(Vector2 center) : base(center, 1, 0.2f, 0.3f, new Animation(1, 1, 1, EmbeddedResource.LoadTexture("tempShooter.png"), 0.2f, 1))
     {
 
     }

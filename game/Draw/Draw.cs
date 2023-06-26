@@ -170,7 +170,7 @@ internal class Draw
                     DrawBackground(gameBorder);
                     drawPlaying.DrawPlayer(player, camera);
                     drawPlaying.DrawEnemies(listOfEnemies, camera);
-                    if (listOfEnemies.Count < 3)
+                    if (listOfEnemies.Count < 4)
                     {
                         foreach (Enemy enemy in listOfEnemies)
                         {
