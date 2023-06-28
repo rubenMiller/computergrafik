@@ -115,7 +115,7 @@ internal class Update
     }
 
 
-    public void update(FrameEventArgs args, GameWindow window, GameState gameState, List<Enemy> listOfEnemies, List<ParticleSystem> listOfEnemyBullets, List<BloodSplash> listOfBloodSplashes, Camera camera, Player player, Wave wave, GameBorder gameBorder, UpgradeMenu upgradeMenu)
+    public void update(FrameEventArgs args, GameWindow window, GameState gameState, List<Enemy> listOfEnemies, List<ParticleSystem> listOfEnemyBullets, List<BloodSplash> listOfBloodSplashes, Animation EnemyIconAnimation, Camera camera, Player player, Wave wave, GameBorder gameBorder, UpgradeMenu upgradeMenu)
     {
         switch (gameState.CurrentState)
         {
@@ -145,10 +145,21 @@ internal class Update
                         bullet.Update(elapsedTime);
                     }
 
-
-
                     Collissions(listOfEnemies, listOfEnemyBullets, player, player.listOfBullets, listOfBloodSplashes, gameState, wave);
                     UpdateBloodSplasList(listOfBloodSplashes, elapsedTime);
+
+                    if (wave.RemainingEnemies > 6)
+                    {
+                        EnemyIconAnimation.SpriteSize = 0.07f;
+                    }
+                    else if (wave.RemainingEnemies > 3)
+                    {
+                        EnemyIconAnimation.SpriteSize = 0.08f;
+                    }
+                    else
+                    {
+                        EnemyIconAnimation.SpriteSize = 0.1f;
+                    }
 
                     if (listOfEnemies.Count == 0 && wave.readyForNewWave == false)
                     {

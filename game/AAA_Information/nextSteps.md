@@ -6,8 +6,6 @@ Hier sind die nächsten Schritte festgehalten.
 
 ### wichtige Todos:
 
-TODO: bessere Bilder für Upgrades
-
 ### optionale Todos:
 
 TODO: Kamera resized abhängig von Rand.

@@ -39,6 +39,7 @@ internal class DrawPlaying
     {
         foreach (Enemy enemy in listOfEnemies)
         {
+            GL.Color4(1f, 1f, 1f, 1f);
             DrawEntity(enemy.Orientation, enemy.Animation, enemy.Center, camera);
 
 
@@ -87,13 +88,14 @@ internal class DrawPlaying
                 cam = camera.CameraMatrix;
                 GL.LoadMatrix(ref cam);
             }
-
+            GL.Color4(1f, 1f, 1f, 1f);
             DrawEntity(ps.Direction, ps.FireAnimation, ps.Center, camera);
         }
     }
 
     internal void DrawPlayer(Player player, Camera camera)
     {
+        GL.Color4(1f, 1f, 1f, 1f);
         DrawEntity(player.Orientation, player.weapon.Animation, player.Center, camera);
 
         // Healthbar
@@ -129,10 +131,21 @@ internal class DrawPlaying
 
     }
 
-    internal void DrawEnemyIcons(Enemy enemy, Camera camera)
+    internal void DrawEnemyIcons(Enemy enemy, Camera camera, Animation EnemyIconAnimation)
     {
         if (!SpriteSheetTools.InCamera(camera.Center, enemy.Center, enemy.Radius, camera))
         {
+            var deltaX = camera.Center.X - enemy.Center.X;
+            var deltaY = camera.Center.Y - enemy.Center.Y;
+
+            var distanceSq = deltaX * deltaX + deltaY * deltaY;
+            var distance = MathF.Sqrt(distanceSq);
+            float alpha = 1 - ((distance - 1f) / 6);
+            if (alpha < 0.1f)
+            {
+                alpha = 0.1f;
+            }
+
             Vector2 Direction = camera.Center - enemy.Center;
             var Angle = Direction.PolarAngle();
 
@@ -143,10 +156,10 @@ internal class DrawPlaying
 
             var rect = new RectangleF(Xcoord, Ycoord, Width, Heigth);
             var anotherCenter = SpriteSheetTools.Intersects(camera.Center, -Direction, rect);
+            GL.Color4(1f, 1f, 1f, alpha);
             DrawEntity(new Vector2(1, 0), EnemyIconAnimation, anotherCenter, camera);
         }
     }
-
 
     internal void DrawEntity(Vector2 Orientation, Animation animation, Vector2 Center, Camera camera)
     {
@@ -158,8 +171,6 @@ internal class DrawPlaying
         cam = Transformation2d.Combine(Transformation2d.Rotation(Orientation.PolarAngle()), Transformation2d.Translate(Center), cam);
         GL.LoadMatrix(ref cam);
 
-
-        GL.Color4(1f, 1f, 1f, 1f);
         GL.BindTexture(TextureTarget.Texture2D, animation.Texture.Handle);
 
 
@@ -178,12 +189,10 @@ internal class DrawPlaying
 
     private readonly Texture2D texBullet;
     private readonly Texture2D texParticle;
-    private Animation EnemyIconAnimation;
 
     internal DrawPlaying()
     {
         texBullet = EmbeddedResource.LoadTexture("bullet.png");
         texParticle = EmbeddedResource.LoadTexture("smoke_256a.png");
-        EnemyIconAnimation = new Animation(1, 1, 1, EmbeddedResource.LoadTexture("Enemy_Icon.png"), 0.1f, 1);
     }
 }

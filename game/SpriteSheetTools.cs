@@ -71,4 +71,25 @@ internal static class SpriteSheetTools
         }
         return false;
     }
+
+    internal static bool InGameBorder(Vector2 CenterObject, float Size, GameBorder gameBorder)
+    {
+        if (CenterObject.X - Size > gameBorder.MaxX)
+        {
+            return false;
+        }
+        if (CenterObject.X + Size < gameBorder.MinX)
+        {
+            return false;
+        }
+        if (CenterObject.Y - Size > gameBorder.MaxY)
+        {
+            return false;
+        }
+        if (CenterObject.Y + Size < gameBorder.MaxY)
+        {
+            return false;
+        }
+        return true;
+    }
 }

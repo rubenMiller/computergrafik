@@ -34,6 +34,15 @@ internal class Draw
         GL.LoadMatrix(ref cam);
     }
 
+    internal void DrawMultiLineText(string text, float x, float y, float size, Camera camera)
+    {
+        foreach (var singleLineString in text.Split('\n'))
+        {
+            DrawText(singleLineString, x, y, size, camera);
+            y -= size;
+        }
+    }
+
     public void DrawBloodyOverlay(Camera camera, float time)
     {
 
@@ -147,11 +156,10 @@ internal class Draw
     internal void drawButton(Button button, Camera camera)
     {
         drawInterface.DrawButton(button, camera);
-        DrawText(button.ButtonAction.ButtonText, button.Position.Min.X, button.Position.Max.Y + 0.2f, 0.03f, camera);
+        DrawMultiLineText(button.ButtonAction.ButtonText, button.Position.Min.X, button.Position.Max.Y + 0.2f, 0.03f, camera);
     }
 
-
-    public void draw(List<Enemy> listOfEnemies, List<ParticleSystem> listOfEnemyBullets, List<Bullet> listPlayerOfBullets, Player player, List<BloodSplash> listOfBloodSplashes, Camera camera, GameState gameState, int updateWave, float updatetimePlayed, int RemainingEnemies, GameBorder gameBorder, UpgradeMenu upgradeMenu)
+    public void draw(List<Enemy> listOfEnemies, List<ParticleSystem> listOfEnemyBullets, List<Bullet> listPlayerOfBullets, Player player, List<BloodSplash> listOfBloodSplashes, Animation EnemyIconAnimation, Camera camera, GameState gameState, int updateWave, float updatetimePlayed, int RemainingEnemies, GameBorder gameBorder, UpgradeMenu upgradeMenu)
     {
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
@@ -162,7 +170,7 @@ internal class Draw
             case GameState.STATE.STATE_START:
                 {
                     DrawBackground(gameBorder);
-                    DrawText($"To start the game, press Space.", -0.9f, 0, 0.05f, camera);
+                    DrawMultiLineText($"To start the game, press Space.", -0.9f, 0, 0.05f, camera);
                     break;
                 }
             case GameState.STATE.STATE_PLAYING:
@@ -172,7 +180,7 @@ internal class Draw
                     drawPlaying.DrawEnemies(listOfEnemies, camera);
                     foreach (Enemy enemy in listOfEnemies)
                     {
-                        drawPlaying.DrawEnemyIcons(enemy, camera);
+                        drawPlaying.DrawEnemyIcons(enemy, camera, EnemyIconAnimation);
                     }
                     drawPlaying.DrawBullets(listPlayerOfBullets, camera);
                     //drawPlaying.DrawBullets(listOfEnemyBullets, camera);

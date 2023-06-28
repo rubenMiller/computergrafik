@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using Framework;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
@@ -11,7 +12,7 @@ internal class Program
     private static void Main(string[] args)
     {
         GameWindow window = new(GameWindowSettings.Default, new NativeWindowSettings { Profile = ContextProfile.Compatability }); // window with immediate mode rendering enabled
-
+        window.WindowState = WindowState.Fullscreen;
         //int gameState = 0;
         List<Enemy> listOfEnemies = new List<Enemy>();
         List<ParticleSystem> listOfEnemyBullets = new List<ParticleSystem>();
@@ -24,10 +25,11 @@ internal class Program
         GameBorder gameBorder = new GameBorder(3, 3, -3, -3);
         GameState gameState = new GameState(GameState.STATE.STATE_START);
         UpgradeMenu upgradeMenu = new UpgradeMenu();
+        Animation EnemyIconAnimation = new Animation(1, 1, 1, EmbeddedResource.LoadTexture("Enemy_Icon.png"), 0.07f, 1);
         bool reset = true;
         window.UpdateFrame += args =>
             {
-                update.update(args, window, gameState, listOfEnemies, listOfEnemyBullets, listOfBloodSplashes, camera, player, wave, gameBorder, upgradeMenu);
+                update.update(args, window, gameState, listOfEnemies, listOfEnemyBullets, listOfBloodSplashes, EnemyIconAnimation, camera, player, wave, gameBorder, upgradeMenu);
                 if (reset && gameState.CurrentState is GameState.STATE.STATE_DEAD)
                 {
                     reset = false;
@@ -36,6 +38,9 @@ internal class Program
                     player.listOfBullets = new List<Bullet>();
                     player = new Player(0.1f, 4);
                     wave = new Wave();
+                    listOfEnemyBullets = new List<ParticleSystem>();
+                    listOfBloodSplashes = new List<BloodSplash>();
+                    upgradeMenu = new UpgradeMenu();
                     //Do not reset the camera!
                     //camera = new Camera();       
                 }
@@ -43,7 +48,7 @@ internal class Program
 
         window.Resize += args1 => camera.Resize(args1);
         window.KeyDown += args => { if (Keys.Escape == args.Key) window.Close(); };
-        window.RenderFrame += args1 => draw.draw(listOfEnemies, listOfEnemyBullets, player.listOfBullets, player, listOfBloodSplashes, camera, gameState, wave.WaveCount, wave.waveTime, wave.RemainingEnemies, gameBorder, upgradeMenu); // called once each frame; callback should contain drawing code
+        window.RenderFrame += args1 => draw.draw(listOfEnemies, listOfEnemyBullets, player.listOfBullets, player, listOfBloodSplashes, EnemyIconAnimation, camera, gameState, wave.WaveCount, wave.waveTime, wave.RemainingEnemies, gameBorder, upgradeMenu); // called once each frame; callback should contain drawing code
         window.KeyDown += args =>
         {
             if (Keys.Space != args.Key)
