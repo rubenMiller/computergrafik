@@ -52,6 +52,7 @@ internal class Update
                     gameState.transitionToState(GameState.STATE.STATE_DEAD);
                     return 2;
                 }
+                player.lastHit = 1f;
             }
         }
         foreach (Bullet bullet in listOfPlayerBullets.ToList())
@@ -79,6 +80,7 @@ internal class Update
                     gameState.transitionToState(GameState.STATE.STATE_DEAD);
                     return 2;
                 }
+                player.lastHit = 1f;
             }
         }
         return 1;

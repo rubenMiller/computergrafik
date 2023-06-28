@@ -6,12 +6,10 @@ Hier sind die nächsten Schritte festgehalten.
 
 ### wichtige Todos:
 
-TODO: Wenn Welle x vorbei, win-screen einblenden
-TODO: letzten Gegner mit Richtung anzeigen
+TODO: bessere Bilder für Upgrades
 
 ### optionale Todos:
 
-TODO: bessere Bilder für Upgrades
 TODO: Kamera resized abhängig von Rand.
 TODO: gameState Änderungen bei Veränderungen der states an einer Stelle festelgen, so dass nur noch transition state aufgeruden werden muss.
 

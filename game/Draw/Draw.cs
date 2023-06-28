@@ -170,12 +170,9 @@ internal class Draw
                     DrawBackground(gameBorder);
                     drawPlaying.DrawPlayer(player, camera);
                     drawPlaying.DrawEnemies(listOfEnemies, camera);
-                    if (listOfEnemies.Count < 4)
+                    foreach (Enemy enemy in listOfEnemies)
                     {
-                        foreach (Enemy enemy in listOfEnemies)
-                        {
-                            drawPlaying.DrawEnemyIcons(enemy, camera);
-                        }
+                        drawPlaying.DrawEnemyIcons(enemy, camera);
                     }
                     drawPlaying.DrawBullets(listPlayerOfBullets, camera);
                     //drawPlaying.DrawBullets(listOfEnemyBullets, camera);
@@ -185,13 +182,17 @@ internal class Draw
                     {
                         DrawBloodyOverlay(camera, updatetimePlayed);
                     }
+                    else if (player.lastHit > 0)
+                    {
+                        DrawBloodyOverlay(camera, 2 * player.lastHit - 0.5f);
+                    }
                     DrawText($"Wave: {updateWave}, Enemies remaining: {RemainingEnemies}", -.99f, 0.9f, 0.05f, camera);
                     break;
                 }
             case GameState.STATE.STATE_WAVEOVER:
                 {
                     DrawBackground(gameBorder);
-                    DrawText($"Youcompleted a Wave!", -0.5f, 0, 0.1f, camera);
+                    DrawText($"You completed a Wave!", -0.7f, 0, 0.1f, camera);
                     DrawText($"To choose an upgrade, press Space.", -0.9f, -0.2f, 0.05f, camera);
                     break;
                 }

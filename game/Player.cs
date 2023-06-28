@@ -83,7 +83,11 @@ internal class Player
 
     public void Update(float elapsedTime, GameWindow window, Camera camera, GameBorder gameBorder)
     {
-        timeSinceLastShot = timeSinceLastShot + elapsedTime;
+        if (lastHit > 0)
+        {
+            lastHit -= elapsedTime;
+        }
+        timeSinceLastShot += elapsedTime;
         weapon.Animation.Update(elapsedTime);
 
         movePlayer(window.KeyboardState);
@@ -111,6 +115,7 @@ internal class Player
     public float Radius;
     public int maxHealth = 4;
     public int Health;
+    public float lastHit = 0f;
     public Vector2 Orientation = new Vector2(0, 0);
     public float timeSinceLastShot = 0f;
     public List<Bullet> listOfBullets = new List<Bullet>();
